@@ -14,6 +14,7 @@ import io.netty.handler.codec.http.HttpRequestEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import win.liumian.qt.server.channel.ChannelMap;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,8 +28,9 @@ public class UserServerHandlerV2 extends QuantumCommonHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServerHandlerV2.class);
 
-    public static Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
+    private String userChannelId;
 
+    private String clientId;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -39,16 +41,21 @@ public class UserServerHandlerV2 extends QuantumCommonHandler {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        log.info("关闭用户channel：" + ctx.channel().id().asLongText());
+        String userChannelId = ctx.channel().id().asLongText();
+        log.info("关闭用户channel：" + userChannelId);
+        ChannelMap.userChannelMap.remove(userChannelId);
+        QuantumMessage message = new QuantumMessage();
+        message.setClientId(clientId);
+        message.setMessageType(QuantumMessageType.USER_DISCONNECTED);
+        message.setChannelId(userChannelId);
 
+        writeMessage(message);
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         FullHttpRequest httpRequest = (FullHttpRequest) msg;
-        String clientId = httpRequest.headers().get("clientId");
+        clientId = httpRequest.headers().get("clientId");
         String proxyHost = httpRequest.headers().get("proxyHost");
         String proxyPort = httpRequest.headers().get("proxyPort");
 
@@ -56,31 +63,46 @@ public class UserServerHandlerV2 extends QuantumCommonHandler {
         QuantumMessage message = new QuantumMessage();
         message.setClientId(clientId);
         message.setMessageType(QuantumMessageType.DATA);
-        String userChannelId = userChannel.id().asLongText();
+        userChannelId = userChannel.id().asLongText();
         message.setChannelId(userChannelId);
         message.setProxyHost(proxyHost);
         message.setProxyPort(Integer.parseInt(proxyPort));
 
+        message.setData(toByteArray(httpRequest));
 
+        ChannelMap.userChannelMap.put(userChannelId, userChannel);
+
+        boolean success = writeMessage(message);
+        if (!success) {
+            ctx.channel().close();
+        }
+    }
+
+    private boolean writeMessage(QuantumMessage message) {
+        Channel proxyChannel = ChannelMap.proxyChannelsMap.get(clientId);
+        if (proxyChannel != null && proxyChannel.isWritable()) {
+            String proxyChannelId = proxyChannel.id().asLongText();
+            logger.info("用户通道:{} -> 代理通道:{}", userChannelId, proxyChannelId);
+            proxyChannel.writeAndFlush(message);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private byte[] toByteArray(FullHttpRequest httpRequest) {
         EmbeddedChannel ch = new EmbeddedChannel(new HttpRequestEncoder());
-        ch.writeOutbound(msg);
-
+        ch.writeOutbound(httpRequest);
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
 
-
         ByteBuf encoded;
-        while(( encoded= ch.readOutbound()) != null){
+        while ((encoded = ch.readOutbound()) != null) {
             buffer.writeBytes(encoded);
         }
-
-        message.setData(ByteBufUtil.getBytes(buffer));
+        byte[] bytes = ByteBufUtil.getBytes(buffer);
+        buffer.release();
         ch.close();
-
-
-        Channel proxyChannel = ProxyServerHandler.proxyChannelsMap.get(clientId);
-        String proxyChannelId = proxyChannel.id().asLongText();
-        logger.info("用户通道:{} -> 代理通道:{}", userChannelId, proxyChannelId);
-        userChannelMap.put(userChannelId, userChannel);
-        proxyChannel.writeAndFlush(message);
+        return bytes;
     }
+
 }

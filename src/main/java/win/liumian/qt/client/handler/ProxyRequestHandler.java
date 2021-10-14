@@ -1,15 +1,16 @@
 package win.liumian.qt.client.handler;
 
+import io.netty.channel.Channel;
 import win.liumian.qt.common.QuantumMessage;
 import win.liumian.qt.common.QuantumMessageType;
 import win.liumian.qt.common.handler.QuantumCommonHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpResponseEncoder;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author liumian  2021/9/26 17:13
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProxyRequestHandler extends QuantumCommonHandler {
 
+    final static Map<String, Channel> user2ProxyChannelMap = new ConcurrentHashMap<>();
 
     private final ChannelHandlerContext proxyChannelContext;
 
@@ -31,24 +33,15 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
-        log.info("准备发起请求：" + ctx.channel().id().asLongText() + "，用户通道：" + userChannelId);
+        Channel channel = ctx.channel();
+        user2ProxyChannelMap.put(userChannelId, channel);
+        log.info("准备发起请求：" + channel.id().asLongText() + "，用户通道：" + userChannelId);
         super.channelActive(ctx);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        FullHttpResponse httpResponse = (FullHttpResponse) msg;
-//        log.info(ctx.channel().id().asLongText() + "：接收到消息：" + new String(data));
-
-        EmbeddedChannel ch = new EmbeddedChannel(new HttpResponseEncoder());
-        ch.writeOutbound(msg);
-        ByteBuf encoded = ch.readOutbound();
-
-        ch.close();
-
-        processData(ByteBufUtil.getBytes(encoded));
-//        ctx.channel().close();
+        processData(ByteBufUtil.getBytes((ByteBuf) msg));
     }
 
     @Override
@@ -66,7 +59,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
     private void processDisconnected() {
         QuantumMessage message = new QuantumMessage();
         message.setChannelId(userChannelId);
-        message.setMessageType(QuantumMessageType.DISCONNECTED);
+        message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
         proxyChannelContext.writeAndFlush(message);
     }
 

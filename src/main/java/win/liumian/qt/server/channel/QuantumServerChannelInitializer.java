@@ -22,16 +22,10 @@ public class QuantumServerChannelInitializer extends ChannelInitializer<SocketCh
 
         // 请求解码器
         pipeline.addLast("http-decoder", new HttpRequestDecoder());
-//        // 将HTTP消息的多个部分合成一条完整的HTTP消息
+        // 将HTTP消息的多个部分合成一条完整的HTTP消息
         pipeline.addLast("http-aggregator", new HttpObjectAggregator(65535));
-//        // 响应转码器
-//        socketChannel.pipeline().addLast("http-encoder", new HttpResponseEncoder().encode());
-//        // 解决大码流的问题，ChunkedWriteHandler：向客户端发送HTML5文件
-//        socketChannel.pipeline().addLast("http-chunked", new ChunkedWriteHandler());
 
-        pipeline.addLast(
-//                new ByteArrayDecoder(),
-                new ByteArrayEncoder(), new UserServerHandlerV2());
+        pipeline.addLast(new ByteArrayEncoder(), new UserServerHandlerV2());
 
     }
 }

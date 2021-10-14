@@ -6,19 +6,17 @@ import win.liumian.qt.common.handler.QuantumCommonHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
+import win.liumian.qt.server.channel.ChannelMap;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author liumian  2021/9/19 19:10
  */
 @Slf4j
 public class ProxyServerHandler extends QuantumCommonHandler {
-
-    public static final Map<String, Channel> proxyChannelsMap = new ConcurrentHashMap<>();
 
     private volatile boolean register = false;
 
@@ -27,26 +25,22 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         QuantumMessage message = (QuantumMessage) msg;
         if (message.getMessageType() == QuantumMessageType.REGISTER) {
             processRegister(ctx, message);
-        } else if (register) {
-            if (message.getMessageType() == QuantumMessageType.DISCONNECTED) {
-                processDisconnected(message);
-            } else if (message.getMessageType() == QuantumMessageType.DATA) {
-                processData(message);
-            } else if (message.getMessageType() == QuantumMessageType.KEEPALIVE) {
-                // 心跳包, 不处理
-                log.info("收到心跳包：" + message.getClientId());
-            } else {
-                throw new RuntimeException("Unknown type: " + message.getMessageType());
-            }
+        } else if (message.getMessageType() == QuantumMessageType.PROXY_DISCONNECTED) {
+            processProxyDisconnected(message);
+        } else if (message.getMessageType() == QuantumMessageType.DATA) {
+            processData(message);
+        } else if (message.getMessageType() == QuantumMessageType.KEEPALIVE) {
+            log.info("收到心跳包：" + message.getClientId());
         } else {
             ctx.channel().close();
+            throw new RuntimeException("Unknown type: " + message.getMessageType());
         }
     }
 
     private void processRegister(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
         Channel channel = ctx.channel();
         String clientId = quantumMessage.getClientId();
-        proxyChannelsMap.put(clientId, channel);
+        ChannelMap.proxyChannelsMap.put(clientId, channel);
         Map<String, Object> resultData = new HashMap<>();
         resultData.put("success", true);
         QuantumMessage resultMsg = new QuantumMessage();
@@ -59,9 +53,9 @@ public class ProxyServerHandler extends QuantumCommonHandler {
     }
 
 
-    private void processDisconnected(QuantumMessage quantumMessage) {
+    private void processProxyDisconnected(QuantumMessage quantumMessage) {
         String channelId = quantumMessage.getChannelId();
-        Channel channel = UserServerHandlerV2.userChannelMap.get(channelId);
+        Channel channel = ChannelMap.userChannelMap.get(channelId);
         if (channel != null && channel.isOpen()) {
             channel.close();
         }
@@ -69,10 +63,9 @@ public class ProxyServerHandler extends QuantumCommonHandler {
     }
 
     private void processData(QuantumMessage quantumMessage) {
-        Channel userChannel = UserServerHandlerV2.userChannelMap.get(quantumMessage.getChannelId());
+        Channel userChannel = ChannelMap.userChannelMap.get(quantumMessage.getChannelId());
         if (userChannel != null) {
             userChannel.writeAndFlush(quantumMessage.getData());
-//                    .addListener(ChannelFutureListener.CLOSE);
         }
     }
 

@@ -20,7 +20,7 @@ public enum QuantumMessageType {
     /**
      * 断开连接
      */
-    DISCONNECTED(4),
+    PROXY_DISCONNECTED(4),
     /**
      * 传输数据
      */
@@ -28,7 +28,12 @@ public enum QuantumMessageType {
     /**
      * 保持链接
      */
-    KEEPALIVE(6);
+    KEEPALIVE(6),
+
+    /**
+     * 用户链接断开
+     */
+    USER_DISCONNECTED(7);
 
     private int code;
 
