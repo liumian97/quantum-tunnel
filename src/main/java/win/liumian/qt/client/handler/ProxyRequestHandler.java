@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class ProxyRequestHandler extends QuantumCommonHandler {
 
-    final static Map<String, Channel> user2ProxyChannelMap = new ConcurrentHashMap<>();
 
     private final ChannelHandlerContext proxyChannelContext;
 
@@ -34,7 +33,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
-        user2ProxyChannelMap.put(userChannelId, channel);
+        ProxyClientHandler.user2ProxyChannelMap.put(userChannelId, channel);
         log.info("准备发起请求：" + channel.id().asLongText() + "，用户通道：" + userChannelId);
         super.channelActive(ctx);
     }
@@ -61,6 +60,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
         message.setChannelId(userChannelId);
         message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
         proxyChannelContext.writeAndFlush(message);
+
     }
 
 

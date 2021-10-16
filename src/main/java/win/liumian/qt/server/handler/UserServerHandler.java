@@ -1,5 +1,8 @@
 package win.liumian.qt.server.handler;
 
+import io.netty.handler.codec.http.websocketx.WebSocket00FrameDecoder;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.springframework.util.StringUtils;
 import win.liumian.qt.common.QuantumMessage;
 import win.liumian.qt.common.QuantumMessageType;
 import win.liumian.qt.common.handler.QuantumCommonHandler;
@@ -16,26 +19,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import win.liumian.qt.server.channel.ChannelMap;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author liumian  2021/9/19 07:33
  */
 @Slf4j
-public class UserServerHandlerV2 extends QuantumCommonHandler {
+public class UserServerHandler extends QuantumCommonHandler {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServerHandlerV2.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServerHandler.class);
 
     private String userChannelId;
 
     private String clientId;
 
+    private String proxyHost;
+
+    private String proxyPort;
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        log.info("打开用户channel：" + ctx.channel().id().asLongText());
+        userChannelId = ctx.channel().id().asLongText();
+        log.info("打开用户channel：" + userChannelId);
+        ChannelMap.userChannelMap.put(userChannelId, ctx.channel());
     }
 
     @Override
@@ -48,32 +54,37 @@ public class UserServerHandlerV2 extends QuantumCommonHandler {
         message.setClientId(clientId);
         message.setMessageType(QuantumMessageType.USER_DISCONNECTED);
         message.setChannelId(userChannelId);
-
         writeMessage(message);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        FullHttpRequest httpRequest = (FullHttpRequest) msg;
-        clientId = httpRequest.headers().get("clientId");
-        String proxyHost = httpRequest.headers().get("proxyHost");
-        String proxyPort = httpRequest.headers().get("proxyPort");
-
-        Channel userChannel = ctx.channel();
         QuantumMessage message = new QuantumMessage();
+        byte[] bytes = (byte[]) msg;
+        message.setData(bytes);
+
+        if (clientId == null || proxyHost == null || proxyPort == null) {
+            String s = new String(bytes);
+            clientId = getHeaderValue(s, "clientId");
+            proxyHost = getHeaderValue(s, "proxyHost");
+            proxyPort = getHeaderValue(s, "proxyPort");
+        }
+
+        if (clientId == null || proxyHost == null || proxyPort == null) {
+            log.info("缺少参数，clientId={}，proxyHost={}，proxyPort={}", clientId, proxyHost, proxyPort);
+            ctx.channel().close();
+        }
+
         message.setClientId(clientId);
         message.setMessageType(QuantumMessageType.DATA);
-        userChannelId = userChannel.id().asLongText();
         message.setChannelId(userChannelId);
         message.setProxyHost(proxyHost);
         message.setProxyPort(Integer.parseInt(proxyPort));
 
-        message.setData(toByteArray(httpRequest));
-
-        ChannelMap.userChannelMap.put(userChannelId, userChannel);
 
         boolean success = writeMessage(message);
         if (!success) {
+            log.info("写入数据失败，clientId={}，proxyHost={}，proxyPort={}", clientId, proxyHost, proxyPort);
             ctx.channel().close();
         }
     }
@@ -103,6 +114,15 @@ public class UserServerHandlerV2 extends QuantumCommonHandler {
         buffer.release();
         ch.close();
         return bytes;
+    }
+
+    private String getHeaderValue(String requestStr, String headerName) {
+        for (String s : requestStr.split("\r\n")) {
+            if (s.startsWith(headerName + ":")) {
+                return s.split(":")[1].trim();
+            }
+        }
+        return null;
     }
 
 }

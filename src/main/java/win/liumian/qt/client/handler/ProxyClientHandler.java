@@ -12,13 +12,16 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author liumian  2021/9/26 17:13
  */
 @Slf4j
 public class ProxyClientHandler extends QuantumCommonHandler {
 
-
+    public final static Map<String, Channel> user2ProxyChannelMap = new ConcurrentHashMap<>();
 
     private final static NioEventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
 
@@ -67,11 +70,11 @@ public class ProxyClientHandler extends QuantumCommonHandler {
     }
 
     private void processUserChannelDisconnected(QuantumMessage quantumMessage) {
-        Channel channel = ProxyRequestHandler.user2ProxyChannelMap.get(quantumMessage.getChannelId());
-        if (channel != null && channel.isOpen()){
+        Channel channel = user2ProxyChannelMap.get(quantumMessage.getChannelId());
+        if (channel != null && channel.isOpen()) {
             channel.close();
         }
-        log.info("主动关闭用户代理通道：{}",quantumMessage.getChannelId());
+        log.info("主动关闭用户代理通道：{}", quantumMessage.getChannelId());
     }
 
     private void processData(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
@@ -84,23 +87,29 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
 
     private void doProxyRequest(ChannelHandlerContext ctx, QuantumMessage quantumMessage) throws InterruptedException {
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(WORKER_GROUP);
-            b.channel(NioSocketChannel.class);
-            b.handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel ch) {
-                    ChannelPipeline pipeline = ch.pipeline();
-                    pipeline.addLast(new ProxyRequestHandler(ctx, quantumMessage.getChannelId()));
-                }
-            });
-            ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(quantumMessage.getData().length);
-            buffer.writeBytes(quantumMessage.getData());
-            Channel channel = b.connect(quantumMessage.getProxyHost(), quantumMessage.getProxyPort()).sync().channel();
-            channel.writeAndFlush(buffer);
-        } catch (Exception e) {
-            throw e;
+        Channel proxyChannel = user2ProxyChannelMap.get(quantumMessage.getChannelId());
+        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(quantumMessage.getData().length);
+        buffer.writeBytes(quantumMessage.getData());
+        if (proxyChannel == null){
+            try {
+                Bootstrap b = new Bootstrap();
+                b.group(WORKER_GROUP);
+                b.channel(NioSocketChannel.class);
+                b.handler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel ch) {
+                        ChannelPipeline pipeline = ch.pipeline();
+                        pipeline.addLast(new ProxyRequestHandler(ctx, quantumMessage.getChannelId()));
+                    }
+                });
+                Channel channel = b.connect(quantumMessage.getProxyHost(), quantumMessage.getProxyPort()).sync().channel();
+                channel.writeAndFlush(buffer);
+            } catch (Exception e) {
+                throw e;
+            }
+        } else {
+            proxyChannel.writeAndFlush(buffer);
         }
+
     }
 }

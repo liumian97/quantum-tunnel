@@ -22,11 +22,12 @@ public class ProxyClient {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        new ProxyClient().connect("localhost", 9090);
+        ChannelFuture channelFuture = new ProxyClient().connect("localhost", 9090);
+        channelFuture.awaitUninterruptibly();
     }
 
-    public void connect(String serverAddress, int serverPort) throws IOException, InterruptedException {
-        ChannelFuture future = this.connect(serverAddress, serverPort, new ChannelInitializer<SocketChannel>() {
+    public ChannelFuture connect(String serverAddress, int serverPort) throws IOException, InterruptedException {
+        return this.connect(serverAddress, serverPort, new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) {
                 ProxyClientHandler proxyClientHandler = new ProxyClientHandler();
