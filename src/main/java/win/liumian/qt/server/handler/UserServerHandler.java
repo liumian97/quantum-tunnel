@@ -101,21 +101,6 @@ public class UserServerHandler extends QuantumCommonHandler {
         }
     }
 
-    private byte[] toByteArray(FullHttpRequest httpRequest) {
-        EmbeddedChannel ch = new EmbeddedChannel(new HttpRequestEncoder());
-        ch.writeOutbound(httpRequest);
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
-
-        ByteBuf encoded;
-        while ((encoded = ch.readOutbound()) != null) {
-            buffer.writeBytes(encoded);
-        }
-        byte[] bytes = ByteBufUtil.getBytes(buffer);
-        buffer.release();
-        ch.close();
-        return bytes;
-    }
-
     private String getHeaderValue(String requestStr, String headerName) {
         for (String s : requestStr.split("\r\n")) {
             if (s.startsWith(headerName + ":")) {

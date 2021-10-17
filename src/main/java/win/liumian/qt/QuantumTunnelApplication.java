@@ -1,7 +1,7 @@
 package win.liumian.qt;
 
 import win.liumian.qt.server.ProxyServer;
-import win.liumian.qt.server.QuantumServer;
+import win.liumian.qt.server.UserServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -22,7 +22,7 @@ public class QuantumTunnelApplication {
 
         executor.execute(() -> {
             //启动用户服务端
-            QuantumServer nettyServer = new QuantumServer();
+            UserServer nettyServer = new UserServer();
             nettyServer.start(new InetSocketAddress("127.0.0.1", 8090));
         });
 

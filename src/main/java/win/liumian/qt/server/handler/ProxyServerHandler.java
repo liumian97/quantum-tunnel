@@ -18,8 +18,6 @@ import java.util.Map;
 @Slf4j
 public class ProxyServerHandler extends QuantumCommonHandler {
 
-    private volatile boolean register = false;
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         QuantumMessage message = (QuantumMessage) msg;
@@ -29,11 +27,9 @@ public class ProxyServerHandler extends QuantumCommonHandler {
             processProxyDisconnected(message);
         } else if (message.getMessageType() == QuantumMessageType.DATA) {
             processData(message);
-        } else if (message.getMessageType() == QuantumMessageType.KEEPALIVE) {
-            log.info("收到心跳包：" + message.getClientId());
         } else {
             ctx.channel().close();
-            throw new RuntimeException("Unknown type: " + message.getMessageType());
+            throw new RuntimeException("Unknown MessageType: " + message.getMessageType());
         }
     }
 
@@ -48,10 +44,8 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         resultMsg.setMessageType(QuantumMessageType.REGISTER_RESULT);
         resultMsg.setData(resultData.toString().getBytes(StandardCharsets.UTF_8));
         channel.writeAndFlush(resultMsg);
-        register = true;
         log.info("quantum tunnel register success,clientId:" + clientId);
     }
-
 
     private void processProxyDisconnected(QuantumMessage quantumMessage) {
         String channelId = quantumMessage.getChannelId();
@@ -68,5 +62,4 @@ public class ProxyServerHandler extends QuantumCommonHandler {
             userChannel.writeAndFlush(quantumMessage.getData());
         }
     }
-
 }

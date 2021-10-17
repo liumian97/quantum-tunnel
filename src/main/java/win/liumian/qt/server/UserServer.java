@@ -15,7 +15,7 @@ import java.net.InetSocketAddress;
  * @author liumian  2021/9/18 16:22
  */
 @Slf4j
-public class QuantumServer {
+public class UserServer {
 
     public void start(InetSocketAddress socketAddress) {
         //new 一个主线程组

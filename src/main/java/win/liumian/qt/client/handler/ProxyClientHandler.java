@@ -33,24 +33,19 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         quantumMessage.setClientId("localTest");
         quantumMessage.setMessageType(QuantumMessageType.REGISTER);
         ctx.writeAndFlush(quantumMessage);
-
         super.channelActive(ctx);
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
         QuantumMessage quantumMessage = (QuantumMessage) msg;
         if (quantumMessage.getMessageType() == QuantumMessageType.REGISTER_RESULT) {
             processRegisterResult(quantumMessage);
-        } else if (quantumMessage.getMessageType() == QuantumMessageType.CONNECTED) {
-            processConnected(quantumMessage);
         } else if (quantumMessage.getMessageType() == QuantumMessageType.USER_DISCONNECTED) {
             processUserChannelDisconnected(quantumMessage);
         } else if (quantumMessage.getMessageType() == QuantumMessageType.DATA) {
             processData(ctx, quantumMessage);
-        } else if (quantumMessage.getMessageType() == QuantumMessageType.KEEPALIVE) {
-            // 心跳包, 不处理
         } else {
             throw new RuntimeException("Unknown type: " + quantumMessage.getMessageType());
         }
@@ -63,10 +58,6 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     private void processRegisterResult(QuantumMessage quantumMessage) {
         log.info("register to quantum-tunnel proxy server");
-    }
-
-    private void processConnected(QuantumMessage quantumMessage) throws Exception {
-        log.info("connected to quantum-tunnel proxy server");
     }
 
     private void processUserChannelDisconnected(QuantumMessage quantumMessage) {
@@ -90,7 +81,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         Channel proxyChannel = user2ProxyChannelMap.get(quantumMessage.getChannelId());
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(quantumMessage.getData().length);
         buffer.writeBytes(quantumMessage.getData());
-        if (proxyChannel == null){
+        if (proxyChannel == null) {
             try {
                 Bootstrap b = new Bootstrap();
                 b.group(WORKER_GROUP);
@@ -110,6 +101,5 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         } else {
             proxyChannel.writeAndFlush(buffer);
         }
-
     }
 }
