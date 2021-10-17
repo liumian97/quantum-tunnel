@@ -57,6 +57,11 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.76</version>
         </dependency>
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.4</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>

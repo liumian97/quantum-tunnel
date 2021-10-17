@@ -25,6 +25,12 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     private final static NioEventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
 
+    private String clientId;
+
+    public ProxyClientHandler(String clientId) {
+        this.clientId = clientId;
+    }
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
