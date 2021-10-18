@@ -18,9 +18,22 @@ QuantumTunnel也取意于此，希望把公网发出来的请求，完整的同�
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. 克隆仓库到本地：git clone git@gitee.com:liumian/quantum-tunnel.git
+2. 打包
+   1. 内网穿透客户端： sh package_client.sh
+   2. 内网穿透服务端： sh package_server.sh
+3. 启动服务
+   1. 启动服务端： java -jar quantum-tunnel-server.jar -proxy_server_port 9090 -user_server_port 8090
+   2. 启动客户端：java -jar quantum-tunnel-client.jar -network_id localTest -proxy_server_host lm.cn -proxy_server_port 9090
+4. 使用代理服务访问百度
+```shell
+curl --location --request GET '127.0.0.1:8090/' \
+--header 'targetPort: 80' \
+--header 'networkId: localTest' \
+--header 'Host: www.baidu.com' \
+--header 'targetHost: www.baidu.com' \
+--header 'Cookie: BDSVRTM=11; BD_HOME=1'
+```
 
 #### 参与贡献
 
@@ -31,5 +44,6 @@ QuantumTunnel也取意于此，希望把公网发出来的请求，完整的同�
 
 
 #### 技术文章
-[QuantumTunnel：内网穿透服务设计](https://mp.weixin.qq.com/s/7t5n_nI7CZ3VhownRhCsrg)
+1. [QuantumTunnel：内网穿透服务设计](https://mp.weixin.qq.com/s/7t5n_nI7CZ3VhownRhCsrg)
+2. [QuantumTunnel:Netty实现](https://mp.weixin.qq.com/s/3N_c6IR--e85kmt0tjHSvw)
 
