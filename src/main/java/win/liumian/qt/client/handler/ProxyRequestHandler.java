@@ -60,7 +60,6 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
         message.setChannelId(userChannelId);
         message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
         proxyChannelContext.writeAndFlush(message);
-
     }
 
 

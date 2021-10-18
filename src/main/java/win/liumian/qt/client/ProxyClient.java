@@ -54,7 +54,7 @@ public class ProxyClient {
             ProxyClient proxyClient = new ProxyClient();
             while (true) {
                 try {
-                    Channel channel = proxyClient.connect(serverHost, Integer.parseInt(serverPort), clientId);
+                    Channel channel = proxyClient.connect(serverHost, Integer.parseInt(serverPort));
                     channel.closeFuture().sync();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -74,7 +74,7 @@ public class ProxyClient {
      * @param port
      * @throws InterruptedException
      */
-    public Channel connect(String host, int port, String clientId) throws InterruptedException, IOException {
+    public Channel connect(String host, int port) throws InterruptedException, IOException {
 
         Bootstrap b = new Bootstrap();
         b.group(workerGroup);
@@ -83,7 +83,7 @@ public class ProxyClient {
         b.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) {
-                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(clientId);
+                ProxyClientHandler proxyClientHandler = new ProxyClientHandler();
                 ch.pipeline().addLast(
                         new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
                         new QuantumMessageDecoder(),

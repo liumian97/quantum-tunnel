@@ -25,12 +25,6 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     private final static NioEventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
 
-    private String clientId;
-
-    public ProxyClientHandler(String clientId) {
-        this.clientId = clientId;
-    }
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
@@ -102,7 +96,12 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                 Channel channel = b.connect(quantumMessage.getProxyHost(), quantumMessage.getProxyPort()).sync().channel();
                 channel.writeAndFlush(buffer);
             } catch (Exception e) {
-                throw e;
+                log.error("请求targetServer异常",e);
+                //通知服务端proxyChannel已经断开，让其断开userChannel
+                QuantumMessage message = new QuantumMessage();
+                message.setChannelId(quantumMessage.getChannelId());
+                message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
+                ctx.writeAndFlush(message);
             }
         } else {
             proxyChannel.writeAndFlush(buffer);
