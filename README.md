@@ -12,8 +12,6 @@ QuantumTunnel也取意于此，希望把公网发出来的请求，完整的同�
 
 
 ### 流程图
-![流程图](https://images.gitee.com/uploads/images/2021/1015/183056_5f0c13c6_602197.png "屏幕截图.png")
-
 ![流程图](https://images.gitee.com/uploads/images/2021/1019/001318_3a3e6f11_602197.png "屏幕截图.png")
 
 
