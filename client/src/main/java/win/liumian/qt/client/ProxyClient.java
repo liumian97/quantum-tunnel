@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.client.handler.ProxyClientHandler;
 import win.liumian.qt.common.QuantumMessageDecoder;
 import win.liumian.qt.common.QuantumMessageEncoder;
@@ -20,6 +21,7 @@ import java.io.IOException;
  * @author liumian  2021/9/26 11:40
  */
 @Slf4j
+@SpringBootApplication
 public class ProxyClient {
 
     public static void main(String[] args) throws ParseException, InterruptedException {
