@@ -25,12 +25,18 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     private final static NioEventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
 
+    private String networkId;
+
+    public ProxyClientHandler(String networkId) {
+        this.networkId = networkId;
+    }
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        log.info("准备注册通道");
+        log.info("准备注册量子通道");
         QuantumMessage quantumMessage = new QuantumMessage();
-        quantumMessage.setClientId("localTest");
+        quantumMessage.setNetworkId(networkId);
         quantumMessage.setMessageType(QuantumMessageType.REGISTER);
         ctx.writeAndFlush(quantumMessage);
         super.channelActive(ctx);
@@ -53,11 +59,11 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        log.info("loss connection for quantum-tunnel proxy, Please restart!");
+        log.info("量子通道断开");
     }
 
     private void processRegisterResult(QuantumMessage quantumMessage) {
-        log.info("register to quantum-tunnel proxy server");
+        log.info("量子通道注册成功");
     }
 
     private void processUserChannelDisconnected(QuantumMessage quantumMessage) {
@@ -65,7 +71,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         if (channel != null && channel.isOpen()) {
             channel.close();
         }
-        log.info("主动关闭用户代理通道：{}", quantumMessage.getChannelId());
+        log.info("主动关闭代理通道：{}", quantumMessage.getChannelId());
     }
 
     private void processData(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
@@ -93,7 +99,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                         pipeline.addLast(new ProxyRequestHandler(ctx, quantumMessage.getChannelId()));
                     }
                 });
-                Channel channel = b.connect(quantumMessage.getProxyHost(), quantumMessage.getProxyPort()).sync().channel();
+                Channel channel = b.connect(quantumMessage.getTargetHost(), quantumMessage.getTargetPort()).sync().channel();
                 channel.writeAndFlush(buffer);
             } catch (Exception e) {
                 log.error("请求targetServer异常",e);

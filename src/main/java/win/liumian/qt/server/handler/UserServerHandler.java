@@ -1,19 +1,10 @@
 package win.liumian.qt.server.handler;
 
-import io.netty.handler.codec.http.websocketx.WebSocket00FrameDecoder;
-import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import org.springframework.util.StringUtils;
 import win.liumian.qt.common.QuantumMessage;
 import win.liumian.qt.common.QuantumMessageType;
 import win.liumian.qt.common.handler.QuantumCommonHandler;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpRequestEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +21,17 @@ public class UserServerHandler extends QuantumCommonHandler {
 
     private String userChannelId;
 
-    private String clientId;
+    private String networkId;
 
-    private String proxyHost;
+    private String targetHost;
 
-    private String proxyPort;
+    private String targetPort;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         userChannelId = ctx.channel().id().asLongText();
-        log.info("打开用户channel：" + userChannelId);
+        log.info("打开用户通道：{}", userChannelId);
         ChannelMap.userChannelMap.put(userChannelId, ctx.channel());
     }
 
@@ -48,10 +39,10 @@ public class UserServerHandler extends QuantumCommonHandler {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
         String userChannelId = ctx.channel().id().asLongText();
-        log.info("关闭用户channel：" + userChannelId);
+        log.info("关闭用户通道：{}", userChannelId);
         ChannelMap.userChannelMap.remove(userChannelId);
         QuantumMessage message = new QuantumMessage();
-        message.setClientId(clientId);
+        message.setNetworkId(networkId);
         message.setMessageType(QuantumMessageType.USER_DISCONNECTED);
         message.setChannelId(userChannelId);
         writeMessage(message);
@@ -63,34 +54,34 @@ public class UserServerHandler extends QuantumCommonHandler {
         byte[] bytes = (byte[]) msg;
         message.setData(bytes);
 
-        if (clientId == null || proxyHost == null || proxyPort == null) {
+        if (networkId == null || targetHost == null || targetPort == null) {
             String s = new String(bytes);
-            clientId = getHeaderValue(s, "clientId");
-            proxyHost = getHeaderValue(s, "proxyHost");
-            proxyPort = getHeaderValue(s, "proxyPort");
+            networkId = getHeaderValue(s, "networkId");
+            targetHost = getHeaderValue(s, "targetHost");
+            targetPort = getHeaderValue(s, "targetPort");
         }
 
-        if (clientId == null || proxyHost == null || proxyPort == null) {
-            log.info("缺少参数，clientId={}，proxyHost={}，proxyPort={}", clientId, proxyHost, proxyPort);
+        if (networkId == null || targetHost == null || targetPort == null) {
+            log.info("缺少参数，networkId={}，targetHost={}，targetPort={}", networkId, targetHost, targetPort);
             ctx.channel().close();
         }
 
-        message.setClientId(clientId);
+        message.setNetworkId(networkId);
         message.setMessageType(QuantumMessageType.DATA);
         message.setChannelId(userChannelId);
-        message.setProxyHost(proxyHost);
-        message.setProxyPort(Integer.parseInt(proxyPort));
+        message.setTargetHost(targetHost);
+        message.setTargetPort(Integer.parseInt(targetPort));
 
 
         boolean success = writeMessage(message);
         if (!success) {
-            log.info("写入数据失败，clientId={}，proxyHost={}，proxyPort={}", clientId, proxyHost, proxyPort);
+            log.info("写入数据失败，networkId={}，targetHost={}，targetPort={}", networkId, targetHost, targetPort);
             ctx.channel().close();
         }
     }
 
     private boolean writeMessage(QuantumMessage message) {
-        Channel proxyChannel = ChannelMap.proxyChannelsMap.get(clientId);
+        Channel proxyChannel = ChannelMap.proxyChannelsMap.get(networkId);
         if (proxyChannel != null && proxyChannel.isWritable()) {
             String proxyChannelId = proxyChannel.id().asLongText();
             logger.info("用户通道:{} -> 代理通道:{}", userChannelId, proxyChannelId);

@@ -26,7 +26,7 @@ public class ProxyClient {
         options.addOption("help", false, "Help");
         options.addOption("proxy_server_host", true, "内网穿透-代理服务器地址");
         options.addOption("proxy_server_port", true, "内网穿透-代理服务端口");
-        options.addOption("client_id", true, "本客户端的Id");
+        options.addOption("network_id", true, "分配的网络id");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -46,15 +46,15 @@ public class ProxyClient {
                 System.out.println("proxy_server_port cannot be null");
                 return;
             }
-            String clientId = cmd.getOptionValue("client_id");
-            if (clientId == null) {
+            String networkId = cmd.getOptionValue("network_id");
+            if (networkId == null) {
                 System.out.println("proxy_server_port cannot be null");
                 return;
             }
             ProxyClient proxyClient = new ProxyClient();
             while (true) {
                 try {
-                    Channel channel = proxyClient.connect(serverHost, Integer.parseInt(serverPort));
+                    Channel channel = proxyClient.connect(serverHost, Integer.parseInt(serverPort),networkId);
                     channel.closeFuture().sync();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -74,7 +74,7 @@ public class ProxyClient {
      * @param port
      * @throws InterruptedException
      */
-    public Channel connect(String host, int port) throws InterruptedException, IOException {
+    public Channel connect(String host, int port,String networkId) throws InterruptedException, IOException {
 
         Bootstrap b = new Bootstrap();
         b.group(workerGroup);
@@ -83,7 +83,7 @@ public class ProxyClient {
         b.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) {
-                ProxyClientHandler proxyClientHandler = new ProxyClientHandler();
+                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId);
                 ch.pipeline().addLast(
                         new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
                         new QuantumMessageDecoder(),

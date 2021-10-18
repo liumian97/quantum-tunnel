@@ -35,16 +35,16 @@ public class ProxyServerHandler extends QuantumCommonHandler {
 
     private void processRegister(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
         Channel channel = ctx.channel();
-        String clientId = quantumMessage.getClientId();
-        ChannelMap.proxyChannelsMap.put(clientId, channel);
+        String networkId = quantumMessage.getNetworkId();
+        ChannelMap.proxyChannelsMap.put(networkId, channel);
         Map<String, Object> resultData = new HashMap<>();
         resultData.put("success", true);
         QuantumMessage resultMsg = new QuantumMessage();
-        resultMsg.setClientId(clientId);
+        resultMsg.setNetworkId(networkId);
         resultMsg.setMessageType(QuantumMessageType.REGISTER_RESULT);
         resultMsg.setData(resultData.toString().getBytes(StandardCharsets.UTF_8));
         channel.writeAndFlush(resultMsg);
-        log.info("quantum tunnel register success,clientId:" + clientId);
+        log.info("量子通道注册成功，网络id:{}",networkId);
     }
 
     private void processProxyDisconnected(QuantumMessage quantumMessage) {
@@ -53,7 +53,7 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         if (channel != null && channel.isOpen()) {
             channel.close();
         }
-        log.info("quantum tunnel closed,channelId:" + channelId);
+        log.info("用户通道关闭，channelId:" + channelId);
     }
 
     private void processData(QuantumMessage quantumMessage) {

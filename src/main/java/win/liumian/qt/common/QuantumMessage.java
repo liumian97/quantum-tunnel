@@ -11,22 +11,22 @@ public class QuantumMessage {
     /**
      * 客户端id
      */
-    private String clientId;
+    private String networkId;
 
     /**
-     * 代理通道
+     * 用户通道
      */
     private String channelId;
 
     /**
      * 代理地址
      */
-    private String proxyHost;
+    private String targetHost;
 
     /**
      * 代理端口
      */
-    private int proxyPort;
+    private int targetPort;
 
     /**
      * 消息类型
