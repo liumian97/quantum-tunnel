@@ -20,10 +20,10 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
 
     private final String userChannelId;
 
-
-    public ProxyRequestHandler(ChannelHandlerContext proxyChannelContext, String userChannelId) {
+    public ProxyRequestHandler(ChannelHandlerContext proxyChannelContext, String userChannelId,String networkId) {
         this.proxyChannelContext = proxyChannelContext;
         this.userChannelId = userChannelId;
+        super.networkId = networkId;
     }
 
 

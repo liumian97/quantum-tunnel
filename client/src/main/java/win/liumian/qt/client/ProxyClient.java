@@ -8,6 +8,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,12 +25,15 @@ import java.io.IOException;
 @SpringBootApplication
 public class ProxyClient {
 
+
     public static void main(String[] args) throws ParseException, InterruptedException {
         Options options = new Options();
         options.addOption("help", false, "Help");
         options.addOption("proxy_server_host", true, "内网穿透-代理服务器地址");
         options.addOption("proxy_server_port", true, "内网穿透-代理服务端口");
         options.addOption("network_id", true, "分配的网络id");
+        options.addOption("target_server_host", true, "目标服务器host，允许访问所有服务器则填 * ");
+        options.addOption("target_server_port", true, "目标服务器port，允许访问所有服务器则填 * ");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -54,10 +58,20 @@ public class ProxyClient {
                 System.out.println("proxy_server_port cannot be null");
                 return;
             }
+            String targetServerHost = cmd.getOptionValue("target_server_host");
+            if (targetServerHost == null) {
+                System.out.println("target_server_host cannot be null");
+                return;
+            }
+            String targetServerPort = cmd.getOptionValue("target_server_port");
+            if (targetServerPort == null) {
+                System.out.println("target_server_port cannot be null");
+                return;
+            }
             ProxyClient proxyClient = new ProxyClient();
             while (true) {
                 try {
-                    Channel channel = proxyClient.connect(serverHost, Integer.parseInt(serverPort), networkId);
+                    Channel channel = proxyClient.connect(serverHost, Integer.parseInt(serverPort), networkId,targetServerHost,targetServerPort);
                     channel.closeFuture().sync();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -77,7 +91,7 @@ public class ProxyClient {
      * @param port
      * @throws InterruptedException
      */
-    public Channel connect(String host, int port, String networkId) throws InterruptedException, IOException {
+    public Channel connect(String host, int port, String networkId,String targetServerHost,String targetServerPort) throws InterruptedException, IOException {
 
         Bootstrap b = new Bootstrap();
         b.group(workerGroup);
@@ -86,11 +100,12 @@ public class ProxyClient {
         b.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) {
-                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId);
+                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId,targetServerHost,targetServerPort);
                 ch.pipeline().addLast(
                         new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
                         new QuantumMessageDecoder(),
                         new QuantumMessageEncoder(),
+                        new IdleStateHandler(360,300,0),
                         proxyClientHandler);
             }
         });

@@ -56,9 +56,10 @@ public class UserServerHandler extends QuantumCommonHandler {
 
         if (networkId == null || targetHost == null || targetPort == null) {
             String s = new String(bytes);
-            networkId = getHeaderValue(s, "networkId");
-            targetHost = getHeaderValue(s, "targetHost");
-            targetPort = getHeaderValue(s, "targetPort");
+            networkId = getHeaderValue(s, "network_id");
+            targetHost = getHeaderValue(s, "target_host");
+            targetPort = getHeaderValue(s, "target_port");
+            super.networkId = networkId;
         }
 
         if (networkId == null || targetHost == null || targetPort == null) {

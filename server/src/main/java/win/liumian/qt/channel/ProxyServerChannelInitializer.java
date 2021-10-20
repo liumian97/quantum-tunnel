@@ -1,5 +1,6 @@
 package win.liumian.qt.channel;
 
+import io.netty.handler.timeout.IdleStateHandler;
 import win.liumian.qt.common.QuantumMessageDecoder;
 import win.liumian.qt.common.QuantumMessageEncoder;
 import win.liumian.qt.handler.ProxyServerHandler;
@@ -17,9 +18,10 @@ public class ProxyServerChannelInitializer extends ChannelInitializer<SocketChan
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         socketChannel.pipeline().addLast(
-                new LengthFieldBasedFrameDecoder(65535, 0, 4,0,4),
+                new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
                 new QuantumMessageDecoder(),
                 new QuantumMessageEncoder(),
+                new IdleStateHandler(360, 300, 0),
                 new ProxyServerHandler());
     }
 }

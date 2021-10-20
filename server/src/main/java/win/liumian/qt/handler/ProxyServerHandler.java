@@ -25,6 +25,8 @@ public class ProxyServerHandler extends QuantumCommonHandler {
             processRegister(ctx, message);
         } else if (message.getMessageType() == QuantumMessageType.PROXY_DISCONNECTED) {
             processProxyDisconnected(message);
+        } else if (message.getMessageType() == QuantumMessageType.KEEPALIVE) {
+            log.info("收到心跳消息，网络id：{}",message.getNetworkId());
         } else if (message.getMessageType() == QuantumMessageType.DATA) {
             processData(message);
         } else {
@@ -36,6 +38,7 @@ public class ProxyServerHandler extends QuantumCommonHandler {
     private void processRegister(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
         Channel channel = ctx.channel();
         String networkId = quantumMessage.getNetworkId();
+        super.networkId = networkId;
         ChannelMap.proxyChannelsMap.put(networkId, channel);
         Map<String, Object> resultData = new HashMap<>();
         resultData.put("success", true);

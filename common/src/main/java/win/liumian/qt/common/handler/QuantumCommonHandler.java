@@ -16,6 +16,8 @@ public class QuantumCommonHandler extends ChannelInboundHandlerAdapter {
 
     protected ChannelHandlerContext ctx;
 
+    protected String networkId;
+
     public ChannelHandlerContext getCtx() {
         return ctx;
     }
@@ -36,10 +38,11 @@ public class QuantumCommonHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent e = (IdleStateEvent) evt;
             if (e.state() == IdleState.READER_IDLE) {
-                log.info("Read idle loss connection.");
+                log.info("长时间未收到消息，关闭连接");
                 ctx.close();
             } else if (e.state() == IdleState.WRITER_IDLE) {
                 QuantumMessage quantumMessage = new QuantumMessage();
+                quantumMessage.setNetworkId(networkId);
                 quantumMessage.setMessageType(QuantumMessageType.KEEPALIVE);
                 ctx.writeAndFlush(quantumMessage);
             }

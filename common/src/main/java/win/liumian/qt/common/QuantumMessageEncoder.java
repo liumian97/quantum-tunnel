@@ -26,7 +26,6 @@ public class QuantumMessageEncoder extends MessageToByteEncoder<QuantumMessage> 
             out.writeInt(data.length);
             out.writeBytes(data);
         }
-
     }
 
 }

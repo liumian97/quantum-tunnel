@@ -25,10 +25,20 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     private final static NioEventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
 
-    private String networkId;
+    /**
+     * 通配符
+     */
+    private final static String WILD_CARD = "*";
 
-    public ProxyClientHandler(String networkId) {
-        this.networkId = networkId;
+
+    private String targetServerHost;
+
+    private String targetServerPort;
+
+    public ProxyClientHandler(String networkId,String targetServerHost,String targetServerPort) {
+        super.networkId = networkId;
+        this.targetServerHost = targetServerHost;
+        this.targetServerPort = targetServerPort;
     }
 
     @Override
@@ -50,6 +60,8 @@ public class ProxyClientHandler extends QuantumCommonHandler {
             processRegisterResult(quantumMessage);
         } else if (quantumMessage.getMessageType() == QuantumMessageType.USER_DISCONNECTED) {
             processUserChannelDisconnected(quantumMessage);
+        } else if (quantumMessage.getMessageType() == QuantumMessageType.KEEPALIVE) {
+            log.info("收到心跳消息，网络id：{}",quantumMessage.getNetworkId());
         } else if (quantumMessage.getMessageType() == QuantumMessageType.DATA) {
             processData(ctx, quantumMessage);
         } else {
@@ -88,6 +100,15 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(quantumMessage.getData().length);
         buffer.writeBytes(quantumMessage.getData());
         if (proxyChannel == null) {
+            if (!WILD_CARD.equals(targetServerHost) && !targetServerHost.equals(quantumMessage.getTargetHost())){
+                disconnectUserChannel(ctx,quantumMessage.getChannelId());
+                return;
+            }
+
+            if (!WILD_CARD.equals(targetServerPort) && Integer.parseInt(targetServerPort) != quantumMessage.getTargetPort()){
+                disconnectUserChannel(ctx,quantumMessage.getChannelId());
+                return;
+            }
             try {
                 Bootstrap b = new Bootstrap();
                 b.group(WORKER_GROUP);
@@ -96,21 +117,26 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new ProxyRequestHandler(ctx, quantumMessage.getChannelId()));
+                        pipeline.addLast(new ProxyRequestHandler(ctx, quantumMessage.getChannelId(),networkId));
                     }
                 });
-                Channel channel = b.connect(quantumMessage.getTargetHost(), quantumMessage.getTargetPort()).sync().channel();
+                Channel channel = b.connect("127.0.0.1", quantumMessage.getTargetPort()).sync().channel();
                 channel.writeAndFlush(buffer);
             } catch (Exception e) {
                 log.error("请求targetServer异常",e);
                 //通知服务端proxyChannel已经断开，让其断开userChannel
-                QuantumMessage message = new QuantumMessage();
-                message.setChannelId(quantumMessage.getChannelId());
-                message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
-                ctx.writeAndFlush(message);
+                disconnectUserChannel(ctx,quantumMessage.getChannelId());
             }
         } else {
             proxyChannel.writeAndFlush(buffer);
         }
     }
+
+    private void disconnectUserChannel(ChannelHandlerContext ctx,String channelId){
+        QuantumMessage message = new QuantumMessage();
+        message.setChannelId(channelId);
+        message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
+        ctx.writeAndFlush(message);
+    }
+
 }
