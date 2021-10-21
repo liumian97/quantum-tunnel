@@ -45,6 +45,6 @@ curl --location --request GET '127.0.0.1:8090/' \
 
 #### 技术文章
 1. [QuantumTunnel：内网穿透服务设计](https://mp.weixin.qq.com/s/7t5n_nI7CZ3VhownRhCsrg)
-2. [QuantumTunnel:Netty实现](https://mp.weixin.qq.com/s/3N_c6IR--e85kmt0tjHSvw)
+2. [QuantumTunnel：Netty实现](https://mp.weixin.qq.com/s/3N_c6IR--e85kmt0tjHSvw)
 3. [QuantumTunnel：v0.1-beta发布](https://mp.weixin.qq.com/s/9GRyeFTZ_jdwXAtktSc9Uw)
 
