@@ -120,7 +120,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                         pipeline.addLast(new ProxyRequestHandler(ctx, quantumMessage.getChannelId(),networkId));
                     }
                 });
-                Channel channel = b.connect("127.0.0.1", quantumMessage.getTargetPort()).sync().channel();
+                Channel channel = b.connect(quantumMessage.getTargetHost(), quantumMessage.getTargetPort()).sync().channel();
                 channel.writeAndFlush(buffer);
             } catch (Exception e) {
                 log.error("请求targetServer异常",e);
