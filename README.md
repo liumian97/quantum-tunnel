@@ -13,6 +13,10 @@ QuantumTunnel，量子隧道，名字来源于量子纠缠现象。
 
 QuantumTunnel也取意于此，希望把公网发出来的请求，完整的同步到内网，就像在内网发出的请求，打破网络的限制。
 
+## 仓库地址
+1. gitee：[乐天派 / quantum-tunnel](https://gitee.com/liumian/quantum-tunnel)
+2. github：[liumian97/quantum-tunnel](https://github.com/liumian97/quantum-tunnel)
+
 ## 软件架构
 
 ### 架构图
