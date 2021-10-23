@@ -83,8 +83,8 @@ public class ProxyClient {
 
     }
 
-    private String proxyServerHost;
-    private String proxyServerPort;
+    private final String proxyServerHost;
+    private final String proxyServerPort;
     private final String networkId;
     private final String targetServerHost;
     private final String targetServerPort;

@@ -28,14 +28,35 @@ QuantumTunnel也取意于此，希望把公网发出来的请求，完整的同�
    - 内网穿透客户端： sh package_client.sh
 3. 启动服务
    - 启动服务端： java -jar quantum-tunnel-server.jar -proxy_server_port 9090 -user_server_port 8090
-   - 启动客户端： java -jar quantum-tunnel-client.jar -network_id localTest -proxy_server_host lm.cn -proxy_server_port 9090
+   - 启动客户端： java -jar quantum-tunnel-client.jar -network_id localTest -proxy_server_host 127.0.0.1 -proxy_server_port 9090
+
+全部参数说明：
+```shell
+# 内网穿透服务端
+1. proxy_server_port：代理服务器端口，即接收代理客户连接的端口
+2. user_server_port：用户服务器端口，即接收用户请求的端口
+3. route_mode：路由模式
+  3.1 协议路由：protocol_route，即解析用户提交的路由信息决定真实服务器的地址，适用于业务代理场景
+  3.2 端口路由：port_route，即将真实服务器的路由信息与端口绑定，忽略用户提交的路由信息，适用于中间件代理场景
+4. network_id：被代理网络id。若选择端口路由，则必填
+5. target_server_host：真实服务器地址。若选择端口路由，则必填
+6. target_server_port：真实服务端口。若选择端口路由，则必填
+
+# 内网穿透客户端
+1. network_id：所在网络id
+2. proxy_server_host：代理服务器地址
+3. proxy_server_port：代理服务器端口
+4. target_server_host：目标服务器host，允许访问所有服务器则填 * 
+4. target_server_port：目标服务器端口，允许访问所有服务器则填 * 
+```
+
 4. 使用代理服务访问百度
 ```shell
 curl --location --request GET '127.0.0.1:8090/' \
---header 'targetPort: 80' \
---header 'networkId: localTest' \
 --header 'Host: www.baidu.com' \
---header 'targetHost: www.baidu.com' \
+--header 'network_id: localTest' \
+--header 'target_host: www.baidu.com' \
+--header 'target_port: 80' \
 --header 'Cookie: BDSVRTM=11; BD_HOME=1'
 ```
 

@@ -26,8 +26,8 @@ public class QuantumTunnelApplication {
         options.addOption("user_server_port", true, "内网穿透-用户服务端口");
         options.addOption("route_mode", true, "路由模式：protocol_route 或者 port_route，默认protocol_route");
         options.addOption("network_id", true, "网络id，port_route需要指定");
-        options.addOption("target_host", true, "目标host，port_route需要指定");
-        options.addOption("target_port", true, "目标port，port_route需要指定");
+        options.addOption("target_server_host", true, "目标host，port_route需要指定");
+        options.addOption("target_server_port", true, "目标port，port_route需要指定");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
