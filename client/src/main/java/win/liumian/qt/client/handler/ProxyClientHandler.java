@@ -26,15 +26,9 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     private final static NioEventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
 
-    /**
-     * 通配符
-     */
-    private final static String WILD_CARD = "*";
+    private final String targetServerHost;
 
-
-    private String targetServerHost;
-
-    private String targetServerPort;
+    private final String targetServerPort;
 
     public ProxyClientHandler(String networkId, String targetServerHost, String targetServerPort) {
         super.networkId = networkId;
@@ -108,12 +102,12 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(quantumMessage.getData().length);
         buffer.writeBytes(quantumMessage.getData());
         if (proxyChannel == null) {
-            if (!WILD_CARD.equals(targetServerHost) && !targetServerHost.equals(quantumMessage.getTargetHost())) {
+            if (targetServerHost != null && !targetServerHost.equals(quantumMessage.getTargetHost())) {
                 disconnectUserChannel(ctx, quantumMessage.getChannelId());
                 return;
             }
 
-            if (!WILD_CARD.equals(targetServerPort) && Integer.parseInt(targetServerPort) != quantumMessage.getTargetPort()) {
+            if (targetServerPort != null && Integer.parseInt(targetServerPort) != quantumMessage.getTargetPort()) {
                 disconnectUserChannel(ctx, quantumMessage.getChannelId());
                 return;
             }

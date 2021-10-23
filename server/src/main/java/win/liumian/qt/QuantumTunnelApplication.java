@@ -58,15 +58,15 @@ public class QuantumTunnelApplication {
                 return;
             }
 
-            String targetHost = cmd.getOptionValue("target_host");
+            String targetHost = cmd.getOptionValue("target_server_host");
             if (RouteMode.PORT_ROUTE.value.equals(routeMode) && targetHost == null) {
-                log.error("target_host cannot be null");
+                log.error("target_server_host cannot be null");
                 return;
             }
 
-            String targetPort = cmd.getOptionValue("target_port");
+            String targetPort = cmd.getOptionValue("target_server_port");
             if (RouteMode.PORT_ROUTE.value.equals(routeMode) && targetPort == null) {
-                log.error("target_port cannot be null");
+                log.error("target_server_port cannot be null");
                 return;
             }
             executor.execute(() -> {

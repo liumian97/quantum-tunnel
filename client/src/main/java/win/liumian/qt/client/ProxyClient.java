@@ -32,8 +32,8 @@ public class ProxyClient {
         options.addOption("proxy_server_host", true, "内网穿透-代理服务器地址");
         options.addOption("proxy_server_port", true, "内网穿透-代理服务端口");
         options.addOption("network_id", true, "分配的网络id");
-        options.addOption("target_server_host", true, "目标服务器host，允许访问所有服务器则填 * ");
-        options.addOption("target_server_port", true, "目标服务器port，允许访问所有服务器则填 *");
+        options.addOption("target_server_host", true, "目标服务器host，默认不限制");
+        options.addOption("target_server_port", true, "目标服务器port，默认不限制");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -43,13 +43,13 @@ public class ProxyClient {
             formatter.printHelp("options", options);
         } else {
 
-            String serverHost = cmd.getOptionValue("proxy_server_host");
-            if (serverHost == null) {
+            String proxyServerHost = cmd.getOptionValue("proxy_server_host");
+            if (proxyServerHost == null) {
                 log.error("proxy_server_host cannot be null");
                 return;
             }
-            String serverPort = cmd.getOptionValue("proxy_server_port");
-            if (serverPort == null) {
+            String proxyServerPort = cmd.getOptionValue("proxy_server_port");
+            if (proxyServerPort == null) {
                 log.error("proxy_server_port cannot be null");
                 return;
             }
@@ -59,16 +59,10 @@ public class ProxyClient {
                 return;
             }
             String targetServerHost = cmd.getOptionValue("target_server_host");
-            if (targetServerHost == null) {
-                log.error("target_server_host cannot be null");
-                return;
-            }
             String targetServerPort = cmd.getOptionValue("target_server_port");
-            if (targetServerPort == null) {
-                log.error("target_server_port cannot be null");
-                return;
-            }
-            ProxyClient proxyClient = new ProxyClient(serverHost, serverPort, networkId, targetServerHost, targetServerPort);
+            log.info("启动参数：\nproxy_server_host：{}\nproxy_server_port：{}\nnetwork_id：{} \ntarget_server_host：{}\ntarget_server_port：{}",
+                    proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
+            ProxyClient proxyClient = new ProxyClient(proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
             while (true) {
                 try {
                     Channel channel = proxyClient.connect();
