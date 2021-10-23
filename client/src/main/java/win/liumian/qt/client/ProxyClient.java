@@ -33,7 +33,7 @@ public class ProxyClient {
         options.addOption("proxy_server_port", true, "内网穿透-代理服务端口");
         options.addOption("network_id", true, "分配的网络id");
         options.addOption("target_server_host", true, "目标服务器host，允许访问所有服务器则填 * ");
-        options.addOption("target_server_port", true, "目标服务器port，允许访问所有服务器则填 * ");
+        options.addOption("target_server_port", true, "目标服务器port，允许访问所有服务器则填 *");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -45,33 +45,33 @@ public class ProxyClient {
 
             String serverHost = cmd.getOptionValue("proxy_server_host");
             if (serverHost == null) {
-                System.out.println("proxy_server_host cannot be null");
+                log.error("proxy_server_host cannot be null");
                 return;
             }
             String serverPort = cmd.getOptionValue("proxy_server_port");
             if (serverPort == null) {
-                System.out.println("proxy_server_port cannot be null");
+                log.error("proxy_server_port cannot be null");
                 return;
             }
             String networkId = cmd.getOptionValue("network_id");
             if (networkId == null) {
-                System.out.println("proxy_server_port cannot be null");
+                log.error("proxy_server_port cannot be null");
                 return;
             }
             String targetServerHost = cmd.getOptionValue("target_server_host");
             if (targetServerHost == null) {
-                System.out.println("target_server_host cannot be null");
+                log.error("target_server_host cannot be null");
                 return;
             }
             String targetServerPort = cmd.getOptionValue("target_server_port");
             if (targetServerPort == null) {
-                System.out.println("target_server_port cannot be null");
+                log.error("target_server_port cannot be null");
                 return;
             }
-            ProxyClient proxyClient = new ProxyClient();
+            ProxyClient proxyClient = new ProxyClient(serverHost, serverPort, networkId, targetServerHost, targetServerPort);
             while (true) {
                 try {
-                    Channel channel = proxyClient.connect(serverHost, Integer.parseInt(serverPort), networkId,targetServerHost,targetServerPort);
+                    Channel channel = proxyClient.connect();
                     channel.closeFuture().sync();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -83,15 +83,27 @@ public class ProxyClient {
 
     }
 
+    private String proxyServerHost;
+    private String proxyServerPort;
+    private final String networkId;
+    private final String targetServerHost;
+    private final String targetServerPort;
+
+
     private final NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 
+    public ProxyClient(String proxyServerHost, String proxyServerPort, String networkId, String targetServerHost, String targetServerPort) {
+        this.proxyServerHost = proxyServerHost;
+        this.proxyServerPort = proxyServerPort;
+        this.networkId = networkId;
+        this.targetServerHost = targetServerHost;
+        this.targetServerPort = targetServerPort;
+    }
 
     /**
-     * @param host
-     * @param port
      * @throws InterruptedException
      */
-    public Channel connect(String host, int port, String networkId,String targetServerHost,String targetServerPort) throws InterruptedException, IOException {
+    public Channel connect() throws InterruptedException, IOException {
 
         Bootstrap b = new Bootstrap();
         b.group(workerGroup);
@@ -100,15 +112,15 @@ public class ProxyClient {
         b.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) {
-                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId,targetServerHost,targetServerPort);
+                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId, targetServerHost, targetServerPort);
                 ch.pipeline().addLast(
                         new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
                         new QuantumMessageDecoder(),
                         new QuantumMessageEncoder(),
-                        new IdleStateHandler(360,300,0),
+                        new IdleStateHandler(360, 300, 0),
                         proxyClientHandler);
             }
         });
-        return b.connect(host, port).addListener(future -> log.info("内网穿透客户端启动成功...")).sync().channel();
+        return b.connect(proxyServerHost, Integer.parseInt(proxyServerPort)).addListener(future -> log.info("内网穿透客户端启动成功...")).sync().channel();
     }
 }

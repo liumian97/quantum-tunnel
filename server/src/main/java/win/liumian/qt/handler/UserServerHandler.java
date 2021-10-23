@@ -27,6 +27,13 @@ public class UserServerHandler extends QuantumCommonHandler {
 
     private String targetPort;
 
+
+    public UserServerHandler(String networkId, String targetHost, String targetPort) {
+        this.networkId = networkId;
+        this.targetHost = targetHost;
+        this.targetPort = targetPort;
+    }
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);

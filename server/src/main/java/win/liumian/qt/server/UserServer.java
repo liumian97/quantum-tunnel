@@ -1,15 +1,15 @@
 package win.liumian.qt.server;
 
-import win.liumian.qt.channel.QuantumServerChannelInitializer;
+import io.netty.channel.*;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.InetSocketAddress;
+import win.liumian.qt.common.enumeration.RouteMode;
+import win.liumian.qt.handler.UserServerHandler;
 
 /**
  * @author liumian  2021/9/18 16:22
@@ -17,7 +17,47 @@ import java.net.InetSocketAddress;
 @Slf4j
 public class UserServer {
 
-    public void start(InetSocketAddress socketAddress) {
+    /**
+     * 用户服务器端口
+     */
+    private final String userServerPort;
+
+    /**
+     * 路由模式
+     * 协议路由：protocol_route
+     * 端口路由：port_route
+     */
+    private final String routeMode;
+
+    /**
+     * 目标网络id
+     */
+    private final String networkId;
+
+    /**
+     * 目标host
+     */
+    private final String targetHost;
+
+    /**
+     * 目标端口
+     */
+    private final String targetPort;
+
+    public UserServer(String userServerPort, String routeMode, String networkId, String targetHost, String targetPort) {
+        this.userServerPort = userServerPort;
+        this.routeMode = routeMode;
+        if (RouteMode.PORT_ROUTE.value.equals(routeMode)) {
+            if (networkId == null || targetHost == null || targetPort == null) {
+                throw new RuntimeException("端口路由必须填写network_id，target_host，target_port参数");
+            }
+        }
+        this.networkId = networkId;
+        this.targetHost = targetHost;
+        this.targetPort = targetPort;
+    }
+
+    public void start() {
         //new 一个主线程组
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         //new 一个工作线程组
@@ -25,16 +65,28 @@ public class UserServer {
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new QuantumServerChannelInitializer())
-                .localAddress(socketAddress)
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel socketChannel) {
+                        // 请求解码器
+                        socketChannel.pipeline()
+                                .addLast(new ByteArrayDecoder(), new ByteArrayEncoder())
+                                .addLast(new UserServerHandler(networkId, targetHost, targetPort));
+
+                    }
+                })
+                .localAddress(Integer.parseInt(userServerPort))
                 //设置队列大小
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 // 两小时内没有数据的通信时,TCP会自动发送一个活动探测数据报文
                 .childOption(ChannelOption.SO_KEEPALIVE, true);
         //绑定端口,开始接收进来的连接
         try {
-            ChannelFuture future = bootstrap.bind(socketAddress).sync();
-            log.info("业务服务器启动开始监听端口: {}", socketAddress.getPort());
+            ChannelFuture future = bootstrap.bind(Integer.parseInt(userServerPort)).sync();
+            log.info("用户服务器启动，路由模式：{}，监听端口: {}", routeMode, userServerPort);
+            if (RouteMode.PORT_ROUTE.value.equals(routeMode)) {
+                log.info("目标网络Id：{}，目标host：{}，目标端口：{}", networkId, targetHost, targetPort);
+            }
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
