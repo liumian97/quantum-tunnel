@@ -9,15 +9,21 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.channel.ChannelMap;
 
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author liumian  2021/9/19 19:10
  */
 @Slf4j
 public class ProxyServerHandler extends QuantumCommonHandler {
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
+        SocketAddress socketAddress = ctx.channel().remoteAddress();
+        log.info("接收到{}连接请求", socketAddress.toString());
+    }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
