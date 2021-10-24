@@ -1,5 +1,6 @@
 package win.liumian.qt.client.udp;
 
+import com.alibaba.fastjson.JSONObject;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -12,6 +13,8 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.client.udp.handler.UdpClientHandler;
+import win.liumian.qt.common.QuantumMessage;
+import win.liumian.qt.common.QuantumMessageType;
 
 import java.net.InetSocketAddress;
 
@@ -21,13 +24,16 @@ import java.net.InetSocketAddress;
 @Slf4j
 public class UdpClient {
 
+    private final String networkId;
+
     private final String remoteHost;
 
     private final int remotePort;
 
     private final int localPort;
 
-    public UdpClient(String remoteHost, int remotePort, int localPort) {
+    public UdpClient(String networkId, String remoteHost, int remotePort, int localPort) {
+        this.networkId = networkId;
         this.remoteHost = remoteHost;
         this.remotePort = remotePort;
         this.localPort = localPort;
@@ -46,7 +52,12 @@ public class UdpClient {
                     .handler(new UdpClientHandler());
             Channel channel = b.bind(localPort).sync().channel();
 
-            ByteBuf byteBuf = Unpooled.copiedBuffer("Hello UDP world", CharsetUtil.UTF_8);
+
+            QuantumMessage quantumMessage = new QuantumMessage();
+            quantumMessage.setMessageType(QuantumMessageType.REGISTER);
+            quantumMessage.setNetworkId(networkId);
+
+            ByteBuf byteBuf = Unpooled.copiedBuffer(JSONObject.toJSONString(quantumMessage), CharsetUtil.UTF_8);
             InetSocketAddress socketAddress = new InetSocketAddress(remoteHost, remotePort);
             DatagramPacket packet = new DatagramPacket(byteBuf, socketAddress);
 

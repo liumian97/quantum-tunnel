@@ -1,4 +1,4 @@
-package win.liumian.qt.handler;
+package win.liumian.qt.tcp.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import win.liumian.qt.common.QuantumMessage;
@@ -7,7 +7,7 @@ import win.liumian.qt.common.handler.QuantumCommonHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import win.liumian.qt.channel.ChannelMap;
+import win.liumian.qt.tcp.channel.ChannelMap;
 
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;

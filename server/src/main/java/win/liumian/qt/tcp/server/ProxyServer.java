@@ -1,4 +1,4 @@
-package win.liumian.qt.server;
+package win.liumian.qt.tcp.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -13,7 +13,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.common.QuantumMessageDecoder;
 import win.liumian.qt.common.QuantumMessageEncoder;
-import win.liumian.qt.handler.ProxyServerHandler;
+import win.liumian.qt.tcp.handler.ProxyServerHandler;
 
 /**
  * @author liumian  2021/9/19 19:10

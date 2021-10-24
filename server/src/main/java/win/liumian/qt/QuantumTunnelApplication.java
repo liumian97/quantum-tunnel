@@ -5,8 +5,8 @@ import org.apache.commons.cli.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.common.enumeration.RouteMode;
-import win.liumian.qt.server.ProxyServer;
-import win.liumian.qt.server.UserServer;
+import win.liumian.qt.tcp.server.ProxyServer;
+import win.liumian.qt.tcp.server.UserServer;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

@@ -1,4 +1,4 @@
-package win.liumian.qt.channel;
+package win.liumian.qt.tcp.channel;
 
 import io.netty.channel.Channel;
 

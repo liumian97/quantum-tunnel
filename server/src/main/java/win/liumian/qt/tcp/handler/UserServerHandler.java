@@ -1,4 +1,4 @@
-package win.liumian.qt.handler;
+package win.liumian.qt.tcp.handler;
 
 import win.liumian.qt.common.QuantumMessage;
 import win.liumian.qt.common.QuantumMessageType;
@@ -8,7 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import win.liumian.qt.channel.ChannelMap;
+import win.liumian.qt.tcp.channel.ChannelMap;
 
 /**
  * @author liumian  2021/9/19 07:33

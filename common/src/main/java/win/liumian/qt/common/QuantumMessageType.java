@@ -33,7 +33,11 @@ public enum QuantumMessageType {
     /**
      * 用户链接断开
      */
-    USER_DISCONNECTED(7);
+    USER_DISCONNECTED(7),
+
+    PING(8),
+
+    PONG(9);
 
     private int code;
 

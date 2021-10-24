@@ -1,4 +1,4 @@
-package win.liumian.qt.server;
+package win.liumian.qt.tcp.server;
 
 import io.netty.channel.*;
 import io.netty.channel.socket.SocketChannel;
@@ -9,7 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.common.enumeration.RouteMode;
-import win.liumian.qt.handler.UserServerHandler;
+import win.liumian.qt.tcp.handler.UserServerHandler;
 
 /**
  * @author liumian  2021/9/18 16:22
