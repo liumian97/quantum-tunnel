@@ -34,7 +34,7 @@ public class UdpClientHandler extends SimpleChannelInboundHandler<DatagramPacket
         } else if (quantumMessage.getMessageType() == QuantumMessageType.PONG) {
             String hostName = msg.sender().getHostName();
             int port = msg.sender().getPort();
-            processPing(ctx, quantumMessage.getNetworkId(), hostName, port);
+            processPong(ctx, quantumMessage.getNetworkId(), hostName, port);
         }
     }
 
@@ -45,16 +45,12 @@ public class UdpClientHandler extends SimpleChannelInboundHandler<DatagramPacket
         pingMsg.setMessageType(QuantumMessageType.PING);
 
         ByteBuf byteBuf2Pre = Unpooled.copiedBuffer(JSONObject.toJSONString(pingMsg), CharsetUtil.UTF_8);
-        InetSocketAddress recipient = new InetSocketAddress(pingMsg.getTargetHost(), pingMsg.getTargetPort());
+        InetSocketAddress recipient = new InetSocketAddress(quantumMessage.getTargetHost(), quantumMessage.getTargetPort());
         DatagramPacket packet2Pre = new DatagramPacket(byteBuf2Pre, recipient);
         ctx.channel().writeAndFlush(packet2Pre);
     }
 
     private void processPing(ChannelHandlerContext ctx, String networkId, String targetHost, int targetPort) {
-        log.info("成功建立udp通道，网络id：{}，对端host：{}，对端port：{}", networkId, targetHost, targetPort);
-    }
-
-    private void processPong(ChannelHandlerContext ctx, String networkId, String targetHost, int targetPort) {
         QuantumMessage pongMsg = new QuantumMessage();
         pongMsg.setNetworkId(networkId);
         pongMsg.setMessageType(QuantumMessageType.PONG);
@@ -63,6 +59,10 @@ public class UdpClientHandler extends SimpleChannelInboundHandler<DatagramPacket
         InetSocketAddress recipient = new InetSocketAddress(targetHost, targetPort);
         DatagramPacket packet2Pre = new DatagramPacket(byteBuf2Pre, recipient);
         ctx.channel().writeAndFlush(packet2Pre);
+    }
+
+    private void processPong(ChannelHandlerContext ctx, String networkId, String targetHost, int targetPort) {
+        log.info("成功建立udp通道，网络id：{}，对端host：{}，对端port：{}", networkId, targetHost, targetPort);
     }
 
 

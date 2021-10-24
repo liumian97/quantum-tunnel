@@ -62,10 +62,7 @@ public class UdpClient {
             DatagramPacket packet = new DatagramPacket(byteBuf, socketAddress);
 
             channel.writeAndFlush(packet).sync();
-
-            if (!channel.closeFuture().await(15000)) {
-                log.info("查询超时");
-            }
+            channel.closeFuture().await();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

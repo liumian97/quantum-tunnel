@@ -31,7 +31,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
         QuantumMessage quantumMessage = JSONObject.parseObject(response, QuantumMessage.class);
 
         if (quantumMessage.getMessageType() == QuantumMessageType.REGISTER) {
-            InetSocketAddress currentAddr = msg.recipient();
+            InetSocketAddress currentAddr = msg.sender();
             String networkId = quantumMessage.getNetworkId();
             if (networkId2Addr.containsKey(networkId)) {
 
