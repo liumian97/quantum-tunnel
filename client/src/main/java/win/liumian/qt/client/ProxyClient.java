@@ -1,20 +1,10 @@
 package win.liumian.qt.client;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import win.liumian.qt.client.tcp.handler.ProxyClientHandler;
-import win.liumian.qt.common.QuantumMessageDecoder;
-import win.liumian.qt.common.QuantumMessageEncoder;
+import win.liumian.qt.client.tcp.TcpClient;
 
 import java.io.IOException;
 
@@ -62,10 +52,10 @@ public class ProxyClient {
             String targetServerPort = cmd.getOptionValue("target_server_port");
             log.info("启动参数：\nproxy_server_host：{}\nproxy_server_port：{}\nnetwork_id：{} \ntarget_server_host：{}\ntarget_server_port：{}",
                     proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
-            ProxyClient proxyClient = new ProxyClient(proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
+            TcpClient tcpClient = new TcpClient(proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
             while (true) {
                 try {
-                    Channel channel = proxyClient.connect();
+                    Channel channel = tcpClient.connect();
                     channel.closeFuture().sync();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -75,46 +65,5 @@ public class ProxyClient {
             }
         }
 
-    }
-
-    private final String proxyServerHost;
-    private final String proxyServerPort;
-    private final String networkId;
-    private final String targetServerHost;
-    private final String targetServerPort;
-
-
-    private final NioEventLoopGroup workerGroup = new NioEventLoopGroup();
-
-    public ProxyClient(String proxyServerHost, String proxyServerPort, String networkId, String targetServerHost, String targetServerPort) {
-        this.proxyServerHost = proxyServerHost;
-        this.proxyServerPort = proxyServerPort;
-        this.networkId = networkId;
-        this.targetServerHost = targetServerHost;
-        this.targetServerPort = targetServerPort;
-    }
-
-    /**
-     * @throws InterruptedException
-     */
-    public Channel connect() throws InterruptedException, IOException {
-
-        Bootstrap b = new Bootstrap();
-        b.group(workerGroup);
-        b.channel(NioSocketChannel.class);
-        b.option(ChannelOption.SO_KEEPALIVE, true);
-        b.handler(new ChannelInitializer<SocketChannel>() {
-            @Override
-            public void initChannel(SocketChannel ch) {
-                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId, targetServerHost, targetServerPort);
-                ch.pipeline().addLast(
-                        new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
-                        new QuantumMessageDecoder(),
-                        new QuantumMessageEncoder(),
-                        new IdleStateHandler(360, 300, 0),
-                        proxyClientHandler);
-            }
-        });
-        return b.connect(proxyServerHost, Integer.parseInt(proxyServerPort)).addListener(future -> log.info("内网穿透客户端启动成功...")).sync().channel();
     }
 }
