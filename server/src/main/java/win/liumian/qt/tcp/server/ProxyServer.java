@@ -39,7 +39,7 @@ public class ProxyServer {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast(
-                                new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
+                                new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4),
                                 new QuantumMessageDecoder(),
                                 new QuantumMessageEncoder(),
                                 new IdleStateHandler(360, 300, 0),

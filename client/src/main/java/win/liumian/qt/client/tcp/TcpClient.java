@@ -53,7 +53,7 @@ public class TcpClient {
             public void initChannel(SocketChannel ch) {
                 ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId, targetServerHost, targetServerPort);
                 ch.pipeline().addLast(
-                        new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
+                        new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4),
                         new QuantumMessageDecoder(),
                         new QuantumMessageEncoder(),
                         new IdleStateHandler(360, 300, 0),
