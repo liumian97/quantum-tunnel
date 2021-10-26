@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.common.enumeration.RouteMode;
 import win.liumian.qt.tcp.server.ProxyServer;
 import win.liumian.qt.tcp.server.UserServer;
+import win.liumian.qt.udp.UdpServer;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -16,7 +17,7 @@ import java.util.concurrent.Executors;
 public class QuantumTunnelApplication {
 
 
-    private static Executor executor = Executors.newFixedThreadPool(2);
+    private static Executor executor = Executors.newFixedThreadPool(3);
 
 
     public static void main(String[] args) throws ParseException {
@@ -69,6 +70,10 @@ public class QuantumTunnelApplication {
                 log.error("target_server_port cannot be null");
                 return;
             }
+
+            executor.execute(() -> new UdpServer(9999).run());
+
+
             executor.execute(() -> {
                 //启动代理服务端
                 ProxyServer proxyServer = new ProxyServer(proxyServerPort);

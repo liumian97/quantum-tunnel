@@ -1,22 +1,17 @@
 package win.liumian.qt.udp;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.udp.handler.UdpServerHandler;
-
-import java.net.InetSocketAddress;
 
 /**
  * @author liumian  2021/10/24 16:31
  */
+@Slf4j
 public class UdpServer {
 
     private final int localPort;
@@ -36,6 +31,7 @@ public class UdpServer {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UdpServerHandler());
+            log.info("udp服务启动：{}", localPort);
             b.bind(localPort).sync().channel().closeFuture().await();
         } catch (Exception e) {
             e.printStackTrace();
