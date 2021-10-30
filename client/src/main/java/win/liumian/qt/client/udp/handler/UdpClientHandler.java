@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.util.CharsetUtil;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.common.QuantumMessage;
 import win.liumian.qt.common.QuantumMessageType;
@@ -40,14 +41,37 @@ public class UdpClientHandler extends SimpleChannelInboundHandler<DatagramPacket
 
 
     private void processRegisterResult(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
-        QuantumMessage pingMsg = new QuantumMessage();
-        pingMsg.setNetworkId(quantumMessage.getNetworkId());
-        pingMsg.setMessageType(QuantumMessageType.PING);
+        if (StringUtil.isNullOrEmpty(quantumMessage.getTargetHost())) {
+            try {
+                Thread.sleep(20000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            QuantumMessage registerMsg = new QuantumMessage();
+            registerMsg.setMessageType(QuantumMessageType.REGISTER);
+            registerMsg.setNetworkId(quantumMessage.getNetworkId());
 
-        ByteBuf byteBuf2Pre = Unpooled.copiedBuffer(JSONObject.toJSONString(pingMsg), CharsetUtil.UTF_8);
-        InetSocketAddress recipient = new InetSocketAddress(quantumMessage.getTargetHost(), quantumMessage.getTargetPort());
-        DatagramPacket packet2Pre = new DatagramPacket(byteBuf2Pre, recipient);
-        ctx.channel().writeAndFlush(packet2Pre);
+            ByteBuf byteBuf = Unpooled.copiedBuffer(JSONObject.toJSONString(registerMsg), CharsetUtil.UTF_8);
+            InetSocketAddress socketAddress = new InetSocketAddress("101.35.83.105", 9999);
+            DatagramPacket packet = new DatagramPacket(byteBuf, socketAddress);
+            ctx.channel().writeAndFlush(packet);
+        } else {
+            QuantumMessage pingMsg = new QuantumMessage();
+            pingMsg.setNetworkId(quantumMessage.getNetworkId());
+            pingMsg.setMessageType(QuantumMessageType.PING);
+
+            for (int i = 0; i < 10; i++) {
+                ByteBuf byteBuf2Pre = Unpooled.copiedBuffer(JSONObject.toJSONString(pingMsg), CharsetUtil.UTF_8);
+                InetSocketAddress recipient = new InetSocketAddress(quantumMessage.getTargetHost(), quantumMessage.getTargetPort());
+                DatagramPacket packet2Pre = new DatagramPacket(byteBuf2Pre, recipient);
+                ctx.channel().writeAndFlush(packet2Pre);
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void processPing(ChannelHandlerContext ctx, String networkId, String targetHost, int targetPort) {

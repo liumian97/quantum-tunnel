@@ -39,7 +39,10 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
                 InetSocketAddress preAddr = networkId2Addr.get(networkId);
                 if (preAddr.toString().equals(currentAddr.toString())) {
                     //相等则说明是同一个客户端，直接丢弃
-                    return;
+                    networkId2Addr.put(networkId, currentAddr);
+                    ByteBuf byteBuf2Pre = Unpooled.copiedBuffer(JSONObject.toJSONString(newRegisterResultMsg(networkId, null, 0)), CharsetUtil.UTF_8);
+                    DatagramPacket packet2Pre = new DatagramPacket(byteBuf2Pre, msg.sender());
+                    ctx.channel().writeAndFlush(packet2Pre);
                 } else {
                     //往两个客户端发送注册结果，告知对方的ip和端口
 
