@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.client.tcp.TcpClient;
+import win.liumian.qt.client.udp.UdpClient;
 
 import java.io.IOException;
 
@@ -53,6 +54,15 @@ public class ProxyClient {
             log.info("启动参数：\nproxy_server_host：{}\nproxy_server_port：{}\nnetwork_id：{} \ntarget_server_host：{}\ntarget_server_port：{}",
                     proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
             TcpClient tcpClient = new TcpClient(proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
+            new Thread(() -> {
+                UdpClient client1 = new UdpClient(networkId, proxyServerHost, 9999, 8881);
+                client1.run();
+            }).start();
+
+//            new Thread(() -> {
+//                UdpClient client1 = new UdpClient(networkId, proxyServerHost, 10000, 8881);
+//                client1.run();
+//            }).start();
             while (true) {
                 try {
                     Channel channel = tcpClient.connect();

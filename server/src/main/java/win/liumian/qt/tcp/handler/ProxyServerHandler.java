@@ -58,7 +58,7 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         resultMsg.setNetworkId(networkId);
         resultMsg.setMessageType(QuantumMessageType.REGISTER_RESULT);
         if (ChannelMap.proxyChannelsMap.containsKey(networkId)) {
-            resultData.put("success", false);
+            resultData.put("success", true);
             resultData.put("msg", "重复注册");
             log.info("量子通道注册失败，网络id：{} 重复注册", networkId);
         } else {

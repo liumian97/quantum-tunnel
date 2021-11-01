@@ -61,6 +61,7 @@ public class UdpClientHandler extends SimpleChannelInboundHandler<DatagramPacket
             pingMsg.setMessageType(QuantumMessageType.PING);
 
             for (int i = 0; i < 10; i++) {
+                log.info("发送ping：{}:{}",quantumMessage.getTargetHost(),quantumMessage.getTargetPort());
                 ByteBuf byteBuf2Pre = Unpooled.copiedBuffer(JSONObject.toJSONString(pingMsg), CharsetUtil.UTF_8);
                 InetSocketAddress recipient = new InetSocketAddress(quantumMessage.getTargetHost(), quantumMessage.getTargetPort());
                 DatagramPacket packet2Pre = new DatagramPacket(byteBuf2Pre, recipient);

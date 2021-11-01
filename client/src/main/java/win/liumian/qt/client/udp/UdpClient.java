@@ -50,18 +50,26 @@ public class UdpClient {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UdpClientHandler());
-            Channel channel = b.bind(localPort).sync().channel();
+            Channel channel = b.bind(0).sync().channel();
 
 
             QuantumMessage quantumMessage = new QuantumMessage();
             quantumMessage.setMessageType(QuantumMessageType.REGISTER);
             quantumMessage.setNetworkId(networkId);
 
-            ByteBuf byteBuf = Unpooled.copiedBuffer(JSONObject.toJSONString(quantumMessage), CharsetUtil.UTF_8);
-            InetSocketAddress socketAddress = new InetSocketAddress(remoteHost, remotePort);
-            DatagramPacket packet = new DatagramPacket(byteBuf, socketAddress);
+            ByteBuf byteBuf1 = Unpooled.copiedBuffer(JSONObject.toJSONString(quantumMessage), CharsetUtil.UTF_8);
+            DatagramPacket packet1 = new DatagramPacket(byteBuf1,  new InetSocketAddress(remoteHost, 9999));
 
-            channel.writeAndFlush(packet).sync();
+
+            ByteBuf byteBuf2 = Unpooled.copiedBuffer(JSONObject.toJSONString(quantumMessage), CharsetUtil.UTF_8);
+            DatagramPacket packet2 = new DatagramPacket(byteBuf2,  new InetSocketAddress(remoteHost, 10000));
+
+            log.info("udp客户端启动，端口：{}",channel.localAddress());
+
+
+
+            channel.writeAndFlush(packet1);
+            channel.writeAndFlush(packet2).sync();
             channel.closeFuture().await();
         } catch (Exception e) {
             e.printStackTrace();

@@ -27,8 +27,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
         String response = msg.content().toString(CharsetUtil.UTF_8);
-        String remoteAddr = ctx.channel().remoteAddress().toString();
-        log.info("接收到 {} 消息：{}", remoteAddr, response);
+        log.info("{} 接收到 {} 消息：{}",msg.recipient(), msg.sender(), response);
         QuantumMessage quantumMessage = JSONObject.parseObject(response, QuantumMessage.class);
 
         if (quantumMessage.getMessageType() == QuantumMessageType.REGISTER) {
@@ -38,13 +37,13 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
 
                 InetSocketAddress preAddr = networkId2Addr.get(networkId);
                 if (preAddr.toString().equals(currentAddr.toString())) {
-                    //相等则说明是同一个客户端，直接丢弃
                     networkId2Addr.put(networkId, currentAddr);
                     ByteBuf byteBuf2Pre = Unpooled.copiedBuffer(JSONObject.toJSONString(newRegisterResultMsg(networkId, null, 0)), CharsetUtil.UTF_8);
                     DatagramPacket packet2Pre = new DatagramPacket(byteBuf2Pre, msg.sender());
                     ctx.channel().writeAndFlush(packet2Pre);
                 } else {
                     //往两个客户端发送注册结果，告知对方的ip和端口
+                    log.info("通知互相ping，currentAddr：{}，preAddr：{}",currentAddr,preAddr);
 
                     ByteBuf byteBuf2Current = Unpooled.copiedBuffer(JSONObject.toJSONString(newRegisterResultMsg(networkId, preAddr.getHostName(), preAddr.getPort())), CharsetUtil.UTF_8);
                     DatagramPacket packet2Current = new DatagramPacket(byteBuf2Current, currentAddr);

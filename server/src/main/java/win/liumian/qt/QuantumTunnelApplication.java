@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class QuantumTunnelApplication {
 
 
-    private static Executor executor = Executors.newFixedThreadPool(3);
+    private static Executor executor = Executors.newFixedThreadPool(10);
 
 
     public static void main(String[] args) throws ParseException {
@@ -72,6 +72,8 @@ public class QuantumTunnelApplication {
             }
 
             executor.execute(() -> new UdpServer(9999).run());
+
+            executor.execute(() -> new UdpServer(10000).run());
 
 
             executor.execute(() -> {
