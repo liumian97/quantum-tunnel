@@ -1,14 +1,14 @@
 package win.liumian.qt.handler;
 
-import win.liumian.qt.common.QuantumMessage;
-import win.liumian.qt.common.QuantumMessageType;
-import win.liumian.qt.common.handler.QuantumCommonHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import win.liumian.qt.channel.ChannelMap;
+import win.liumian.qt.common.QuantumMessage;
+import win.liumian.qt.common.QuantumMessageType;
+import win.liumian.qt.common.handler.QuantumCommonHandler;
 
 /**
  * @author liumian  2021/9/19 07:33
@@ -64,8 +64,17 @@ public class UserServerHandler extends QuantumCommonHandler {
         if (networkId == null || targetHost == null || targetPort == null) {
             String s = new String(bytes);
             networkId = getHeaderValue(s, "network_id");
+            if (networkId == null) {
+                networkId = getParamValue(s, "network_id");
+            }
             targetHost = getHeaderValue(s, "target_host");
+            if (targetHost == null){
+                targetHost = getParamValue(s, "target_host");
+            }
             targetPort = getHeaderValue(s, "target_port");
+            if (targetPort == null){
+                targetPort = getParamValue(s, "target_port");
+            }
             super.networkId = networkId;
         }
 
@@ -104,6 +113,19 @@ public class UserServerHandler extends QuantumCommonHandler {
         for (String s : requestStr.split("\r\n")) {
             if (s.startsWith(headerName + ":")) {
                 return s.split(":")[1].trim();
+            }
+        }
+        return null;
+    }
+
+
+    private String getParamValue(String requestStr, String paramName) {
+        String requestUrl = requestStr.split("\r\n")[0];
+        String queryStr = requestUrl.split(" ")[1];
+        String[] kv = queryStr.substring(queryStr.indexOf("?")+1).split("&");
+        for (String s : kv) {
+            if (s.contains(paramName + "=")) {
+                return s.substring(s.indexOf("=") + 1);
             }
         }
         return null;
