@@ -5,6 +5,7 @@ import org.apache.commons.cli.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.common.enumeration.RouteMode;
+import win.liumian.qt.common.util.BannerUtil;
 import win.liumian.qt.server.ProxyServer;
 import win.liumian.qt.server.UserServer;
 
@@ -20,6 +21,8 @@ public class QuantumTunnelApplication {
 
 
     public static void main(String[] args) throws ParseException {
+        BannerUtil.printGitBuildInfo();
+
         Options options = new Options();
         options.addOption("help", false, "Help");
         options.addOption("proxy_server_port", true, "内网穿透-代理服务端口");

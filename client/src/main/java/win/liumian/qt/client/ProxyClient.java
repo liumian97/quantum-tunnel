@@ -3,7 +3,6 @@ package win.liumian.qt.client;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -15,10 +14,13 @@ import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import win.liumian.qt.client.handler.ProxyClientHandler;
 import win.liumian.qt.common.proto.QuantumMessage;
+import win.liumian.qt.common.util.BannerUtil;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author liumian  2021/9/26 11:40
@@ -28,7 +30,11 @@ import java.io.IOException;
 public class ProxyClient {
 
 
-    public static void main(String[] args) throws ParseException, InterruptedException {
+    public static void main(String[] args) throws ParseException, InterruptedException, IOException {
+
+
+        BannerUtil.printGitBuildInfo();
+
         Options options = new Options();
         options.addOption("help", false, "Help");
         options.addOption("proxy_server_host", true, "内网穿透-代理服务器地址");
