@@ -1,12 +1,17 @@
 package win.liumian.qt.server;
 
-import io.netty.channel.*;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.common.enumeration.RouteMode;
 import win.liumian.qt.handler.UserServerHandler;
@@ -70,7 +75,10 @@ public class UserServer {
                     protected void initChannel(SocketChannel socketChannel) {
                         // 请求解码器
                         socketChannel.pipeline()
-                                .addLast(new ByteArrayDecoder(), new ByteArrayEncoder())
+                                .addLast(new ByteArrayDecoder())
+                                .addLast(new ByteArrayEncoder())
+//                                .addLast("frameEncoder", new LengthFieldPrepender(4))
+//                                .addLast(new ProtobufEncoder())
                                 .addLast(new UserServerHandler(networkId, targetHost, targetPort));
 
                     }

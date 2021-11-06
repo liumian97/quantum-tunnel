@@ -1,13 +1,13 @@
 package win.liumian.qt.client.handler;
 
-import io.netty.channel.Channel;
-import win.liumian.qt.common.QuantumMessage;
-import win.liumian.qt.common.QuantumMessageType;
-import win.liumian.qt.common.handler.QuantumCommonHandler;
+import com.google.protobuf.ByteString;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
+import win.liumian.qt.common.handler.QuantumCommonHandler;
+import win.liumian.qt.common.proto.QuantumMessage;
 
 /**
  * @author liumian  2021/9/26 17:13
@@ -20,7 +20,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
 
     private final String userChannelId;
 
-    public ProxyRequestHandler(ChannelHandlerContext proxyChannelContext, String userChannelId,String networkId) {
+    public ProxyRequestHandler(ChannelHandlerContext proxyChannelContext, String userChannelId, String networkId) {
         this.proxyChannelContext = proxyChannelContext;
         this.userChannelId = userChannelId;
         super.networkId = networkId;
@@ -37,7 +37,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        processData(ByteBufUtil.getBytes((ByteBuf) msg));
+        writeToUserChannel(ByteBufUtil.getBytes((ByteBuf) msg));
     }
 
     @Override
@@ -49,22 +49,22 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         super.exceptionCaught(ctx, cause);
-        cause.printStackTrace();
+        log.error("请求异常", cause);
+//        cause.printStackTrace();
     }
 
     private void processDisconnected() {
-        QuantumMessage message = new QuantumMessage();
-        message.setChannelId(userChannelId);
-        message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
+        QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
+                .setNetworkId(networkId).setChannelId(userChannelId)
+                .setMessageType(QuantumMessage.Message.MessageType.PROXY_DISCONNECTED).build();
         proxyChannelContext.writeAndFlush(message);
     }
 
 
-    private void processData(byte[] data) {
-        QuantumMessage message = new QuantumMessage();
-        message.setChannelId(userChannelId);
-        message.setData(data);
-        message.setMessageType(QuantumMessageType.DATA);
+    private void writeToUserChannel(byte[] data) {
+        QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
+                .setNetworkId(networkId).setChannelId(userChannelId)
+                .setMessageType(QuantumMessage.Message.MessageType.DATA).setData(ByteString.copyFrom(data)).build();
         proxyChannelContext.writeAndFlush(message);
     }
 

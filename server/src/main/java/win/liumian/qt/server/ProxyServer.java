@@ -9,10 +9,12 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
-import win.liumian.qt.common.QuantumMessageDecoder;
-import win.liumian.qt.common.QuantumMessageEncoder;
+import win.liumian.qt.common.proto.QuantumMessage;
 import win.liumian.qt.handler.ProxyServerHandler;
 
 /**
@@ -38,12 +40,21 @@ public class ProxyServer {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(
-                                new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
-                                new QuantumMessageDecoder(),
-                                new QuantumMessageEncoder(),
-                                new IdleStateHandler(360, 300, 0),
-                                new ProxyServerHandler());
+                        ch.pipeline()
+                                .addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4))
+                                .addLast(new ProtobufDecoder(QuantumMessage.Message.getDefaultInstance()))
+                                .addLast("frameEncoder", new LengthFieldPrepender(4))
+                                .addLast(new ProtobufEncoder())
+                                .addLast(new IdleStateHandler(360, 300, 0))
+                                .addLast(new ProxyServerHandler());
+
+                        /**
+                         *  * pipeline.addLast("frameDecoder",
+                         *  *                  new {@link LengthFieldBasedFrameDecoder}(1048576, 0, 4, 0, 4));
+                         *  * pipeline.addLast("protobufDecoder",
+                         *  *                  new {@link ProtobufDecoder}(MyMessage.getDefaultInstance()));
+                         */
+
                     }
                 })
                 .localAddress(Integer.parseInt(proxyServerPort))

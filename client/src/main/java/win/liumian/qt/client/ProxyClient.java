@@ -8,13 +8,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.client.handler.ProxyClientHandler;
-import win.liumian.qt.common.QuantumMessageDecoder;
-import win.liumian.qt.common.QuantumMessageEncoder;
+import win.liumian.qt.common.proto.QuantumMessage;
 
 import java.io.IOException;
 
@@ -102,17 +104,18 @@ public class ProxyClient {
         Bootstrap b = new Bootstrap();
         b.group(workerGroup);
         b.channel(NioSocketChannel.class);
-        b.option(ChannelOption.SO_KEEPALIVE, true);
+//        b.option(ChannelOption.SO_KEEPALIVE, true);
         b.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) {
                 ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId, targetServerHost, targetServerPort);
-                ch.pipeline().addLast(
-                        new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4),
-                        new QuantumMessageDecoder(),
-                        new QuantumMessageEncoder(),
-                        new IdleStateHandler(360, 300, 0),
-                        proxyClientHandler);
+                ch.pipeline()
+                        .addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4))
+                        .addLast(new ProtobufDecoder(QuantumMessage.Message.getDefaultInstance()))
+                        .addLast("frameEncoder", new LengthFieldPrepender(4))
+                        .addLast(new ProtobufEncoder())
+                        .addLast(new IdleStateHandler(360, 300, 0))
+                        .addLast(proxyClientHandler);
             }
         });
         return b.connect(proxyServerHost, Integer.parseInt(proxyServerPort)).addListener(future -> log.info("内网穿透客户端启动成功...")).sync().channel();

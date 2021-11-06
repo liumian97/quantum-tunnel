@@ -1,14 +1,16 @@
 package win.liumian.qt.handler;
 
+import com.google.protobuf.ByteString;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import win.liumian.qt.channel.ChannelMap;
-import win.liumian.qt.common.QuantumMessage;
-import win.liumian.qt.common.QuantumMessageType;
 import win.liumian.qt.common.handler.QuantumCommonHandler;
+import win.liumian.qt.common.proto.QuantumMessage;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author liumian  2021/9/19 07:33
@@ -46,21 +48,19 @@ public class UserServerHandler extends QuantumCommonHandler {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
         String userChannelId = ctx.channel().id().asLongText();
-        log.info("关闭用户通道：{}", userChannelId);
         ChannelMap.userChannelMap.remove(userChannelId);
-        QuantumMessage message = new QuantumMessage();
-        message.setNetworkId(networkId);
-        message.setMessageType(QuantumMessageType.USER_DISCONNECTED);
-        message.setChannelId(userChannelId);
-        writeMessage(message);
+        if (networkId != null) {
+            log.info("关闭用户通道：{}", userChannelId);
+            //说明从通道中读到了数据，那么通知proxyClient关闭对应的channel
+            QuantumMessage.Message message = QuantumMessage.Message.newBuilder().setNetworkId(networkId)
+                    .setMessageType(QuantumMessage.Message.MessageType.USER_DISCONNECTED).build();
+            writeToProxyChannel(message);
+        }
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        QuantumMessage message = new QuantumMessage();
         byte[] bytes = (byte[]) msg;
-        message.setData(bytes);
-
         if (networkId == null || targetHost == null || targetPort == null) {
             String s = new String(bytes);
             networkId = getHeaderValue(s, "network_id");
@@ -68,11 +68,11 @@ public class UserServerHandler extends QuantumCommonHandler {
                 networkId = getParamValue(s, "network_id");
             }
             targetHost = getHeaderValue(s, "target_host");
-            if (targetHost == null){
+            if (targetHost == null) {
                 targetHost = getParamValue(s, "target_host");
             }
             targetPort = getHeaderValue(s, "target_port");
-            if (targetPort == null){
+            if (targetPort == null) {
                 targetPort = getParamValue(s, "target_port");
             }
             super.networkId = networkId;
@@ -83,21 +83,21 @@ public class UserServerHandler extends QuantumCommonHandler {
             ctx.channel().close();
         }
 
-        message.setNetworkId(networkId);
-        message.setMessageType(QuantumMessageType.DATA);
-        message.setChannelId(userChannelId);
-        message.setTargetHost(targetHost);
-        message.setTargetPort(Integer.parseInt(targetPort));
+        QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
+                .setNetworkId(networkId).setMessageType(QuantumMessage.Message.MessageType.DATA)
+                .setChannelId(userChannelId).setTargetHost(targetHost)
+                .setTargetPort(Integer.parseInt(targetPort))
+                .setData(ByteString.copyFrom(new String(bytes), StandardCharsets.UTF_8)).build();
 
 
-        boolean success = writeMessage(message);
+        boolean success = writeToProxyChannel(message);
         if (!success) {
             log.info("写入数据失败，networkId={}，targetHost={}，targetPort={}", networkId, targetHost, targetPort);
             ctx.channel().close();
         }
     }
 
-    private boolean writeMessage(QuantumMessage message) {
+    private boolean writeToProxyChannel(win.liumian.qt.common.proto.QuantumMessage.Message message) {
         Channel proxyChannel = ChannelMap.proxyChannelsMap.get(networkId);
         if (proxyChannel != null && proxyChannel.isWritable()) {
             String proxyChannelId = proxyChannel.id().asLongText();
@@ -122,7 +122,7 @@ public class UserServerHandler extends QuantumCommonHandler {
     private String getParamValue(String requestStr, String paramName) {
         String requestUrl = requestStr.split("\r\n")[0];
         String queryStr = requestUrl.split(" ")[1];
-        String[] kv = queryStr.substring(queryStr.indexOf("?")+1).split("&");
+        String[] kv = queryStr.substring(queryStr.indexOf("?") + 1).split("&");
         for (String s : kv) {
             if (s.contains(paramName + "=")) {
                 return s.substring(s.indexOf("=") + 1);

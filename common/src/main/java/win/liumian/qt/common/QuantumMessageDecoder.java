@@ -1,10 +1,10 @@
 package win.liumian.qt.common;
 
-import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
+import win.liumian.qt.common.proto.QuantumMessage;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ public class QuantumMessageDecoder extends MessageToMessageDecoder<ByteBuf> {
 
         if (msg.isReadable()) {
             byte[] bytes = ByteBufUtil.getBytes(msg);
-            String s = new String(bytes);
-            QuantumMessage quantumMessage = JSONObject.parseObject(s, QuantumMessage.class);
-            out.add(quantumMessage);
+
+            QuantumMessage.Message message = QuantumMessage.Message.parseFrom(bytes);
+            out.add(message);
         }
     }
 

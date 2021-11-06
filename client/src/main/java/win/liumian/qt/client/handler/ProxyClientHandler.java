@@ -1,18 +1,19 @@
 package win.liumian.qt.client.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import win.liumian.qt.common.QuantumMessage;
-import win.liumian.qt.common.QuantumMessageType;
-import win.liumian.qt.common.handler.QuantumCommonHandler;
+import com.google.protobuf.ByteString;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import win.liumian.qt.common.handler.QuantumCommonHandler;
+import win.liumian.qt.common.proto.QuantumMessage;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,24 +41,24 @@ public class ProxyClientHandler extends QuantumCommonHandler {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
         log.info("准备注册量子通道");
-        QuantumMessage quantumMessage = new QuantumMessage();
-        quantumMessage.setNetworkId(networkId);
-        quantumMessage.setMessageType(QuantumMessageType.REGISTER);
-        ctx.writeAndFlush(quantumMessage);
+        QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
+                .setNetworkId(networkId).
+                setMessageType(QuantumMessage.Message.MessageType.REGISTER).build();
+        ctx.writeAndFlush(message);
         super.channelActive(ctx);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-        QuantumMessage quantumMessage = (QuantumMessage) msg;
-        if (quantumMessage.getMessageType() == QuantumMessageType.REGISTER_RESULT) {
+        QuantumMessage.Message quantumMessage = (QuantumMessage.Message) msg;
+        if (quantumMessage.getMessageType() == QuantumMessage.Message.MessageType.REGISTER_RESULT) {
             processRegisterResult(ctx, quantumMessage);
-        } else if (quantumMessage.getMessageType() == QuantumMessageType.USER_DISCONNECTED) {
+        } else if (quantumMessage.getMessageType() == QuantumMessage.Message.MessageType.USER_DISCONNECTED) {
             processUserChannelDisconnected(quantumMessage);
-        } else if (quantumMessage.getMessageType() == QuantumMessageType.KEEPALIVE) {
+        } else if (quantumMessage.getMessageType() == QuantumMessage.Message.MessageType.KEEPALIVE) {
             log.info("收到心跳消息，网络id：{}", quantumMessage.getNetworkId());
-        } else if (quantumMessage.getMessageType() == QuantumMessageType.DATA) {
+        } else if (quantumMessage.getMessageType() == QuantumMessage.Message.MessageType.DATA) {
             processData(ctx, quantumMessage);
         } else {
             throw new RuntimeException("Unknown type: " + quantumMessage.getMessageType());
@@ -69,8 +70,8 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         log.info("量子通道断开");
     }
 
-    private void processRegisterResult(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
-        JSONObject result = JSONObject.parseObject(new String(quantumMessage.getData()));
+    private void processRegisterResult(ChannelHandlerContext ctx, QuantumMessage.Message quantumMessage) {
+        JSONObject result = JSONObject.parseObject(new String(quantumMessage.getData().toByteArray()));
         if (result.getBooleanValue("success")) {
             log.info("量子通道注册成功：{}", result);
         } else {
@@ -80,7 +81,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         }
     }
 
-    private void processUserChannelDisconnected(QuantumMessage quantumMessage) {
+    private void processUserChannelDisconnected(QuantumMessage.Message quantumMessage) {
         Channel channel = user2ProxyChannelMap.get(quantumMessage.getChannelId());
         if (channel != null && channel.isOpen()) {
             channel.close();
@@ -88,7 +89,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         log.info("主动关闭代理通道：{}", quantumMessage.getChannelId());
     }
 
-    private void processData(ChannelHandlerContext ctx, QuantumMessage quantumMessage) {
+    private void processData(ChannelHandlerContext ctx, QuantumMessage.Message quantumMessage) {
         try {
             doProxyRequest(ctx, quantumMessage);
         } catch (InterruptedException e) {
@@ -97,10 +98,11 @@ public class ProxyClientHandler extends QuantumCommonHandler {
     }
 
 
-    private void doProxyRequest(ChannelHandlerContext ctx, QuantumMessage quantumMessage) throws InterruptedException {
+    private void doProxyRequest(ChannelHandlerContext ctx, QuantumMessage.Message quantumMessage) throws InterruptedException {
         Channel proxyChannel = user2ProxyChannelMap.get(quantumMessage.getChannelId());
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(quantumMessage.getData().length);
-        buffer.writeBytes(quantumMessage.getData());
+
+        ByteBuf byteBuf = Unpooled.copiedBuffer(quantumMessage.getData().toByteArray());
+
         if (proxyChannel == null) {
             if (targetServerHost != null && !targetServerHost.equals(quantumMessage.getTargetHost())) {
                 disconnectUserChannel(ctx, quantumMessage.getChannelId());
@@ -115,6 +117,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                 Bootstrap b = new Bootstrap();
                 b.group(WORKER_GROUP);
                 b.channel(NioSocketChannel.class);
+                b.option(ChannelOption.SO_KEEPALIVE, true);
                 b.handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
@@ -123,21 +126,21 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                     }
                 });
                 Channel channel = b.connect(quantumMessage.getTargetHost(), quantumMessage.getTargetPort()).sync().channel();
-                channel.writeAndFlush(buffer);
+                channel.writeAndFlush(byteBuf);
             } catch (Exception e) {
                 log.error("请求targetServer异常", e);
                 //通知服务端proxyChannel已经断开，让其断开userChannel
                 disconnectUserChannel(ctx, quantumMessage.getChannelId());
             }
         } else {
-            proxyChannel.writeAndFlush(buffer);
+            proxyChannel.writeAndFlush(byteBuf);
         }
     }
 
     private void disconnectUserChannel(ChannelHandlerContext ctx, String channelId) {
-        QuantumMessage message = new QuantumMessage();
-        message.setChannelId(channelId);
-        message.setMessageType(QuantumMessageType.PROXY_DISCONNECTED);
+        QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
+                .setChannelId(channelId).setNetworkId(networkId)
+                .setMessageType(QuantumMessage.Message.MessageType.PROXY_DISCONNECTED).build();
         ctx.writeAndFlush(message);
     }
 

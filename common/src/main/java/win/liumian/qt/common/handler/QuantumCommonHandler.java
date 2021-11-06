@@ -1,7 +1,5 @@
 package win.liumian.qt.common.handler;
 
-import win.liumian.qt.common.QuantumMessage;
-import win.liumian.qt.common.QuantumMessageType;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
@@ -29,7 +27,7 @@ public class QuantumCommonHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("捕获通道异常",cause);
+        log.error("捕获通道异常：" + networkId, cause);
         ctx.channel().close();
     }
 
@@ -41,10 +39,9 @@ public class QuantumCommonHandler extends ChannelInboundHandlerAdapter {
                 log.info("长时间未收到消息，关闭连接");
                 ctx.close();
             } else if (e.state() == IdleState.WRITER_IDLE) {
-                QuantumMessage quantumMessage = new QuantumMessage();
-                quantumMessage.setNetworkId(networkId);
-                quantumMessage.setMessageType(QuantumMessageType.KEEPALIVE);
-                ctx.writeAndFlush(quantumMessage);
+                win.liumian.qt.common.proto.QuantumMessage.Message message = win.liumian.qt.common.proto.QuantumMessage.Message.newBuilder().setNetworkId(networkId)
+                        .setMessageType(win.liumian.qt.common.proto.QuantumMessage.Message.MessageType.KEEPALIVE).build();
+                ctx.writeAndFlush(message);
             }
         }
     }
