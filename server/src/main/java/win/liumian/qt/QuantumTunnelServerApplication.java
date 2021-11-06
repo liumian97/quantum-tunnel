@@ -14,14 +14,14 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 @SpringBootApplication
-public class QuantumTunnelApplication {
+public class QuantumTunnelServerApplication {
 
 
     private static Executor executor = Executors.newFixedThreadPool(2);
 
 
     public static void main(String[] args) throws ParseException {
-        BannerUtil.printGitBuildInfo();
+
 
         Options options = new Options();
         options.addOption("help", false, "Help");
@@ -39,8 +39,8 @@ public class QuantumTunnelApplication {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("options", options);
         } else {
-            SpringApplication.run(QuantumTunnelApplication.class, args);
-
+            SpringApplication.run(QuantumTunnelServerApplication.class, args);
+            BannerUtil.printGitBuildInfo();
             String proxyServerPort = cmd.getOptionValue("proxy_server_port");
             if (proxyServerPort == null) {
                 log.error("proxy_server_host cannot be null");
