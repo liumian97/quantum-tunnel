@@ -1,6 +1,5 @@
 package win.liumian.qt.handler;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.ByteString;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,13 +27,13 @@ public class ProxyServerHandler extends QuantumCommonHandler {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         QuantumMessage.Message message = (QuantumMessage.Message) msg;
-        if (message.getMessageType() == QuantumMessage.Message.MessageType.REGISTER) {
+        if (message.getMessageType() == QuantumMessage.MessageType.REGISTER) {
             processRegister(ctx, message);
-        } else if (message.getMessageType() == QuantumMessage.Message.MessageType.PROXY_DISCONNECTED) {
+        } else if (message.getMessageType() == QuantumMessage.MessageType.PROXY_DISCONNECTED) {
             processProxyDisconnected(message);
-        } else if (message.getMessageType() == QuantumMessage.Message.MessageType.KEEPALIVE) {
+        } else if (message.getMessageType() == QuantumMessage.MessageType.KEEPALIVE) {
             log.info("收到心跳消息，网络id：{}", message.getNetworkId());
-        } else if (message.getMessageType() == QuantumMessage.Message.MessageType.DATA) {
+        } else if (message.getMessageType() == QuantumMessage.MessageType.DATA) {
             writeToUserChannel(message);
         } else {
             ctx.channel().close();
@@ -45,20 +44,19 @@ public class ProxyServerHandler extends QuantumCommonHandler {
     private void processRegister(ChannelHandlerContext ctx, QuantumMessage.Message quantumMessage) {
         Channel channel = ctx.channel();
         String networkId = quantumMessage.getNetworkId();
-        JSONObject resultData = new JSONObject();
+        QuantumMessage.Message.Builder builder = QuantumMessage.Message.newBuilder().setNetworkId(networkId);
         if (ChannelMap.proxyChannelsMap.containsKey(networkId)) {
-            resultData.put("success", false);
-            resultData.put("msg", "重复注册");
+            builder.setMessageType(QuantumMessage.MessageType.REGISTER_SUCCESS)
+                    .setData(ByteString.copyFrom("重复注册", StandardCharsets.UTF_8));
             log.info("量子通道注册失败，网络id：{} 重复注册", networkId);
         } else {
             super.networkId = networkId;
             ChannelMap.proxyChannelsMap.put(networkId, channel);
-            resultData.put("success", true);
+            builder.setMessageType(QuantumMessage.MessageType.REGISTER_SUCCESS)
+                    .setData(ByteString.copyFrom("注册成功", StandardCharsets.UTF_8));
             log.info("量子通道注册成功，网络id:{}", networkId);
         }
-        QuantumMessage.Message message = QuantumMessage.Message.newBuilder().setNetworkId(networkId)
-                .setMessageType(QuantumMessage.Message.MessageType.REGISTER_RESULT)
-                .setData(ByteString.copyFrom(resultData.toJSONString(), StandardCharsets.UTF_8)).build();
+        QuantumMessage.Message message = builder.build();
         channel.writeAndFlush(message);
     }
 
@@ -66,9 +64,9 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         String channelId = quantumMessage.getChannelId();
         Channel channel = ChannelMap.userChannelMap.get(channelId);
         if (channel != null && channel.isOpen()) {
+            log.info("ProxyClient主动关闭用户通道，channelId:" + channelId);
             channel.close();
         }
-        log.info("用户通道关闭，channelId:" + channelId);
     }
 
     private void writeToUserChannel(QuantumMessage.Message quantumMessage) {

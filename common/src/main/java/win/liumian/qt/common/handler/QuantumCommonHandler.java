@@ -5,6 +5,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
+import win.liumian.qt.common.proto.QuantumMessage;
 
 /**
  * @author liumian  2021/9/25 11:24
@@ -39,8 +40,8 @@ public class QuantumCommonHandler extends ChannelInboundHandlerAdapter {
                 log.info("长时间未收到消息，关闭连接");
                 ctx.close();
             } else if (e.state() == IdleState.WRITER_IDLE) {
-                win.liumian.qt.common.proto.QuantumMessage.Message message = win.liumian.qt.common.proto.QuantumMessage.Message.newBuilder().setNetworkId(networkId)
-                        .setMessageType(win.liumian.qt.common.proto.QuantumMessage.Message.MessageType.KEEPALIVE).build();
+                QuantumMessage.Message message = QuantumMessage.Message.newBuilder().setNetworkId(networkId)
+                        .setMessageType(QuantumMessage.MessageType.KEEPALIVE).build();
                 ctx.writeAndFlush(message);
             }
         }

@@ -10,42 +10,48 @@ option java_outer_classname = "QuantumMessage";
 
 message Message{
 
-  enum MessageType{
-    /**
-    * 注册请求
-    */
-    REGISTER = 1;
-    /**
-     * 注册结果
-     */
-    REGISTER_RESULT = 2;
-    /**
-     * 连接成功
-     */
-    CONNECTED = 3;
-    /**
-     * 断开连接
-     */
-    PROXY_DISCONNECTED = 4;
-    /**
-     * 传输数据
-     */
-    DATA = 5;
-    /**
-     * 保持链接
-     */
-    KEEPALIVE = 6;
+  required string networkId = 9;
+  required MessageType messageType = 10;
+  optional string channelId = 11;
+  optional string targetHost = 12;
+  optional int32 targetPort = 13;
+  optional bytes data = 14;
+}
 
-    /**
-     * 用户链接断开
-     */
-    USER_DISCONNECTED = 7;
-  }
+enum MessageType{
+  /**
+  * 注册请求
+  */
+  REGISTER = 1;
+  /**
+   * 注册成功
+   */
+  REGISTER_SUCCESS = 2;
+  /**
+   * 注册失败
+   */
 
-  required string networkId = 8;
-  optional string channelId = 9;
-  optional string targetHost = 10;
-  optional int32 targetPort = 11;
-  required MessageType messageType = 12;
-  optional bytes data = 13;
+  /**
+   * 连接成功
+   */
+  REGISTER_FAILED = 3;
+
+  CONNECTED = 4;
+  /**
+   * 断开连接
+   */
+  PROXY_DISCONNECTED = 5;
+  /**
+   * 传输数据
+   */
+  DATA = 6;
+  /**
+   * 保持链接
+   */
+  KEEPALIVE = 7;
+
+  /**
+   * 用户链接断开
+   */
+  USER_DISCONNECTED = 8;
 }

@@ -1,0 +1,1 @@
+ protoc --java_out common/src/main/java/ common/src/main/proto/QuantumMessage.proto

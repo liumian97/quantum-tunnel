@@ -42,7 +42,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        log.info("准备断开连接：" + ctx.channel().id().asLongText() + "，用户通道：" + userChannelId);
+        log.info("主动断开连接：" + ctx.channel().id().asLongText() + "，用户通道：" + userChannelId);
         processDisconnected();
     }
 
@@ -56,7 +56,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
     private void processDisconnected() {
         QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
                 .setNetworkId(networkId).setChannelId(userChannelId)
-                .setMessageType(QuantumMessage.Message.MessageType.PROXY_DISCONNECTED).build();
+                .setMessageType(QuantumMessage.MessageType.PROXY_DISCONNECTED).build();
         proxyChannelContext.writeAndFlush(message);
     }
 
@@ -64,7 +64,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
     private void writeToUserChannel(byte[] data) {
         QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
                 .setNetworkId(networkId).setChannelId(userChannelId)
-                .setMessageType(QuantumMessage.Message.MessageType.DATA).setData(ByteString.copyFrom(data)).build();
+                .setMessageType(QuantumMessage.MessageType.DATA).setData(ByteString.copyFrom(data)).build();
         proxyChannelContext.writeAndFlush(message);
     }
 

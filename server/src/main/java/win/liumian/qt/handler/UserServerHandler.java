@@ -10,6 +10,7 @@ import win.liumian.qt.channel.ChannelMap;
 import win.liumian.qt.common.handler.QuantumCommonHandler;
 import win.liumian.qt.common.proto.QuantumMessage;
 
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -29,6 +30,7 @@ public class UserServerHandler extends QuantumCommonHandler {
 
     private String targetPort;
 
+    private SocketAddress remoteAddress;
 
     public UserServerHandler(String networkId, String targetHost, String targetPort) {
         this.networkId = networkId;
@@ -40,7 +42,8 @@ public class UserServerHandler extends QuantumCommonHandler {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         userChannelId = ctx.channel().id().asLongText();
-        log.info("打开用户通道：{}", userChannelId);
+        remoteAddress = ctx.channel().remoteAddress();
+        log.info("打开用户通道，ip：{} ：{}", remoteAddress, userChannelId);
         ChannelMap.userChannelMap.put(userChannelId, ctx.channel());
     }
 
@@ -49,11 +52,11 @@ public class UserServerHandler extends QuantumCommonHandler {
         super.channelInactive(ctx);
         String userChannelId = ctx.channel().id().asLongText();
         ChannelMap.userChannelMap.remove(userChannelId);
+        log.info("关闭用户通道，ip：{} ：{}", remoteAddress, userChannelId);
         if (networkId != null) {
-            log.info("关闭用户通道：{}", userChannelId);
             //说明从通道中读到了数据，那么通知proxyClient关闭对应的channel
             QuantumMessage.Message message = QuantumMessage.Message.newBuilder().setNetworkId(networkId)
-                    .setMessageType(QuantumMessage.Message.MessageType.USER_DISCONNECTED).build();
+                    .setMessageType(QuantumMessage.MessageType.USER_DISCONNECTED).build();
             writeToProxyChannel(message);
         }
     }
@@ -84,7 +87,7 @@ public class UserServerHandler extends QuantumCommonHandler {
         }
 
         QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
-                .setNetworkId(networkId).setMessageType(QuantumMessage.Message.MessageType.DATA)
+                .setNetworkId(networkId).setMessageType(QuantumMessage.MessageType.DATA)
                 .setChannelId(userChannelId).setTargetHost(targetHost)
                 .setTargetPort(Integer.parseInt(targetPort))
                 .setData(ByteString.copyFrom(new String(bytes), StandardCharsets.UTF_8)).build();
@@ -97,7 +100,7 @@ public class UserServerHandler extends QuantumCommonHandler {
         }
     }
 
-    private boolean writeToProxyChannel(win.liumian.qt.common.proto.QuantumMessage.Message message) {
+    private boolean writeToProxyChannel(QuantumMessage.Message message) {
         Channel proxyChannel = ChannelMap.proxyChannelsMap.get(networkId);
         if (proxyChannel != null && proxyChannel.isWritable()) {
             String proxyChannelId = proxyChannel.id().asLongText();
@@ -105,6 +108,7 @@ public class UserServerHandler extends QuantumCommonHandler {
             proxyChannel.writeAndFlush(message);
             return true;
         } else {
+            logger.info("代理通道不存在：{}", message.getNetworkId());
             return false;
         }
     }

@@ -77,17 +77,13 @@ public class UserServer {
                         socketChannel.pipeline()
                                 .addLast(new ByteArrayDecoder())
                                 .addLast(new ByteArrayEncoder())
-//                                .addLast("frameEncoder", new LengthFieldPrepender(4))
-//                                .addLast(new ProtobufEncoder())
                                 .addLast(new UserServerHandler(networkId, targetHost, targetPort));
 
                     }
                 })
                 .localAddress(Integer.parseInt(userServerPort))
                 //设置队列大小
-                .option(ChannelOption.SO_BACKLOG, 1024)
-                // 两小时内没有数据的通信时,TCP会自动发送一个活动探测数据报文
-                .childOption(ChannelOption.SO_KEEPALIVE, true);
+                .option(ChannelOption.SO_BACKLOG, 1024);
         //绑定端口,开始接收进来的连接
         try {
             ChannelFuture future = bootstrap.bind(Integer.parseInt(userServerPort)).sync();
