@@ -7,10 +7,14 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.common.handler.QuantumCommonHandler;
 import win.liumian.qt.common.proto.QuantumMessage;
 
+import javax.net.ssl.SSLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class ProxyClientHandler extends QuantumCommonHandler {
+
+    public final static int DEFAULT_HTTPS_PORT = 443;
 
     public final static Map<String, Channel> user2ProxyChannelMap = new ConcurrentHashMap<>();
 
@@ -120,6 +126,15 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
+
+                        if (DEFAULT_HTTPS_PORT == quantumMessage.getTargetPort()) {
+                            try {
+                                SslContext sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+                                pipeline.addLast(sslContext.newHandler(ch.alloc()));
+                            } catch (SSLException e) {
+                                log.error("初始化sslContext失败：" + networkId, e);
+                            }
+                        }
                         pipeline.addLast(new ProxyRequestHandler(ctx, quantumMessage.getChannelId(), networkId));
                     }
                 });
