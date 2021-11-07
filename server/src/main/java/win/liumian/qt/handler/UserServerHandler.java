@@ -24,8 +24,6 @@ public class UserServerHandler extends QuantumCommonHandler {
 
     private String userChannelId;
 
-    private String networkId;
-
     private String targetHost;
 
     private String targetPort;
@@ -33,7 +31,7 @@ public class UserServerHandler extends QuantumCommonHandler {
     private SocketAddress remoteAddress;
 
     public UserServerHandler(String networkId, String targetHost, String targetPort) {
-        this.networkId = networkId;
+        super.networkId = networkId;
         this.targetHost = targetHost;
         this.targetPort = targetPort;
     }
