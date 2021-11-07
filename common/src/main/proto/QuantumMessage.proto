@@ -54,4 +54,8 @@ enum MessageType{
    * 用户链接断开
    */
   USER_DISCONNECTED = 8;
+
+  PING = 9;
+
+  PONG = 10;
 }

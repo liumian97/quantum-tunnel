@@ -1,22 +1,22 @@
 package win.liumian.qt.udp;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.extern.slf4j.Slf4j;
+import win.liumian.qt.udp.handler.UdpEchoServerHandler;
 import win.liumian.qt.udp.handler.UdpServerHandler;
 
 /**
  * @author liumian  2021/10/24 16:31
  */
 @Slf4j
-public class UdpServer {
+public class UdpEchoServer {
 
     private final int localPort;
 
-    public UdpServer(int localPort) {
+    public UdpEchoServer(int localPort) {
         this.localPort = localPort;
     }
 
@@ -30,8 +30,8 @@ public class UdpServer {
             b.group(bossGroup)
                     .channel(NioDatagramChannel.class)
 //                    .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new UdpServerHandler());
-            log.info("udp服务启动：{}", localPort);
+                    .handler(new UdpEchoServerHandler());
+            log.info("udp Echo服务启动：{}", localPort);
             b.bind(localPort).sync().channel().closeFuture().await();
         } catch (Exception e) {
             e.printStackTrace();

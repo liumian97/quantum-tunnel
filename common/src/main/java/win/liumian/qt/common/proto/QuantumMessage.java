@@ -86,6 +86,14 @@ public final class QuantumMessage {
      * <code>USER_DISCONNECTED = 8;</code>
      */
     USER_DISCONNECTED(8),
+    /**
+     * <code>PING = 9;</code>
+     */
+    PING(9),
+    /**
+     * <code>PONG = 10;</code>
+     */
+    PONG(10),
     ;
 
     /**
@@ -155,6 +163,14 @@ public final class QuantumMessage {
      * <code>USER_DISCONNECTED = 8;</code>
      */
     public static final int USER_DISCONNECTED_VALUE = 8;
+    /**
+     * <code>PING = 9;</code>
+     */
+    public static final int PING_VALUE = 9;
+    /**
+     * <code>PONG = 10;</code>
+     */
+    public static final int PONG_VALUE = 10;
 
 
     public final int getNumber() {
@@ -185,6 +201,8 @@ public final class QuantumMessage {
         case 6: return DATA;
         case 7: return KEEPALIVE;
         case 8: return USER_DISCONNECTED;
+        case 9: return PING;
+        case 10: return PONG;
         default: return null;
       }
     }
@@ -1550,12 +1568,12 @@ public final class QuantumMessage {
       "\n \002(\0162(.win.liumian.qt.common.proto.Mess" +
       "ageType\022\021\n\tchannelId\030\013 \001(\t\022\022\n\ntargetHost" +
       "\030\014 \001(\t\022\022\n\ntargetPort\030\r \001(\005\022\014\n\004data\030\016 \001(\014" +
-      "*\235\001\n\013MessageType\022\014\n\010REGISTER\020\001\022\024\n\020REGIST" +
+      "*\261\001\n\013MessageType\022\014\n\010REGISTER\020\001\022\024\n\020REGIST" +
       "ER_SUCCESS\020\002\022\023\n\017REGISTER_FAILED\020\003\022\r\n\tCON" +
       "NECTED\020\004\022\026\n\022PROXY_DISCONNECTED\020\005\022\010\n\004DATA" +
       "\020\006\022\r\n\tKEEPALIVE\020\007\022\025\n\021USER_DISCONNECTED\020\010" +
-      "B/\n\033win.liumian.qt.common.protoB\016Quantum" +
-      "MessageH\001"
+      "\022\010\n\004PING\020\t\022\010\n\004PONG\020\nB/\n\033win.liumian.qt.c" +
+      "ommon.protoB\016QuantumMessageH\001"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

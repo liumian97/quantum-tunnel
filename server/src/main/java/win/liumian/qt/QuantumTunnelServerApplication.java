@@ -6,8 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.common.enumeration.RouteMode;
 import win.liumian.qt.common.util.BannerUtil;
-import win.liumian.qt.server.ProxyServer;
-import win.liumian.qt.server.UserServer;
+import win.liumian.qt.tcp.server.ProxyServer;
+import win.liumian.qt.tcp.server.UserServer;
+import win.liumian.qt.udp.UdpEchoServer;
+import win.liumian.qt.udp.UdpServer;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -17,7 +19,7 @@ import java.util.concurrent.Executors;
 public class QuantumTunnelServerApplication {
 
 
-    private static Executor executor = Executors.newFixedThreadPool(2);
+    private static Executor executor = Executors.newFixedThreadPool(5);
 
 
     public static void main(String[] args) throws ParseException {
@@ -82,6 +84,14 @@ public class QuantumTunnelServerApplication {
                 //启动用户服务端
                 UserServer nettyServer = new UserServer(userServerPort, routeMode, networkId, targetHost, targetPort);
                 nettyServer.start();
+            });
+
+            executor.execute(() ->{
+                new UdpServer(10000).run();
+            });
+
+            executor.execute(() ->{
+                new UdpEchoServer(20000).run();
             });
         }
 

@@ -1,5 +1,6 @@
 package win.liumian.qt.client.udp;
 
+
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.Executor;
@@ -22,10 +23,12 @@ public class UdpClientTest {
 
     private Executor executor = Executors.newFixedThreadPool(2);
 
+    public String udpServer = "127.0.0.1";
+
     @Test
     public void client1Test() throws InterruptedException {
-        UdpClient client1 = new UdpClient(networkId, client2Host, client2Port, client1Port);
-        UdpClient client2 = new UdpClient(networkId, client1Host, client1Port, client2Port);
+        UdpClient client1 = new UdpClient(networkId, client2Host, client2Port);
+        UdpClient client2 = new UdpClient(networkId, client1Host, client1Port);
 
         executor.execute(client1::run);
         executor.execute(client2::run);
@@ -36,10 +39,19 @@ public class UdpClientTest {
 
 
     @Test
-    public void client2ServerTest() {
-        UdpClient client1 = new UdpClient(networkId, "192.168.40.233", 10000, 9999);
-        client1.run();
+    public void client2ServerTest() throws InterruptedException {
+        UdpClient client1 = new UdpClient(networkId, udpServer, 9999);
+        UdpClient client2 = new UdpClient(networkId, udpServer, 9999);
+        executor.execute(client1::run);
+        executor.execute(client2::run);
+        Thread.sleep(30000);
     }
 
+
+    @Test
+    public void udpClient() {
+        UdpClient client1 = new UdpClient(networkId, udpServer, 10000);
+        client1.run();
+    }
 
 }
