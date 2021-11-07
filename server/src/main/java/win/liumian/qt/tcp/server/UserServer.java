@@ -1,12 +1,17 @@
 package win.liumian.qt.tcp.server;
 
-import io.netty.channel.*;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import lombok.extern.slf4j.Slf4j;
 import win.liumian.qt.common.enumeration.RouteMode;
 import win.liumian.qt.tcp.handler.UserServerHandler;
@@ -70,16 +75,15 @@ public class UserServer {
                     protected void initChannel(SocketChannel socketChannel) {
                         // 请求解码器
                         socketChannel.pipeline()
-                                .addLast(new ByteArrayDecoder(), new ByteArrayEncoder())
+                                .addLast(new ByteArrayDecoder())
+                                .addLast(new ByteArrayEncoder())
                                 .addLast(new UserServerHandler(networkId, targetHost, targetPort));
 
                     }
                 })
                 .localAddress(Integer.parseInt(userServerPort))
                 //设置队列大小
-                .option(ChannelOption.SO_BACKLOG, 1024)
-                // 两小时内没有数据的通信时,TCP会自动发送一个活动探测数据报文
-                .childOption(ChannelOption.SO_KEEPALIVE, true);
+                .option(ChannelOption.SO_BACKLOG, 1024);
         //绑定端口,开始接收进来的连接
         try {
             ChannelFuture future = bootstrap.bind(Integer.parseInt(userServerPort)).sync();

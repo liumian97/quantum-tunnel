@@ -5,22 +5,24 @@ import org.apache.commons.cli.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import win.liumian.qt.common.enumeration.RouteMode;
-import win.liumian.qt.tcp.server.ProxyServer;
-import win.liumian.qt.tcp.server.UserServer;
-import win.liumian.qt.udp.UdpServer;
+import win.liumian.qt.common.util.BannerUtil;
+import win.liumian.qt.server.ProxyServer;
+import win.liumian.qt.server.UserServer;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 @Slf4j
 @SpringBootApplication
-public class QuantumTunnelApplication {
+public class QuantumTunnelServerApplication {
 
 
-    private static Executor executor = Executors.newFixedThreadPool(10);
+    private static Executor executor = Executors.newFixedThreadPool(2);
 
 
     public static void main(String[] args) throws ParseException {
+
+
         Options options = new Options();
         options.addOption("help", false, "Help");
         options.addOption("proxy_server_port", true, "内网穿透-代理服务端口");
@@ -37,8 +39,8 @@ public class QuantumTunnelApplication {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("options", options);
         } else {
-            SpringApplication.run(QuantumTunnelApplication.class, args);
-
+            SpringApplication.run(QuantumTunnelServerApplication.class, args);
+            BannerUtil.printGitBuildInfo();
             String proxyServerPort = cmd.getOptionValue("proxy_server_port");
             if (proxyServerPort == null) {
                 log.error("proxy_server_host cannot be null");
@@ -70,12 +72,6 @@ public class QuantumTunnelApplication {
                 log.error("target_server_port cannot be null");
                 return;
             }
-
-            executor.execute(() -> new UdpServer(9999).run());
-
-            executor.execute(() -> new UdpServer(10000).run());
-
-
             executor.execute(() -> {
                 //启动代理服务端
                 ProxyServer proxyServer = new ProxyServer(proxyServerPort);

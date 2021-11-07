@@ -71,6 +71,12 @@ curl --location --request GET '127.0.0.1:8090/' \
 
 ## release note
 
+### v0.2.1-beta
+[发布链接](https://gitee.com/liumian/quantum-tunnel/releases/v0.2.1-beta)
+1. 使用protobuf进行编解码，提高数据编解码性能
+2. 增加queryParam路由参数解析，适用不方便添加路由信息到header的场景，如websocket连接
+3. 应用启动时增加git信息，方便查看当前版本
+
 ### v0.2-beta
 [发布链接](https://gitee.com/liumian/quantum-tunnel/releases/v0.2-beta)
 1. 新增端口路由模式：适用于端口场景
