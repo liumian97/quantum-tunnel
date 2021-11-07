@@ -90,7 +90,7 @@ public class UserServerHandler extends QuantumCommonHandler {
                 .setNetworkId(networkId).setMessageType(QuantumMessage.MessageType.DATA)
                 .setChannelId(userChannelId).setTargetHost(targetHost)
                 .setTargetPort(Integer.parseInt(targetPort))
-                .setData(ByteString.copyFrom(new String(bytes), StandardCharsets.UTF_8)).build();
+                .setData(ByteString.copyFrom(bytes)).build();
 
 
         boolean success = writeToProxyChannel(message);

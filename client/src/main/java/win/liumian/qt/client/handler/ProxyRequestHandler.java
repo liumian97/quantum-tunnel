@@ -31,7 +31,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
         ProxyClientHandler.user2ProxyChannelMap.put(userChannelId, channel);
-        log.info("准备发起请求：" + channel.id().asLongText() + "，用户通道：" + userChannelId);
+        log.info("准备发起请求，用户通道：" + userChannelId);
         super.channelActive(ctx);
     }
 
@@ -42,7 +42,7 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        log.info("主动断开连接：" + ctx.channel().id().asLongText() + "，用户通道：" + userChannelId);
+        log.info("主动断开连接，用户通道：" + userChannelId);
         processDisconnected();
     }
 
