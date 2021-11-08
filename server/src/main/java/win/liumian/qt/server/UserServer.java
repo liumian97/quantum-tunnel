@@ -78,7 +78,6 @@ public class UserServer {
                                 .addLast(new ByteArrayDecoder())
                                 .addLast(new ByteArrayEncoder())
                                 .addLast(new UserServerHandler(networkId, targetHost, targetPort));
-
                     }
                 })
                 .localAddress(Integer.parseInt(userServerPort))

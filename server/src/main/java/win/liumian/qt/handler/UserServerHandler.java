@@ -76,7 +76,6 @@ public class UserServerHandler extends QuantumCommonHandler {
             if (targetPort == null) {
                 targetPort = getParamValue(s, "target_port");
             }
-            super.networkId = networkId;
         }
 
         if (networkId == null || targetHost == null || targetPort == null) {

@@ -47,14 +47,6 @@ public class ProxyServer {
                                 .addLast(new ProtobufEncoder())
                                 .addLast(new IdleStateHandler(360, 300, 0))
                                 .addLast(new ProxyServerHandler());
-
-                        /**
-                         *  * pipeline.addLast("frameDecoder",
-                         *  *                  new {@link LengthFieldBasedFrameDecoder}(1048576, 0, 4, 0, 4));
-                         *  * pipeline.addLast("protobufDecoder",
-                         *  *                  new {@link ProtobufDecoder}(MyMessage.getDefaultInstance()));
-                         */
-
                     }
                 })
                 .localAddress(Integer.parseInt(proxyServerPort))
