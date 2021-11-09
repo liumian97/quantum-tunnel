@@ -28,7 +28,7 @@ public class QuantumCommonHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("捕获通道异常：" + networkId, cause);
+//        log.error("捕获通道异常：" + networkId, cause);
         ctx.channel().close();
     }
 
