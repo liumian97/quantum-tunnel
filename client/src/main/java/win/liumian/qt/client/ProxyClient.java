@@ -17,6 +17,7 @@ import win.liumian.qt.client.handler.ProxyClientHandler;
 import win.liumian.qt.common.proto.QuantumMessage;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author liumian  2021/9/26 11:40
@@ -28,18 +29,16 @@ public class ProxyClient {
     private final String proxyServerHost;
     private final String proxyServerPort;
     private final String networkId;
-    private final String targetServerHost;
-    private final String targetServerPort;
+    private final Set<String> tupleWhiteSet;
 
 
     private final NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 
-    public ProxyClient(String proxyServerHost, String proxyServerPort, String networkId, String targetServerHost, String targetServerPort) {
+    public ProxyClient(String proxyServerHost, String proxyServerPort, String networkId, Set<String> tupleWhiteSet) {
         this.proxyServerHost = proxyServerHost;
         this.proxyServerPort = proxyServerPort;
         this.networkId = networkId;
-        this.targetServerHost = targetServerHost;
-        this.targetServerPort = targetServerPort;
+        this.tupleWhiteSet = tupleWhiteSet;
     }
 
     /**
@@ -54,7 +53,7 @@ public class ProxyClient {
         b.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) {
-                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId, targetServerHost, targetServerPort);
+                ProxyClientHandler proxyClientHandler = new ProxyClientHandler(networkId, tupleWhiteSet);
                 ch.pipeline()
                         .addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4))
                         .addLast(new ProtobufDecoder(QuantumMessage.Message.getDefaultInstance()))

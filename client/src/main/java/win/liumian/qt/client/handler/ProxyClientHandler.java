@@ -16,6 +16,7 @@ import win.liumian.qt.common.proto.QuantumMessage;
 
 import javax.net.ssl.SSLException;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,14 +31,12 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
     private final static NioEventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
 
-    private final String targetServerHost;
+    private final Set<String> tupleWhiteSet;
 
-    private final String targetServerPort;
 
-    public ProxyClientHandler(String networkId, String targetServerHost, String targetServerPort) {
+    public ProxyClientHandler(String networkId, Set<String> tupleWhiteSet) {
         super.networkId = networkId;
-        this.targetServerHost = targetServerHost;
-        this.targetServerPort = targetServerPort;
+        this.tupleWhiteSet = tupleWhiteSet;
     }
 
     @Override
@@ -108,12 +107,9 @@ public class ProxyClientHandler extends QuantumCommonHandler {
         ByteBuf byteBuf = Unpooled.copiedBuffer(quantumMessage.getData().toByteArray());
 
         if (proxyChannel == null) {
-            if (targetServerHost != null && !targetServerHost.equals(quantumMessage.getTargetHost())) {
-                disconnectUserChannel(ctx, quantumMessage.getChannelId());
-                return;
-            }
-
-            if (targetServerPort != null && Integer.parseInt(targetServerPort) != quantumMessage.getTargetPort()) {
+            String targetTuple = quantumMessage.getTargetHost() + ":" + quantumMessage.getTargetPort();
+            if (!tupleWhiteSet.isEmpty() && !tupleWhiteSet.contains(targetTuple)) {
+                log.info("targetTuple不在白名单内：{}", targetTuple);
                 disconnectUserChannel(ctx, quantumMessage.getChannelId());
                 return;
             }

@@ -5,10 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.util.StringUtils;
 import win.liumian.qt.client.ProxyClient;
 import win.liumian.qt.common.util.BannerUtil;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * @author liumian
@@ -25,8 +30,7 @@ public class QuantumTunnelClientApplication {
         options.addOption("proxy_server_host", true, "内网穿透-代理服务器地址");
         options.addOption("proxy_server_port", true, "内网穿透-代理服务端口");
         options.addOption("network_id", true, "分配的网络id");
-        options.addOption("target_server_host", true, "目标服务器host，默认不限制");
-        options.addOption("target_server_port", true, "目标服务器port，默认不限制");
+        options.addOption("tuple_white_list_str", true, "目前二元组白名单，逗号分隔");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -55,11 +59,10 @@ public class QuantumTunnelClientApplication {
             SpringApplication.run(QuantumTunnelClientApplication.class, args);
             BannerUtil.printGitBuildInfo();
 
-            String targetServerHost = cmd.getOptionValue("target_server_host");
-            String targetServerPort = cmd.getOptionValue("target_server_port");
-            log.info("启动参数：\nproxy_server_host：{}\nproxy_server_port：{}\nnetwork_id：{} \ntarget_server_host：{}\ntarget_server_port：{}",
-                    proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
-            ProxyClient proxyClient = new ProxyClient(proxyServerHost, proxyServerPort, networkId, targetServerHost, targetServerPort);
+            String tupleWhiteListStr = cmd.getOptionValue("tuple_white_list_str");
+            log.info("启动参数：\nproxy_server_host：{}\nproxy_server_port：{}\nnetwork_id：{} \ntuple_white_list：{}",
+                    proxyServerHost, proxyServerPort, networkId, tupleWhiteListStr);
+            ProxyClient proxyClient = new ProxyClient(proxyServerHost, proxyServerPort, networkId, getTupleWhiteSet(tupleWhiteListStr));
             while (true) {
                 try {
                     Channel channel = proxyClient.connect();
@@ -71,6 +74,14 @@ public class QuantumTunnelClientApplication {
                 Thread.sleep(10 * 1000);
             }
         }
+    }
 
+    public static Set<String> getTupleWhiteSet(String tupleWhiteListStr){
+        if (StringUtils.hasLength(tupleWhiteListStr)){
+            String[] split = tupleWhiteListStr.split(",");
+            return new HashSet<>(Arrays.asList(split));
+        } else {
+            return new HashSet<>();
+        }
     }
 }
