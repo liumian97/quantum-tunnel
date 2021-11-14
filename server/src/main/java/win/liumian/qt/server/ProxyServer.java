@@ -23,7 +23,7 @@ import win.liumian.qt.handler.ProxyServerHandler;
 @Slf4j
 public class ProxyServer {
 
-    private String proxyServerPort;
+    private final String proxyServerPort;
 
     public ProxyServer(String proxyServerPort) {
         this.proxyServerPort = proxyServerPort;

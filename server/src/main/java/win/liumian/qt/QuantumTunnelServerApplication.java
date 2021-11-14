@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 import win.liumian.qt.common.enumeration.RouteMode;
 import win.liumian.qt.common.util.BannerUtil;
 import win.liumian.qt.server.ProxyServer;
@@ -13,6 +14,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 @Slf4j
+@PropertySource("classpath:gitBuildInfo.properties")
 @SpringBootApplication
 public class QuantumTunnelServerApplication {
 

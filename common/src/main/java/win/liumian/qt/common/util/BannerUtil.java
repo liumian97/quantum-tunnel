@@ -23,6 +23,12 @@ public class BannerUtil {
             BufferedReader bufferedReader = new BufferedReader(isr);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
+                if (line.contains("=")) {
+                    String[] split = line.split("=");
+                    if (split.length == 2) {
+                        System.setProperty(split[0], split[1]);
+                    }
+                }
                 log.info(line);
             }
         } catch (Exception e) {
