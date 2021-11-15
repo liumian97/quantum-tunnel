@@ -1,11 +1,11 @@
 syntax = "proto2";
 
-package win.liumian.qt.common.proto;
+package top.liumian.qt.common.proto;
 
 
 //optimize_for 加快解析的速度
 option optimize_for = SPEED;
-option java_package = "win.liumian.qt.common.proto";
+option java_package = "top.liumian.qt.common.proto";
 option java_outer_classname = "QuantumMessage";
 
 message Message{
