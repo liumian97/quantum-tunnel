@@ -7,12 +7,27 @@
 5. 安全性高，客户端可限制代理的服务器地址和端口；
 6. 支持点对点内网穿透 **（开发中）**。
 
- **可以实现在同一个端口将流量代理到不同的网络中，非常方便根据业务将流量穿透多个内网环境。** 
 ## 介绍
 QuantumTunnel，量子隧道，名字来源于量子纠缠现象。 
 > 两个处于量子纠缠的粒子，无论处于多么远的距离，当其中一个粒子状态改变时，另外一个粒子也会做出相应的改变。
 
 QuantumTunnel也取意于此，希望把公网发出来的请求，完整的同步到内网，就像在内网发出的请求，打破网络的限制。
+
+## 体验使用
+1. 下载内网穿透客户端：[v1.0.0正式版本客户端](https://gitee.com/liumian/quantum-tunnel/attach_files/881457/download/quantum-tunnel-client.jar)
+2. 执行启动命令：
+```shell 
+java -jar client/target/quantum-tunnel-client.jar -network_id localTest -proxy_server_host qt.liumian.top  -proxy_server_port 8880
+```
+3. 发起一个内网穿透请求：
+```shell 
+curl -L -X GET 'qt.liumian.top:9990/' \
+-H 'network_id: localTest' \
+-H 'target_host: www.baidu.com' \
+-H 'host: www.baidu.com' \
+-H 'target_port: 80' \
+-H 'Connection: close'
+```
 
 ## 仓库地址
 1. gitee：[乐天派 / quantum-tunnel](https://gitee.com/liumian/quantum-tunnel)
@@ -71,8 +86,18 @@ curl --location --request GET '127.0.0.1:8090/' \
 
 ## release note
 
-### v0.2.1-beta
-[发布链接](https://gitee.com/liumian/quantum-tunnel/releases/v0.2.1-beta)
+### v1.0.0
+[发布链接](https://gitee.com/liumian/quantum-tunnel/releases/v1.0.0)
+
+核心能力的简要说明：
+1. 支持协议路由和端口路由：[QuantumTunnel：端口路由 vs 协议路由](https://mp.weixin.qq.com/s/6Ru1dWzU3JjNClIRFJ1I4A)
+2. 基于Netty实现、使用Protobuf编解码，拥有优秀的转发性能
+3. 支持客户端指定访问白名单，避免被恶意网络攻击
+4. 使用极其简单，用两行命令即可拉起服务端与客户端
+
+
+### v0.2.2-beta
+[发布链接](https://gitee.com/liumian/quantum-tunnel/releases/v0.2.2-beta)
 1. 使用protobuf进行编解码，提高数据编解码性能
 2. 增加queryParam路由参数解析，适用不方便添加路由信息到header的场景，如websocket连接
 3. 应用启动时增加git信息，方便查看当前版本
