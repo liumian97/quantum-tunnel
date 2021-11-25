@@ -127,4 +127,5 @@ curl --location --request GET '127.0.0.1:8090/' \
 2. [QuantumTunnel：Netty实现](https://mp.weixin.qq.com/s/3N_c6IR--e85kmt0tjHSvw)
 3. [QuantumTunnel：v0.1-beta发布](https://mp.weixin.qq.com/s/9GRyeFTZ_jdwXAtktSc9Uw)
 4. [QuantumTunnel：端口路由 vs 协议路由](https://mp.weixin.qq.com/s/6Ru1dWzU3JjNClIRFJ1I4A)
+5. [QuantumTunnel：v1.0.0 正式版本发布](https://mp.weixin.qq.com/s/ge6aqAP7_s2cG5siaJ29XQ)
 
