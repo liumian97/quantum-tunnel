@@ -41,14 +41,14 @@ public class UserServerHandler extends QuantumCommonHandler {
         userChannelId = ctx.channel().id().asLongText();
         remoteAddress = ctx.channel().remoteAddress();
         log.info("打开用户通道，ip：{} ：{}", remoteAddress, userChannelId);
-        ChannelMap.userChannelMap.put(userChannelId, ctx.channel());
+        ChannelMap.USER_CHANNEL_MAP.put(userChannelId, ctx.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
         String userChannelId = ctx.channel().id().asLongText();
-        ChannelMap.userChannelMap.remove(userChannelId);
+        ChannelMap.USER_CHANNEL_MAP.remove(userChannelId);
         log.info("关闭用户通道，ip：{} ：{}", remoteAddress, userChannelId);
         if (networkId != null) {
             //说明从通道中读到了数据，那么通知proxyClient关闭对应的channel
@@ -97,7 +97,7 @@ public class UserServerHandler extends QuantumCommonHandler {
     }
 
     private boolean writeToProxyChannel(QuantumMessage.Message message) {
-        Channel proxyChannel = ChannelMap.proxyChannelsMap.get(networkId);
+        Channel proxyChannel = ChannelMap.PROXY_CHANNEL_MAP.get(networkId);
         if (proxyChannel != null && proxyChannel.isWritable()) {
             String proxyChannelId = proxyChannel.id().asLongText();
             logger.info("用户通道:{} -> 代理通道:{}", userChannelId, proxyChannelId);
@@ -110,7 +110,8 @@ public class UserServerHandler extends QuantumCommonHandler {
     }
 
     private String getHeaderValue(String requestStr, String headerName) {
-        for (String s : requestStr.split("\r\n")) {
+        final String lineBreak = "\r\n";
+        for (String s : requestStr.split(lineBreak)) {
             if (s.startsWith(headerName + ":")) {
                 return s.split(":")[1].trim();
             }

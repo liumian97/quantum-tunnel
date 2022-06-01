@@ -9,20 +9,18 @@ import org.springframework.util.StringUtils;
 import top.liumian.qt.client.ProxyClient;
 import top.liumian.qt.common.util.BannerUtil;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author liumian
- * @date 2021/11/6 12:45 下午
+ * @author liumian 2021/11/6 12:45 下午
  */
 @Slf4j
 @SpringBootApplication
 public class QuantumTunnelClientApplication {
 
-    public static void main(String[] args) throws ParseException, InterruptedException, IOException {
+    public static void main(String[] args) throws ParseException, InterruptedException {
 
         Options options = new Options();
         options.addOption("help", false, "Help");
@@ -66,7 +64,7 @@ public class QuantumTunnelClientApplication {
                 try {
                     Channel channel = proxyClient.connect();
                     channel.closeFuture().sync();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 log.info("内网穿透代理服务器已断开，重试中...");
@@ -75,8 +73,8 @@ public class QuantumTunnelClientApplication {
         }
     }
 
-    public static Set<String> getTupleWhiteSet(String tupleWhiteListStr){
-        if (StringUtils.hasLength(tupleWhiteListStr)){
+    public static Set<String> getTupleWhiteSet(String tupleWhiteListStr) {
+        if (StringUtils.hasLength(tupleWhiteListStr)) {
             String[] split = tupleWhiteListStr.split(",");
             return new HashSet<>(Arrays.asList(split));
         } else {

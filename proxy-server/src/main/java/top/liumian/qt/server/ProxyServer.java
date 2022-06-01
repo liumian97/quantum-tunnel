@@ -14,8 +14,8 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
-import top.liumian.qt.handler.ProxyServerHandler;
 import top.liumian.qt.common.proto.QuantumMessage;
+import top.liumian.qt.handler.ProxyServerHandler;
 
 /**
  * @author liumian  2021/9/19 19:10
@@ -39,7 +39,7 @@ public class ProxyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
+                    protected void initChannel(SocketChannel ch) {
                         ch.pipeline()
                                 .addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4))
                                 .addLast(new ProtobufDecoder(QuantumMessage.Message.getDefaultInstance()))
