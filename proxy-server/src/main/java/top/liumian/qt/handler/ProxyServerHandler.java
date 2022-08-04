@@ -42,6 +42,12 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         }
     }
 
+    /**
+     * 处理内网穿透客户端注册事件
+     *
+     * @param ctx            上下文
+     * @param quantumMessage 注册事件消息
+     */
     private void processRegister(ChannelHandlerContext ctx, QuantumMessage.Message quantumMessage) {
         String serverVersion = System.getProperty("git.branch");
         Channel channel = ctx.channel();
@@ -62,6 +68,11 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         channel.writeAndFlush(message);
     }
 
+    /**
+     * 处理内网穿透客户端与目标服务器连接断开事件
+     *
+     * @param quantumMessage 断开事件消息
+     */
     private void processProxyDisconnected(QuantumMessage.Message quantumMessage) {
         String channelId = quantumMessage.getChannelId();
         Channel channel = ChannelMap.USER_CHANNEL_MAP.get(channelId);
@@ -71,6 +82,11 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         }
     }
 
+    /**
+     * 向用户channel中发送真实服务器接收到的数据
+     *
+     * @param quantumMessage 数据事件消息
+     */
     private void writeToUserChannel(QuantumMessage.Message quantumMessage) {
         Channel userChannel = ChannelMap.USER_CHANNEL_MAP.get(quantumMessage.getChannelId());
         if (userChannel != null) {

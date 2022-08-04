@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>client</artifactId>
+    <artifactId>proxy-client</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -35,7 +35,7 @@
     </dependencies>
 
     <build>
-        <finalName>quantum-tunnel-client</finalName>
+        <finalName>proxy-client</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

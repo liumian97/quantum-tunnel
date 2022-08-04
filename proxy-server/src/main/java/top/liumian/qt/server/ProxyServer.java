@@ -18,6 +18,8 @@ import top.liumian.qt.common.proto.QuantumMessage;
 import top.liumian.qt.handler.ProxyServerHandler;
 
 /**
+ * 面向ProxyClient的服务器
+ *
  * @author liumian  2021/9/19 19:10
  */
 @Slf4j

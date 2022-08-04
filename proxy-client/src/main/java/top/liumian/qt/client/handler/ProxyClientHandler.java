@@ -55,8 +55,7 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
         log.info("准备注册量子通道");
         QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
-                .setNetworkId(networkId).
-                setMessageType(QuantumMessage.MessageType.REGISTER).build();
+                .setNetworkId(networkId).setMessageType(QuantumMessage.MessageType.REGISTER).build();
         ctx.writeAndFlush(message);
         super.channelActive(ctx);
     }

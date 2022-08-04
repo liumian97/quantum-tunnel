@@ -55,13 +55,11 @@ curl -L -X GET 'qt.liumian.top:9990/' \
 ## 使用说明
 
 1. 克隆仓库到本地：git clone git@gitee.com:liumian/quantum-tunnel.git
-2. 打包
-   - 内网穿透服务端： sh package_server.sh
-   - 内网穿透客户端： sh package_client.sh
+2. 打包：``sh mvn_package.sh`
 3. 启动服务
-   - 启动服务端： java -jar quantum-tunnel-server.jar -proxy_server_port 9090 -user_server_port 8090
-   - 启动客户端： java -jar quantum-tunnel-client.jar -network_id localTest -proxy_server_host 127.0.0.1 -proxy_server_port
-     9090
+    - 启动服务端： java -jar proxy-server.jar -proxy_server_port 9090 -user_server_port 8090
+    - 启动客户端： java -jar proxy-client.jar -network_id localTest -proxy_server_host 127.0.0.1 -proxy_server_port
+      9090
 
 全部参数说明：
 
