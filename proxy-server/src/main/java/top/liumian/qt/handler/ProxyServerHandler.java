@@ -18,9 +18,9 @@ public class ProxyServerHandler extends QuantumCommonHandler {
 
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        if (networkId != null && ChannelMap.proxyChannelsMap.containsKey(networkId)) {
-            ChannelMap.proxyChannelsMap.remove(networkId);
+    public void channelInactive(ChannelHandlerContext ctx) {
+        if (networkId != null && ChannelMap.PROXY_CHANNEL_MAP.containsKey(networkId)) {
+            ChannelMap.PROXY_CHANNEL_MAP.remove(networkId);
             log.info("量子通道断开，网络id：{}", networkId);
         }
     }
@@ -42,18 +42,24 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         }
     }
 
+    /**
+     * 处理内网穿透客户端注册事件
+     *
+     * @param ctx            上下文
+     * @param quantumMessage 注册事件消息
+     */
     private void processRegister(ChannelHandlerContext ctx, QuantumMessage.Message quantumMessage) {
         String serverVersion = System.getProperty("git.branch");
         Channel channel = ctx.channel();
         String networkId = quantumMessage.getNetworkId();
         QuantumMessage.Message.Builder builder = QuantumMessage.Message.newBuilder().setNetworkId(networkId);
-        if (ChannelMap.proxyChannelsMap.containsKey(networkId)) {
+        if (ChannelMap.PROXY_CHANNEL_MAP.containsKey(networkId)) {
             builder.setMessageType(QuantumMessage.MessageType.REGISTER_FAILED)
                     .setData(ByteString.copyFrom("重复注册，服务器分支版本：" + serverVersion, StandardCharsets.UTF_8));
             log.info("量子通道注册失败，网络id：{} 重复注册", networkId);
         } else {
             super.networkId = networkId;
-            ChannelMap.proxyChannelsMap.put(networkId, channel);
+            ChannelMap.PROXY_CHANNEL_MAP.put(networkId, channel);
             builder.setMessageType(QuantumMessage.MessageType.REGISTER_SUCCESS)
                     .setData(ByteString.copyFrom("注册成功，服务器分支版本：" + serverVersion, StandardCharsets.UTF_8));
             log.info("量子通道注册成功，网络id:{}", networkId);
@@ -62,17 +68,27 @@ public class ProxyServerHandler extends QuantumCommonHandler {
         channel.writeAndFlush(message);
     }
 
+    /**
+     * 处理内网穿透客户端与目标服务器连接断开事件
+     *
+     * @param quantumMessage 断开事件消息
+     */
     private void processProxyDisconnected(QuantumMessage.Message quantumMessage) {
         String channelId = quantumMessage.getChannelId();
-        Channel channel = ChannelMap.userChannelMap.get(channelId);
+        Channel channel = ChannelMap.USER_CHANNEL_MAP.get(channelId);
         if (channel != null && channel.isOpen()) {
             log.info("ProxyClient主动关闭用户通道，channelId:" + channelId);
             channel.close();
         }
     }
 
+    /**
+     * 向用户channel中发送真实服务器接收到的数据
+     *
+     * @param quantumMessage 数据事件消息
+     */
     private void writeToUserChannel(QuantumMessage.Message quantumMessage) {
-        Channel userChannel = ChannelMap.userChannelMap.get(quantumMessage.getChannelId());
+        Channel userChannel = ChannelMap.USER_CHANNEL_MAP.get(quantumMessage.getChannelId());
         if (userChannel != null) {
             userChannel.writeAndFlush(quantumMessage.getData().toByteArray());
         }

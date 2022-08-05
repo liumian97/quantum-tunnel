@@ -4,1570 +4,1720 @@
 package top.liumian.qt.common.proto;
 
 public final class QuantumMessage {
-  private QuantumMessage() {}
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
-  }
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_top_liumian_qt_common_proto_Message_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable;
+    private static com.google.protobuf.Descriptors.FileDescriptor
+            descriptor;
 
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
-  }
-  /**
-   * Protobuf enum {@code top.liumian.qt.common.proto.MessageType}
-   */
-  public enum MessageType
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <pre>
-     **
-     * 注册请求
-     * </pre>
-     *
-     * <code>REGISTER = 1;</code>
-     */
-    REGISTER(1),
-    /**
-     * <pre>
-     **
-     * 注册成功
-     * </pre>
-     *
-     * <code>REGISTER_SUCCESS = 2;</code>
-     */
-    REGISTER_SUCCESS(2),
-    /**
-     * <pre>
-     **
-     * 连接成功
-     * </pre>
-     *
-     * <code>REGISTER_FAILED = 3;</code>
-     */
-    REGISTER_FAILED(3),
-    /**
-     * <code>CONNECTED = 4;</code>
-     */
-    CONNECTED(4),
-    /**
-     * <pre>
-     **
-     * 断开连接
-     * </pre>
-     *
-     * <code>PROXY_DISCONNECTED = 5;</code>
-     */
-    PROXY_DISCONNECTED(5),
-    /**
-     * <pre>
-     **
-     * 传输数据
-     * </pre>
-     *
-     * <code>DATA = 6;</code>
-     */
-    DATA(6),
-    /**
-     * <pre>
-     **
-     * 保持链接
-     * </pre>
-     *
-     * <code>KEEPALIVE = 7;</code>
-     */
-    KEEPALIVE(7),
-    /**
-     * <pre>
-     **
-     * 用户链接断开
-     * </pre>
-     *
-     * <code>USER_DISCONNECTED = 8;</code>
-     */
-    USER_DISCONNECTED(8),
-    ;
+    static {
+        java.lang.String[] descriptorData = {
+                "\n*common/src/main/proto/QuantumMessage.p" +
+                        "roto\022\033top.liumian.qt.common.proto\"\244\001\n\007Me" +
+                        "ssage\022\021\n\tnetworkId\030\t \002(\t\022=\n\013messageType\030" +
+                        "\n \002(\0162(.top.liumian.qt.common.proto.Mess" +
+                        "ageType\022\021\n\tchannelId\030\013 \001(\t\022\022\n\ntargetHost" +
+                        "\030\014 \001(\t\022\022\n\ntargetPort\030\r \001(\005\022\014\n\004data\030\016 \001(\014" +
+                        "*\235\001\n\013MessageType\022\014\n\010REGISTER\020\001\022\024\n\020REGIST" +
+                        "ER_SUCCESS\020\002\022\023\n\017REGISTER_FAILED\020\003\022\r\n\tCON" +
+                        "NECTED\020\004\022\026\n\022PROXY_DISCONNECTED\020\005\022\010\n\004DATA" +
+                        "\020\006\022\r\n\tKEEPALIVE\020\007\022\025\n\021USER_DISCONNECTED\020\010" +
+                        "B/\n\033top.liumian.qt.common.protoB\016Quantum" +
+                        "MessageH\001"
+        };
+        descriptor = com.google.protobuf.Descriptors.FileDescriptor
+                .internalBuildGeneratedFileFrom(descriptorData,
+                        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                        });
+        internal_static_top_liumian_qt_common_proto_Message_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+        internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_top_liumian_qt_common_proto_Message_descriptor,
+                new java.lang.String[]{"NetworkId", "MessageType", "ChannelId", "TargetHost", "TargetPort", "Data",});
+    }
 
-    /**
-     * <pre>
-     **
-     * 注册请求
-     * </pre>
-     *
-     * <code>REGISTER = 1;</code>
-     */
-    public static final int REGISTER_VALUE = 1;
-    /**
-     * <pre>
-     **
-     * 注册成功
-     * </pre>
-     *
-     * <code>REGISTER_SUCCESS = 2;</code>
-     */
-    public static final int REGISTER_SUCCESS_VALUE = 2;
-    /**
-     * <pre>
-     **
-     * 连接成功
-     * </pre>
-     *
-     * <code>REGISTER_FAILED = 3;</code>
-     */
-    public static final int REGISTER_FAILED_VALUE = 3;
-    /**
-     * <code>CONNECTED = 4;</code>
-     */
-    public static final int CONNECTED_VALUE = 4;
-    /**
-     * <pre>
-     **
-     * 断开连接
-     * </pre>
-     *
-     * <code>PROXY_DISCONNECTED = 5;</code>
-     */
-    public static final int PROXY_DISCONNECTED_VALUE = 5;
-    /**
-     * <pre>
-     **
-     * 传输数据
-     * </pre>
-     *
-     * <code>DATA = 6;</code>
-     */
-    public static final int DATA_VALUE = 6;
-    /**
-     * <pre>
-     **
-     * 保持链接
-     * </pre>
-     *
-     * <code>KEEPALIVE = 7;</code>
-     */
-    public static final int KEEPALIVE_VALUE = 7;
-    /**
-     * <pre>
-     **
-     * 用户链接断开
-     * </pre>
-     *
-     * <code>USER_DISCONNECTED = 8;</code>
-     */
-    public static final int USER_DISCONNECTED_VALUE = 8;
+    private QuantumMessage() {
+    }
 
+    public static void registerAllExtensions(
+            com.google.protobuf.ExtensionRegistryLite registry) {
+    }
 
-    public final int getNumber() {
-      return value;
+    public static void registerAllExtensions(
+            com.google.protobuf.ExtensionRegistry registry) {
+        registerAllExtensions(
+                (com.google.protobuf.ExtensionRegistryLite) registry);
+    }
+
+    public static com.google.protobuf.Descriptors.FileDescriptor
+    getDescriptor() {
+        return descriptor;
     }
 
     /**
-     * @param value The numeric wire value of the corresponding enum entry.
-     * @return The enum associated with the given numeric wire value.
-     * @deprecated Use {@link #forNumber(int)} instead.
+     * Protobuf enum {@code top.liumian.qt.common.proto.MessageType}
      */
-    @java.lang.Deprecated
-    public static MessageType valueOf(int value) {
-      return forNumber(value);
-    }
+    public enum MessageType
+            implements com.google.protobuf.ProtocolMessageEnum {
+        /**
+         * <pre>
+         * *
+         * 注册请求
+         * </pre>
+         *
+         * <code>REGISTER = 1;</code>
+         */
+        REGISTER(1),
+        /**
+         * <pre>
+         * *
+         * 注册成功
+         * </pre>
+         *
+         * <code>REGISTER_SUCCESS = 2;</code>
+         */
+        REGISTER_SUCCESS(2),
+        /**
+         * <pre>
+         * *
+         * 连接成功
+         * </pre>
+         *
+         * <code>REGISTER_FAILED = 3;</code>
+         */
+        REGISTER_FAILED(3),
+        /**
+         * <code>CONNECTED = 4;</code>
+         */
+        CONNECTED(4),
+        /**
+         * <pre>
+         * *
+         * 断开连接
+         * </pre>
+         *
+         * <code>PROXY_DISCONNECTED = 5;</code>
+         */
+        PROXY_DISCONNECTED(5),
+        /**
+         * <pre>
+         * *
+         * 传输数据
+         * </pre>
+         *
+         * <code>DATA = 6;</code>
+         */
+        DATA(6),
+        /**
+         * <pre>
+         * *
+         * 保持链接
+         * </pre>
+         *
+         * <code>KEEPALIVE = 7;</code>
+         */
+        KEEPALIVE(7),
+        /**
+         * <pre>
+         * *
+         * 用户链接断开
+         * </pre>
+         *
+         * <code>USER_DISCONNECTED = 8;</code>
+         */
+        USER_DISCONNECTED(8),
+        ;
 
-    /**
-     * @param value The numeric wire value of the corresponding enum entry.
-     * @return The enum associated with the given numeric wire value.
-     */
-    public static MessageType forNumber(int value) {
-      switch (value) {
-        case 1: return REGISTER;
-        case 2: return REGISTER_SUCCESS;
-        case 3: return REGISTER_FAILED;
-        case 4: return CONNECTED;
-        case 5: return PROXY_DISCONNECTED;
-        case 6: return DATA;
-        case 7: return KEEPALIVE;
-        case 8: return USER_DISCONNECTED;
-        default: return null;
-      }
-    }
+        /**
+         * <pre>
+         * *
+         * 注册请求
+         * </pre>
+         *
+         * <code>REGISTER = 1;</code>
+         */
+        public static final int REGISTER_VALUE = 1;
+        /**
+         * <pre>
+         * *
+         * 注册成功
+         * </pre>
+         *
+         * <code>REGISTER_SUCCESS = 2;</code>
+         */
+        public static final int REGISTER_SUCCESS_VALUE = 2;
+        /**
+         * <pre>
+         * *
+         * 连接成功
+         * </pre>
+         *
+         * <code>REGISTER_FAILED = 3;</code>
+         */
+        public static final int REGISTER_FAILED_VALUE = 3;
+        /**
+         * <code>CONNECTED = 4;</code>
+         */
+        public static final int CONNECTED_VALUE = 4;
+        /**
+         * <pre>
+         * *
+         * 断开连接
+         * </pre>
+         *
+         * <code>PROXY_DISCONNECTED = 5;</code>
+         */
+        public static final int PROXY_DISCONNECTED_VALUE = 5;
+        /**
+         * <pre>
+         * *
+         * 传输数据
+         * </pre>
+         *
+         * <code>DATA = 6;</code>
+         */
+        public static final int DATA_VALUE = 6;
+        /**
+         * <pre>
+         * *
+         * 保持链接
+         * </pre>
+         *
+         * <code>KEEPALIVE = 7;</code>
+         */
+        public static final int KEEPALIVE_VALUE = 7;
+        /**
+         * <pre>
+         * *
+         * 用户链接断开
+         * </pre>
+         *
+         * <code>USER_DISCONNECTED = 8;</code>
+         */
+        public static final int USER_DISCONNECTED_VALUE = 8;
+        private static final com.google.protobuf.Internal.EnumLiteMap<
+                MessageType> internalValueMap =
+                new com.google.protobuf.Internal.EnumLiteMap<MessageType>() {
+                    public MessageType findValueByNumber(int number) {
+                        return MessageType.forNumber(number);
+                    }
+                };
+        private static final MessageType[] VALUES = values();
+        private final int value;
 
-    public static com.google.protobuf.Internal.EnumLiteMap<MessageType>
-        internalGetValueMap() {
-      return internalValueMap;
-    }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        MessageType> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<MessageType>() {
-            public MessageType findValueByNumber(int number) {
-              return MessageType.forNumber(number);
+        private MessageType(int value) {
+            this.value = value;
+        }
+
+        /**
+         * @param value The numeric wire value of the corresponding enum entry.
+         * @return The enum associated with the given numeric wire value.
+         * @deprecated Use {@link #forNumber(int)} instead.
+         */
+        @java.lang.Deprecated
+        public static MessageType valueOf(int value) {
+            return forNumber(value);
+        }
+
+        /**
+         * @param value The numeric wire value of the corresponding enum entry.
+         * @return The enum associated with the given numeric wire value.
+         */
+        public static MessageType forNumber(int value) {
+            switch (value) {
+                case 1:
+                    return REGISTER;
+                case 2:
+                    return REGISTER_SUCCESS;
+                case 3:
+                    return REGISTER_FAILED;
+                case 4:
+                    return CONNECTED;
+                case 5:
+                    return PROXY_DISCONNECTED;
+                case 6:
+                    return DATA;
+                case 7:
+                    return KEEPALIVE;
+                case 8:
+                    return USER_DISCONNECTED;
+                default:
+                    return null;
             }
-          };
+        }
 
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
-      return getDescriptor().getValues().get(ordinal());
-    }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
-      return getDescriptor();
-    }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        public static com.google.protobuf.Internal.EnumLiteMap<MessageType>
+        internalGetValueMap() {
+            return internalValueMap;
+        }
+
+        public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return top.liumian.qt.common.proto.QuantumMessage.getDescriptor().getEnumTypes().get(0);
+            return top.liumian.qt.common.proto.QuantumMessage.getDescriptor().getEnumTypes().get(0);
+        }
+
+        public static MessageType valueOf(
+                com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+            if (desc.getType() != getDescriptor()) {
+                throw new java.lang.IllegalArgumentException(
+                        "EnumValueDescriptor is not for this type.");
+            }
+            return VALUES[desc.getIndex()];
+        }
+
+        public final int getNumber() {
+            return value;
+        }
+
+        public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+            return getDescriptor().getValues().get(ordinal());
+        }
+
+        public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+            return getDescriptor();
+        }
+
+        // @@protoc_insertion_point(enum_scope:top.liumian.qt.common.proto.MessageType)
     }
 
-    private static final MessageType[] VALUES = values();
+    public interface MessageOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:top.liumian.qt.common.proto.Message)
+            com.google.protobuf.MessageOrBuilder {
 
-    public static MessageType valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-      if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
-      }
-      return VALUES[desc.getIndex()];
-    }
+        /**
+         * <code>required string networkId = 9;</code>
+         *
+         * @return Whether the networkId field is set.
+         */
+        boolean hasNetworkId();
 
-    private final int value;
+        /**
+         * <code>required string networkId = 9;</code>
+         *
+         * @return The networkId.
+         */
+        java.lang.String getNetworkId();
 
-    private MessageType(int value) {
-      this.value = value;
-    }
-
-    // @@protoc_insertion_point(enum_scope:top.liumian.qt.common.proto.MessageType)
-  }
-
-  public interface MessageOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:top.liumian.qt.common.proto.Message)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required string networkId = 9;</code>
-     * @return Whether the networkId field is set.
-     */
-    boolean hasNetworkId();
-    /**
-     * <code>required string networkId = 9;</code>
-     * @return The networkId.
-     */
-    java.lang.String getNetworkId();
-    /**
-     * <code>required string networkId = 9;</code>
-     * @return The bytes for networkId.
-     */
-    com.google.protobuf.ByteString
+        /**
+         * <code>required string networkId = 9;</code>
+         *
+         * @return The bytes for networkId.
+         */
+        com.google.protobuf.ByteString
         getNetworkIdBytes();
 
-    /**
-     * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-     * @return Whether the messageType field is set.
-     */
-    boolean hasMessageType();
-    /**
-     * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-     * @return The messageType.
-     */
-    top.liumian.qt.common.proto.QuantumMessage.MessageType getMessageType();
+        /**
+         * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+         *
+         * @return Whether the messageType field is set.
+         */
+        boolean hasMessageType();
 
-    /**
-     * <code>optional string channelId = 11;</code>
-     * @return Whether the channelId field is set.
-     */
-    boolean hasChannelId();
-    /**
-     * <code>optional string channelId = 11;</code>
-     * @return The channelId.
-     */
-    java.lang.String getChannelId();
-    /**
-     * <code>optional string channelId = 11;</code>
-     * @return The bytes for channelId.
-     */
-    com.google.protobuf.ByteString
+        /**
+         * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+         *
+         * @return The messageType.
+         */
+        top.liumian.qt.common.proto.QuantumMessage.MessageType getMessageType();
+
+        /**
+         * <code>optional string channelId = 11;</code>
+         *
+         * @return Whether the channelId field is set.
+         */
+        boolean hasChannelId();
+
+        /**
+         * <code>optional string channelId = 11;</code>
+         *
+         * @return The channelId.
+         */
+        java.lang.String getChannelId();
+
+        /**
+         * <code>optional string channelId = 11;</code>
+         *
+         * @return The bytes for channelId.
+         */
+        com.google.protobuf.ByteString
         getChannelIdBytes();
 
-    /**
-     * <code>optional string targetHost = 12;</code>
-     * @return Whether the targetHost field is set.
-     */
-    boolean hasTargetHost();
-    /**
-     * <code>optional string targetHost = 12;</code>
-     * @return The targetHost.
-     */
-    java.lang.String getTargetHost();
-    /**
-     * <code>optional string targetHost = 12;</code>
-     * @return The bytes for targetHost.
-     */
-    com.google.protobuf.ByteString
+        /**
+         * <code>optional string targetHost = 12;</code>
+         *
+         * @return Whether the targetHost field is set.
+         */
+        boolean hasTargetHost();
+
+        /**
+         * <code>optional string targetHost = 12;</code>
+         *
+         * @return The targetHost.
+         */
+        java.lang.String getTargetHost();
+
+        /**
+         * <code>optional string targetHost = 12;</code>
+         *
+         * @return The bytes for targetHost.
+         */
+        com.google.protobuf.ByteString
         getTargetHostBytes();
 
-    /**
-     * <code>optional int32 targetPort = 13;</code>
-     * @return Whether the targetPort field is set.
-     */
-    boolean hasTargetPort();
-    /**
-     * <code>optional int32 targetPort = 13;</code>
-     * @return The targetPort.
-     */
-    int getTargetPort();
+        /**
+         * <code>optional int32 targetPort = 13;</code>
+         *
+         * @return Whether the targetPort field is set.
+         */
+        boolean hasTargetPort();
 
-    /**
-     * <code>optional bytes data = 14;</code>
-     * @return Whether the data field is set.
-     */
-    boolean hasData();
-    /**
-     * <code>optional bytes data = 14;</code>
-     * @return The data.
-     */
-    com.google.protobuf.ByteString getData();
-  }
-  /**
-   * Protobuf type {@code top.liumian.qt.common.proto.Message}
-   */
-  public static final class Message extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:top.liumian.qt.common.proto.Message)
-      MessageOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use Message.newBuilder() to construct.
-    private Message(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private Message() {
-      networkId_ = "";
-      messageType_ = 1;
-      channelId_ = "";
-      targetHost_ = "";
-      data_ = com.google.protobuf.ByteString.EMPTY;
+        /**
+         * <code>optional int32 targetPort = 13;</code>
+         *
+         * @return The targetPort.
+         */
+        int getTargetPort();
+
+        /**
+         * <code>optional bytes data = 14;</code>
+         *
+         * @return Whether the data field is set.
+         */
+        boolean hasData();
+
+        /**
+         * <code>optional bytes data = 14;</code>
+         *
+         * @return The data.
+         */
+        com.google.protobuf.ByteString getData();
     }
 
-    @java.lang.Override
-    @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
-      return new Message();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private Message(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 74: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              networkId_ = bs;
-              break;
-            }
-            case 80: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              top.liumian.qt.common.proto.QuantumMessage.MessageType value = top.liumian.qt.common.proto.QuantumMessage.MessageType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(10, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                messageType_ = rawValue;
-              }
-              break;
-            }
-            case 90: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              channelId_ = bs;
-              break;
-            }
-            case 98: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000008;
-              targetHost_ = bs;
-              break;
-            }
-            case 104: {
-              bitField0_ |= 0x00000010;
-              targetPort_ = input.readInt32();
-              break;
-            }
-            case 114: {
-              bitField0_ |= 0x00000020;
-              data_ = input.readBytes();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_descriptor;
-    }
-
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              top.liumian.qt.common.proto.QuantumMessage.Message.class, top.liumian.qt.common.proto.QuantumMessage.Message.Builder.class);
-    }
-
-    private int bitField0_;
-    public static final int NETWORKID_FIELD_NUMBER = 9;
-    private volatile java.lang.Object networkId_;
-    /**
-     * <code>required string networkId = 9;</code>
-     * @return Whether the networkId field is set.
-     */
-    @java.lang.Override
-    public boolean hasNetworkId() {
-      return ((bitField0_ & 0x00000001) != 0);
-    }
-    /**
-     * <code>required string networkId = 9;</code>
-     * @return The networkId.
-     */
-    @java.lang.Override
-    public java.lang.String getNetworkId() {
-      java.lang.Object ref = networkId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          networkId_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string networkId = 9;</code>
-     * @return The bytes for networkId.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getNetworkIdBytes() {
-      java.lang.Object ref = networkId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        networkId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int MESSAGETYPE_FIELD_NUMBER = 10;
-    private int messageType_;
-    /**
-     * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-     * @return Whether the messageType field is set.
-     */
-    @java.lang.Override public boolean hasMessageType() {
-      return ((bitField0_ & 0x00000002) != 0);
-    }
-    /**
-     * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-     * @return The messageType.
-     */
-    @java.lang.Override public top.liumian.qt.common.proto.QuantumMessage.MessageType getMessageType() {
-      @SuppressWarnings("deprecation")
-      top.liumian.qt.common.proto.QuantumMessage.MessageType result = top.liumian.qt.common.proto.QuantumMessage.MessageType.valueOf(messageType_);
-      return result == null ? top.liumian.qt.common.proto.QuantumMessage.MessageType.REGISTER : result;
-    }
-
-    public static final int CHANNELID_FIELD_NUMBER = 11;
-    private volatile java.lang.Object channelId_;
-    /**
-     * <code>optional string channelId = 11;</code>
-     * @return Whether the channelId field is set.
-     */
-    @java.lang.Override
-    public boolean hasChannelId() {
-      return ((bitField0_ & 0x00000004) != 0);
-    }
-    /**
-     * <code>optional string channelId = 11;</code>
-     * @return The channelId.
-     */
-    @java.lang.Override
-    public java.lang.String getChannelId() {
-      java.lang.Object ref = channelId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          channelId_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string channelId = 11;</code>
-     * @return The bytes for channelId.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getChannelIdBytes() {
-      java.lang.Object ref = channelId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        channelId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int TARGETHOST_FIELD_NUMBER = 12;
-    private volatile java.lang.Object targetHost_;
-    /**
-     * <code>optional string targetHost = 12;</code>
-     * @return Whether the targetHost field is set.
-     */
-    @java.lang.Override
-    public boolean hasTargetHost() {
-      return ((bitField0_ & 0x00000008) != 0);
-    }
-    /**
-     * <code>optional string targetHost = 12;</code>
-     * @return The targetHost.
-     */
-    @java.lang.Override
-    public java.lang.String getTargetHost() {
-      java.lang.Object ref = targetHost_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          targetHost_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string targetHost = 12;</code>
-     * @return The bytes for targetHost.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getTargetHostBytes() {
-      java.lang.Object ref = targetHost_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        targetHost_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int TARGETPORT_FIELD_NUMBER = 13;
-    private int targetPort_;
-    /**
-     * <code>optional int32 targetPort = 13;</code>
-     * @return Whether the targetPort field is set.
-     */
-    @java.lang.Override
-    public boolean hasTargetPort() {
-      return ((bitField0_ & 0x00000010) != 0);
-    }
-    /**
-     * <code>optional int32 targetPort = 13;</code>
-     * @return The targetPort.
-     */
-    @java.lang.Override
-    public int getTargetPort() {
-      return targetPort_;
-    }
-
-    public static final int DATA_FIELD_NUMBER = 14;
-    private com.google.protobuf.ByteString data_;
-    /**
-     * <code>optional bytes data = 14;</code>
-     * @return Whether the data field is set.
-     */
-    @java.lang.Override
-    public boolean hasData() {
-      return ((bitField0_ & 0x00000020) != 0);
-    }
-    /**
-     * <code>optional bytes data = 14;</code>
-     * @return The data.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString getData() {
-      return data_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @java.lang.Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasNetworkId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasMessageType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) != 0)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, networkId_);
-      }
-      if (((bitField0_ & 0x00000002) != 0)) {
-        output.writeEnum(10, messageType_);
-      }
-      if (((bitField0_ & 0x00000004) != 0)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, channelId_);
-      }
-      if (((bitField0_ & 0x00000008) != 0)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, targetHost_);
-      }
-      if (((bitField0_ & 0x00000010) != 0)) {
-        output.writeInt32(13, targetPort_);
-      }
-      if (((bitField0_ & 0x00000020) != 0)) {
-        output.writeBytes(14, data_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    @java.lang.Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, networkId_);
-      }
-      if (((bitField0_ & 0x00000002) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, messageType_);
-      }
-      if (((bitField0_ & 0x00000004) != 0)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, channelId_);
-      }
-      if (((bitField0_ & 0x00000008) != 0)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, targetHost_);
-      }
-      if (((bitField0_ & 0x00000010) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(13, targetPort_);
-      }
-      if (((bitField0_ & 0x00000020) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(14, data_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof top.liumian.qt.common.proto.QuantumMessage.Message)) {
-        return super.equals(obj);
-      }
-      top.liumian.qt.common.proto.QuantumMessage.Message other = (top.liumian.qt.common.proto.QuantumMessage.Message) obj;
-
-      if (hasNetworkId() != other.hasNetworkId()) return false;
-      if (hasNetworkId()) {
-        if (!getNetworkId()
-            .equals(other.getNetworkId())) return false;
-      }
-      if (hasMessageType() != other.hasMessageType()) return false;
-      if (hasMessageType()) {
-        if (messageType_ != other.messageType_) return false;
-      }
-      if (hasChannelId() != other.hasChannelId()) return false;
-      if (hasChannelId()) {
-        if (!getChannelId()
-            .equals(other.getChannelId())) return false;
-      }
-      if (hasTargetHost() != other.hasTargetHost()) return false;
-      if (hasTargetHost()) {
-        if (!getTargetHost()
-            .equals(other.getTargetHost())) return false;
-      }
-      if (hasTargetPort() != other.hasTargetPort()) return false;
-      if (hasTargetPort()) {
-        if (getTargetPort()
-            != other.getTargetPort()) return false;
-      }
-      if (hasData() != other.hasData()) return false;
-      if (hasData()) {
-        if (!getData()
-            .equals(other.getData())) return false;
-      }
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasNetworkId()) {
-        hash = (37 * hash) + NETWORKID_FIELD_NUMBER;
-        hash = (53 * hash) + getNetworkId().hashCode();
-      }
-      if (hasMessageType()) {
-        hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
-        hash = (53 * hash) + messageType_;
-      }
-      if (hasChannelId()) {
-        hash = (37 * hash) + CHANNELID_FIELD_NUMBER;
-        hash = (53 * hash) + getChannelId().hashCode();
-      }
-      if (hasTargetHost()) {
-        hash = (37 * hash) + TARGETHOST_FIELD_NUMBER;
-        hash = (53 * hash) + getTargetHost().hashCode();
-      }
-      if (hasTargetPort()) {
-        hash = (37 * hash) + TARGETPORT_FIELD_NUMBER;
-        hash = (53 * hash) + getTargetPort();
-      }
-      if (hasData()) {
-        hash = (37 * hash) + DATA_FIELD_NUMBER;
-        hash = (53 * hash) + getData().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(top.liumian.qt.common.proto.QuantumMessage.Message prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @java.lang.Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
     /**
      * Protobuf type {@code top.liumian.qt.common.proto.Message}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:top.liumian.qt.common.proto.Message)
-        top.liumian.qt.common.proto.QuantumMessage.MessageOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_descriptor;
-      }
+    public static final class Message extends
+            com.google.protobuf.GeneratedMessageV3 implements
+            // @@protoc_insertion_point(message_implements:top.liumian.qt.common.proto.Message)
+            MessageOrBuilder {
+        public static final int NETWORKID_FIELD_NUMBER = 9;
+        public static final int MESSAGETYPE_FIELD_NUMBER = 10;
+        public static final int CHANNELID_FIELD_NUMBER = 11;
+        public static final int TARGETHOST_FIELD_NUMBER = 12;
+        public static final int TARGETPORT_FIELD_NUMBER = 13;
+        public static final int DATA_FIELD_NUMBER = 14;
+        @java.lang.Deprecated
+        public static final com.google.protobuf.Parser<Message>
+                PARSER = new com.google.protobuf.AbstractParser<Message>() {
+            @java.lang.Override
+            public Message parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new Message(input, extensionRegistry);
+            }
+        };
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:top.liumian.qt.common.proto.Message)
+        private static final top.liumian.qt.common.proto.QuantumMessage.Message DEFAULT_INSTANCE;
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                top.liumian.qt.common.proto.QuantumMessage.Message.class, top.liumian.qt.common.proto.QuantumMessage.Message.Builder.class);
-      }
+        static {
+            DEFAULT_INSTANCE = new top.liumian.qt.common.proto.QuantumMessage.Message();
+        }
 
-      // Construct using top.liumian.qt.common.proto.QuantumMessage.Message.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+        private int bitField0_;
+        private volatile java.lang.Object networkId_;
+        private int messageType_;
+        private volatile java.lang.Object channelId_;
+        private volatile java.lang.Object targetHost_;
+        private int targetPort_;
+        private com.google.protobuf.ByteString data_;
+        private byte memoizedIsInitialized = -1;
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
+        // Use Message.newBuilder() to construct.
+        private Message(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+            super(builder);
         }
-      }
-      @java.lang.Override
-      public Builder clear() {
-        super.clear();
-        networkId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        messageType_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        channelId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        targetHost_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        targetPort_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        data_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        return this;
-      }
 
-      @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_descriptor;
-      }
+        private Message() {
+            networkId_ = "";
+            messageType_ = 1;
+            channelId_ = "";
+            targetHost_ = "";
+            data_ = com.google.protobuf.ByteString.EMPTY;
+        }
 
-      @java.lang.Override
-      public top.liumian.qt.common.proto.QuantumMessage.Message getDefaultInstanceForType() {
-        return top.liumian.qt.common.proto.QuantumMessage.Message.getDefaultInstance();
-      }
+        private Message(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            this();
+            if (extensionRegistry == null) {
+                throw new java.lang.NullPointerException();
+            }
+            int mutable_bitField0_ = 0;
+            com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+                    com.google.protobuf.UnknownFieldSet.newBuilder();
+            try {
+                boolean done = false;
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        case 74: {
+                            com.google.protobuf.ByteString bs = input.readBytes();
+                            bitField0_ |= 0x00000001;
+                            networkId_ = bs;
+                            break;
+                        }
+                        case 80: {
+                            int rawValue = input.readEnum();
+                            @SuppressWarnings("deprecation")
+                            top.liumian.qt.common.proto.QuantumMessage.MessageType value = top.liumian.qt.common.proto.QuantumMessage.MessageType.valueOf(rawValue);
+                            if (value == null) {
+                                unknownFields.mergeVarintField(10, rawValue);
+                            } else {
+                                bitField0_ |= 0x00000002;
+                                messageType_ = rawValue;
+                            }
+                            break;
+                        }
+                        case 90: {
+                            com.google.protobuf.ByteString bs = input.readBytes();
+                            bitField0_ |= 0x00000004;
+                            channelId_ = bs;
+                            break;
+                        }
+                        case 98: {
+                            com.google.protobuf.ByteString bs = input.readBytes();
+                            bitField0_ |= 0x00000008;
+                            targetHost_ = bs;
+                            break;
+                        }
+                        case 104: {
+                            bitField0_ |= 0x00000010;
+                            targetPort_ = input.readInt32();
+                            break;
+                        }
+                        case 114: {
+                            bitField0_ |= 0x00000020;
+                            data_ = input.readBytes();
+                            break;
+                        }
+                        default: {
+                            if (!parseUnknownField(
+                                    input, unknownFields, extensionRegistry, tag)) {
+                                done = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(this);
+            } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(
+                        e).setUnfinishedMessage(this);
+            } finally {
+                this.unknownFields = unknownFields.build();
+                makeExtensionsImmutable();
+            }
+        }
 
-      @java.lang.Override
-      public top.liumian.qt.common.proto.QuantumMessage.Message build() {
-        top.liumian.qt.common.proto.QuantumMessage.Message result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
+        public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+            return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_descriptor;
         }
-        return result;
-      }
 
-      @java.lang.Override
-      public top.liumian.qt.common.proto.QuantumMessage.Message buildPartial() {
-        top.liumian.qt.common.proto.QuantumMessage.Message result = new top.liumian.qt.common.proto.QuantumMessage.Message(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          to_bitField0_ |= 0x00000001;
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
         }
-        result.networkId_ = networkId_;
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.messageType_ = messageType_;
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.channelId_ = channelId_;
-        if (((from_bitField0_ & 0x00000008) != 0)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.targetHost_ = targetHost_;
-        if (((from_bitField0_ & 0x00000010) != 0)) {
-          result.targetPort_ = targetPort_;
-          to_bitField0_ |= 0x00000010;
-        }
-        if (((from_bitField0_ & 0x00000020) != 0)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.data_ = data_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
-      @java.lang.Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof top.liumian.qt.common.proto.QuantumMessage.Message) {
-          return mergeFrom((top.liumian.qt.common.proto.QuantumMessage.Message)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
         }
-      }
 
-      public Builder mergeFrom(top.liumian.qt.common.proto.QuantumMessage.Message other) {
-        if (other == top.liumian.qt.common.proto.QuantumMessage.Message.getDefaultInstance()) return this;
-        if (other.hasNetworkId()) {
-          bitField0_ |= 0x00000001;
-          networkId_ = other.networkId_;
-          onChanged();
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
         }
-        if (other.hasMessageType()) {
-          setMessageType(other.getMessageType());
-        }
-        if (other.hasChannelId()) {
-          bitField0_ |= 0x00000004;
-          channelId_ = other.channelId_;
-          onChanged();
-        }
-        if (other.hasTargetHost()) {
-          bitField0_ |= 0x00000008;
-          targetHost_ = other.targetHost_;
-          onChanged();
-        }
-        if (other.hasTargetPort()) {
-          setTargetPort(other.getTargetPort());
-        }
-        if (other.hasData()) {
-          setData(other.getData());
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
 
-      @java.lang.Override
-      public final boolean isInitialized() {
-        if (!hasNetworkId()) {
-          return false;
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
         }
-        if (!hasMessageType()) {
-          return false;
+
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
         }
-        return true;
-      }
 
-      @java.lang.Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        top.liumian.qt.common.proto.QuantumMessage.Message parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (top.liumian.qt.common.proto.QuantumMessage.Message) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
         }
-        return this;
-      }
-      private int bitField0_;
 
-      private java.lang.Object networkId_ = "";
-      /**
-       * <code>required string networkId = 9;</code>
-       * @return Whether the networkId field is set.
-       */
-      public boolean hasNetworkId() {
-        return ((bitField0_ & 0x00000001) != 0);
-      }
-      /**
-       * <code>required string networkId = 9;</code>
-       * @return The networkId.
-       */
-      public java.lang.String getNetworkId() {
-        java.lang.Object ref = networkId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            networkId_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
         }
-      }
-      /**
-       * <code>required string networkId = 9;</code>
-       * @return The bytes for networkId.
-       */
-      public com.google.protobuf.ByteString
-          getNetworkIdBytes() {
-        java.lang.Object ref = networkId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          networkId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
+
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
         }
-      }
-      /**
-       * <code>required string networkId = 9;</code>
-       * @param value The networkId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setNetworkId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        networkId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string networkId = 9;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearNetworkId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        networkId_ = getDefaultInstance().getNetworkId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string networkId = 9;</code>
-       * @param value The bytes for networkId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setNetworkIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        networkId_ = value;
-        onChanged();
-        return this;
-      }
 
-      private int messageType_ = 1;
-      /**
-       * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-       * @return Whether the messageType field is set.
-       */
-      @java.lang.Override public boolean hasMessageType() {
-        return ((bitField0_ & 0x00000002) != 0);
-      }
-      /**
-       * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-       * @return The messageType.
-       */
-      @java.lang.Override
-      public top.liumian.qt.common.proto.QuantumMessage.MessageType getMessageType() {
-        @SuppressWarnings("deprecation")
-        top.liumian.qt.common.proto.QuantumMessage.MessageType result = top.liumian.qt.common.proto.QuantumMessage.MessageType.valueOf(messageType_);
-        return result == null ? top.liumian.qt.common.proto.QuantumMessage.MessageType.REGISTER : result;
-      }
-      /**
-       * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-       * @param value The messageType to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageType(top.liumian.qt.common.proto.QuantumMessage.MessageType value) {
-        if (value == null) {
-          throw new NullPointerException();
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
         }
-        bitField0_ |= 0x00000002;
-        messageType_ = value.getNumber();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearMessageType() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        messageType_ = 1;
-        onChanged();
-        return this;
-      }
 
-      private java.lang.Object channelId_ = "";
-      /**
-       * <code>optional string channelId = 11;</code>
-       * @return Whether the channelId field is set.
-       */
-      public boolean hasChannelId() {
-        return ((bitField0_ & 0x00000004) != 0);
-      }
-      /**
-       * <code>optional string channelId = 11;</code>
-       * @return The channelId.
-       */
-      public java.lang.String getChannelId() {
-        java.lang.Object ref = channelId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            channelId_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
         }
-      }
-      /**
-       * <code>optional string channelId = 11;</code>
-       * @return The bytes for channelId.
-       */
-      public com.google.protobuf.ByteString
-          getChannelIdBytes() {
-        java.lang.Object ref = channelId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          channelId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
+
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
         }
-      }
-      /**
-       * <code>optional string channelId = 11;</code>
-       * @param value The channelId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setChannelId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        channelId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string channelId = 11;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearChannelId() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        channelId_ = getDefaultInstance().getChannelId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string channelId = 11;</code>
-       * @param value The bytes for channelId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setChannelIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        channelId_ = value;
-        onChanged();
-        return this;
-      }
 
-      private java.lang.Object targetHost_ = "";
-      /**
-       * <code>optional string targetHost = 12;</code>
-       * @return Whether the targetHost field is set.
-       */
-      public boolean hasTargetHost() {
-        return ((bitField0_ & 0x00000008) != 0);
-      }
-      /**
-       * <code>optional string targetHost = 12;</code>
-       * @return The targetHost.
-       */
-      public java.lang.String getTargetHost() {
-        java.lang.Object ref = targetHost_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            targetHost_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
+        public static top.liumian.qt.common.proto.QuantumMessage.Message parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
         }
-      }
-      /**
-       * <code>optional string targetHost = 12;</code>
-       * @return The bytes for targetHost.
-       */
-      public com.google.protobuf.ByteString
-          getTargetHostBytes() {
-        java.lang.Object ref = targetHost_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          targetHost_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
         }
-      }
-      /**
-       * <code>optional string targetHost = 12;</code>
-       * @param value The targetHost to set.
-       * @return This builder for chaining.
-       */
-      public Builder setTargetHost(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        targetHost_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string targetHost = 12;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearTargetHost() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        targetHost_ = getDefaultInstance().getTargetHost();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string targetHost = 12;</code>
-       * @param value The bytes for targetHost to set.
-       * @return This builder for chaining.
-       */
-      public Builder setTargetHostBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        targetHost_ = value;
-        onChanged();
-        return this;
-      }
 
-      private int targetPort_ ;
-      /**
-       * <code>optional int32 targetPort = 13;</code>
-       * @return Whether the targetPort field is set.
-       */
-      @java.lang.Override
-      public boolean hasTargetPort() {
-        return ((bitField0_ & 0x00000010) != 0);
-      }
-      /**
-       * <code>optional int32 targetPort = 13;</code>
-       * @return The targetPort.
-       */
-      @java.lang.Override
-      public int getTargetPort() {
-        return targetPort_;
-      }
-      /**
-       * <code>optional int32 targetPort = 13;</code>
-       * @param value The targetPort to set.
-       * @return This builder for chaining.
-       */
-      public Builder setTargetPort(int value) {
-        bitField0_ |= 0x00000010;
-        targetPort_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 targetPort = 13;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearTargetPort() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        targetPort_ = 0;
-        onChanged();
-        return this;
-      }
+        public static Builder newBuilder(top.liumian.qt.common.proto.QuantumMessage.Message prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
 
-      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>optional bytes data = 14;</code>
-       * @return Whether the data field is set.
-       */
-      @java.lang.Override
-      public boolean hasData() {
-        return ((bitField0_ & 0x00000020) != 0);
-      }
-      /**
-       * <code>optional bytes data = 14;</code>
-       * @return The data.
-       */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getData() {
-        return data_;
-      }
-      /**
-       * <code>optional bytes data = 14;</code>
-       * @param value The data to set.
-       * @return This builder for chaining.
-       */
-      public Builder setData(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000020;
-        data_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bytes data = 14;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearData() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        data_ = getDefaultInstance().getData();
-        onChanged();
-        return this;
-      }
-      @java.lang.Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
+        public static top.liumian.qt.common.proto.QuantumMessage.Message getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
 
-      @java.lang.Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
+        public static com.google.protobuf.Parser<Message> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        @SuppressWarnings({"unused"})
+        protected java.lang.Object newInstance(
+                UnusedPrivateParameter unused) {
+            return new Message();
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return this.unknownFields;
+        }
+
+        @java.lang.Override
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+            return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable
+                    .ensureFieldAccessorsInitialized(
+                            top.liumian.qt.common.proto.QuantumMessage.Message.class, top.liumian.qt.common.proto.QuantumMessage.Message.Builder.class);
+        }
+
+        /**
+         * <code>required string networkId = 9;</code>
+         *
+         * @return Whether the networkId field is set.
+         */
+        @java.lang.Override
+        public boolean hasNetworkId() {
+            return ((bitField0_ & 0x00000001) != 0);
+        }
+
+        /**
+         * <code>required string networkId = 9;</code>
+         *
+         * @return The networkId.
+         */
+        @java.lang.Override
+        public java.lang.String getNetworkId() {
+            java.lang.Object ref = networkId_;
+            if (ref instanceof java.lang.String) {
+                return (java.lang.String) ref;
+            } else {
+                com.google.protobuf.ByteString bs =
+                        (com.google.protobuf.ByteString) ref;
+                java.lang.String s = bs.toStringUtf8();
+                if (bs.isValidUtf8()) {
+                    networkId_ = s;
+                }
+                return s;
+            }
+        }
+
+        /**
+         * <code>required string networkId = 9;</code>
+         *
+         * @return The bytes for networkId.
+         */
+        @java.lang.Override
+        public com.google.protobuf.ByteString
+        getNetworkIdBytes() {
+            java.lang.Object ref = networkId_;
+            if (ref instanceof java.lang.String) {
+                com.google.protobuf.ByteString b =
+                        com.google.protobuf.ByteString.copyFromUtf8(
+                                (java.lang.String) ref);
+                networkId_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+
+        /**
+         * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+         *
+         * @return Whether the messageType field is set.
+         */
+        @java.lang.Override
+        public boolean hasMessageType() {
+            return ((bitField0_ & 0x00000002) != 0);
+        }
+
+        /**
+         * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+         *
+         * @return The messageType.
+         */
+        @java.lang.Override
+        public top.liumian.qt.common.proto.QuantumMessage.MessageType getMessageType() {
+            @SuppressWarnings("deprecation")
+            top.liumian.qt.common.proto.QuantumMessage.MessageType result = top.liumian.qt.common.proto.QuantumMessage.MessageType.valueOf(messageType_);
+            return result == null ? top.liumian.qt.common.proto.QuantumMessage.MessageType.REGISTER : result;
+        }
+
+        /**
+         * <code>optional string channelId = 11;</code>
+         *
+         * @return Whether the channelId field is set.
+         */
+        @java.lang.Override
+        public boolean hasChannelId() {
+            return ((bitField0_ & 0x00000004) != 0);
+        }
+
+        /**
+         * <code>optional string channelId = 11;</code>
+         *
+         * @return The channelId.
+         */
+        @java.lang.Override
+        public java.lang.String getChannelId() {
+            java.lang.Object ref = channelId_;
+            if (ref instanceof java.lang.String) {
+                return (java.lang.String) ref;
+            } else {
+                com.google.protobuf.ByteString bs =
+                        (com.google.protobuf.ByteString) ref;
+                java.lang.String s = bs.toStringUtf8();
+                if (bs.isValidUtf8()) {
+                    channelId_ = s;
+                }
+                return s;
+            }
+        }
+
+        /**
+         * <code>optional string channelId = 11;</code>
+         *
+         * @return The bytes for channelId.
+         */
+        @java.lang.Override
+        public com.google.protobuf.ByteString
+        getChannelIdBytes() {
+            java.lang.Object ref = channelId_;
+            if (ref instanceof java.lang.String) {
+                com.google.protobuf.ByteString b =
+                        com.google.protobuf.ByteString.copyFromUtf8(
+                                (java.lang.String) ref);
+                channelId_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+
+        /**
+         * <code>optional string targetHost = 12;</code>
+         *
+         * @return Whether the targetHost field is set.
+         */
+        @java.lang.Override
+        public boolean hasTargetHost() {
+            return ((bitField0_ & 0x00000008) != 0);
+        }
+
+        /**
+         * <code>optional string targetHost = 12;</code>
+         *
+         * @return The targetHost.
+         */
+        @java.lang.Override
+        public java.lang.String getTargetHost() {
+            java.lang.Object ref = targetHost_;
+            if (ref instanceof java.lang.String) {
+                return (java.lang.String) ref;
+            } else {
+                com.google.protobuf.ByteString bs =
+                        (com.google.protobuf.ByteString) ref;
+                java.lang.String s = bs.toStringUtf8();
+                if (bs.isValidUtf8()) {
+                    targetHost_ = s;
+                }
+                return s;
+            }
+        }
+
+        /**
+         * <code>optional string targetHost = 12;</code>
+         *
+         * @return The bytes for targetHost.
+         */
+        @java.lang.Override
+        public com.google.protobuf.ByteString
+        getTargetHostBytes() {
+            java.lang.Object ref = targetHost_;
+            if (ref instanceof java.lang.String) {
+                com.google.protobuf.ByteString b =
+                        com.google.protobuf.ByteString.copyFromUtf8(
+                                (java.lang.String) ref);
+                targetHost_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+
+        /**
+         * <code>optional int32 targetPort = 13;</code>
+         *
+         * @return Whether the targetPort field is set.
+         */
+        @java.lang.Override
+        public boolean hasTargetPort() {
+            return ((bitField0_ & 0x00000010) != 0);
+        }
+
+        /**
+         * <code>optional int32 targetPort = 13;</code>
+         *
+         * @return The targetPort.
+         */
+        @java.lang.Override
+        public int getTargetPort() {
+            return targetPort_;
+        }
+
+        /**
+         * <code>optional bytes data = 14;</code>
+         *
+         * @return Whether the data field is set.
+         */
+        @java.lang.Override
+        public boolean hasData() {
+            return ((bitField0_ & 0x00000020) != 0);
+        }
+
+        /**
+         * <code>optional bytes data = 14;</code>
+         *
+         * @return The data.
+         */
+        @java.lang.Override
+        public com.google.protobuf.ByteString getData() {
+            return data_;
+        }
+
+        @java.lang.Override
+        public final boolean isInitialized() {
+            byte isInitialized = memoizedIsInitialized;
+            if (isInitialized == 1) return true;
+            if (isInitialized == 0) return false;
+
+            if (!hasNetworkId()) {
+                memoizedIsInitialized = 0;
+                return false;
+            }
+            if (!hasMessageType()) {
+                memoizedIsInitialized = 0;
+                return false;
+            }
+            memoizedIsInitialized = 1;
+            return true;
+        }
+
+        @java.lang.Override
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                throws java.io.IOException {
+            if (((bitField0_ & 0x00000001) != 0)) {
+                com.google.protobuf.GeneratedMessageV3.writeString(output, 9, networkId_);
+            }
+            if (((bitField0_ & 0x00000002) != 0)) {
+                output.writeEnum(10, messageType_);
+            }
+            if (((bitField0_ & 0x00000004) != 0)) {
+                com.google.protobuf.GeneratedMessageV3.writeString(output, 11, channelId_);
+            }
+            if (((bitField0_ & 0x00000008) != 0)) {
+                com.google.protobuf.GeneratedMessageV3.writeString(output, 12, targetHost_);
+            }
+            if (((bitField0_ & 0x00000010) != 0)) {
+                output.writeInt32(13, targetPort_);
+            }
+            if (((bitField0_ & 0x00000020) != 0)) {
+                output.writeBytes(14, data_);
+            }
+            unknownFields.writeTo(output);
+        }
+
+        @java.lang.Override
+        public int getSerializedSize() {
+            int size = memoizedSize;
+            if (size != -1) return size;
+
+            size = 0;
+            if (((bitField0_ & 0x00000001) != 0)) {
+                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, networkId_);
+            }
+            if (((bitField0_ & 0x00000002) != 0)) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeEnumSize(10, messageType_);
+            }
+            if (((bitField0_ & 0x00000004) != 0)) {
+                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, channelId_);
+            }
+            if (((bitField0_ & 0x00000008) != 0)) {
+                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, targetHost_);
+            }
+            if (((bitField0_ & 0x00000010) != 0)) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeInt32Size(13, targetPort_);
+            }
+            if (((bitField0_ & 0x00000020) != 0)) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeBytesSize(14, data_);
+            }
+            size += unknownFields.getSerializedSize();
+            memoizedSize = size;
+            return size;
+        }
+
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof top.liumian.qt.common.proto.QuantumMessage.Message)) {
+                return super.equals(obj);
+            }
+            top.liumian.qt.common.proto.QuantumMessage.Message other = (top.liumian.qt.common.proto.QuantumMessage.Message) obj;
+
+            if (hasNetworkId() != other.hasNetworkId()) return false;
+            if (hasNetworkId()) {
+                if (!getNetworkId()
+                        .equals(other.getNetworkId())) return false;
+            }
+            if (hasMessageType() != other.hasMessageType()) return false;
+            if (hasMessageType()) {
+                if (messageType_ != other.messageType_) return false;
+            }
+            if (hasChannelId() != other.hasChannelId()) return false;
+            if (hasChannelId()) {
+                if (!getChannelId()
+                        .equals(other.getChannelId())) return false;
+            }
+            if (hasTargetHost() != other.hasTargetHost()) return false;
+            if (hasTargetHost()) {
+                if (!getTargetHost()
+                        .equals(other.getTargetHost())) return false;
+            }
+            if (hasTargetPort() != other.hasTargetPort()) return false;
+            if (hasTargetPort()) {
+                if (getTargetPort()
+                        != other.getTargetPort()) return false;
+            }
+            if (hasData() != other.hasData()) return false;
+            if (hasData()) {
+                if (!getData()
+                        .equals(other.getData())) return false;
+            }
+            if (!unknownFields.equals(other.unknownFields)) return false;
+            return true;
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            if (memoizedHashCode != 0) {
+                return memoizedHashCode;
+            }
+            int hash = 41;
+            hash = (19 * hash) + getDescriptor().hashCode();
+            if (hasNetworkId()) {
+                hash = (37 * hash) + NETWORKID_FIELD_NUMBER;
+                hash = (53 * hash) + getNetworkId().hashCode();
+            }
+            if (hasMessageType()) {
+                hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
+                hash = (53 * hash) + messageType_;
+            }
+            if (hasChannelId()) {
+                hash = (37 * hash) + CHANNELID_FIELD_NUMBER;
+                hash = (53 * hash) + getChannelId().hashCode();
+            }
+            if (hasTargetHost()) {
+                hash = (37 * hash) + TARGETHOST_FIELD_NUMBER;
+                hash = (53 * hash) + getTargetHost().hashCode();
+            }
+            if (hasTargetPort()) {
+                hash = (37 * hash) + TARGETPORT_FIELD_NUMBER;
+                hash = (53 * hash) + getTargetPort();
+            }
+            if (hasData()) {
+                hash = (37 * hash) + DATA_FIELD_NUMBER;
+                hash = (53 * hash) + getData().hashCode();
+            }
+            hash = (29 * hash) + unknownFields.hashCode();
+            memoizedHashCode = hash;
+            return hash;
+        }
+
+        @java.lang.Override
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
+        @java.lang.Override
+        public Builder toBuilder() {
+            return this == DEFAULT_INSTANCE
+                    ? new Builder() : new Builder().mergeFrom(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+                com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            Builder builder = new Builder(parent);
+            return builder;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<Message> getParserForType() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public top.liumian.qt.common.proto.QuantumMessage.Message getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
+        /**
+         * Protobuf type {@code top.liumian.qt.common.proto.Message}
+         */
+        public static final class Builder extends
+                com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+                // @@protoc_insertion_point(builder_implements:top.liumian.qt.common.proto.Message)
+                top.liumian.qt.common.proto.QuantumMessage.MessageOrBuilder {
+            private int bitField0_;
+            private java.lang.Object networkId_ = "";
+            private int messageType_ = 1;
+            private java.lang.Object channelId_ = "";
+            private java.lang.Object targetHost_ = "";
+            private int targetPort_;
+            private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+
+            // Construct using top.liumian.qt.common.proto.QuantumMessage.Message.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
+            public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+                return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_descriptor;
+            }
+
+            @java.lang.Override
+            protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable
+                        .ensureFieldAccessorsInitialized(
+                                top.liumian.qt.common.proto.QuantumMessage.Message.class, top.liumian.qt.common.proto.QuantumMessage.Message.Builder.class);
+            }
+
+            private void maybeForceBuilderInitialization() {
+                if (com.google.protobuf.GeneratedMessageV3
+                        .alwaysUseFieldBuilders) {
+                }
+            }
+
+            @java.lang.Override
+            public Builder clear() {
+                super.clear();
+                networkId_ = "";
+                bitField0_ = (bitField0_ & ~0x00000001);
+                messageType_ = 1;
+                bitField0_ = (bitField0_ & ~0x00000002);
+                channelId_ = "";
+                bitField0_ = (bitField0_ & ~0x00000004);
+                targetHost_ = "";
+                bitField0_ = (bitField0_ & ~0x00000008);
+                targetPort_ = 0;
+                bitField0_ = (bitField0_ & ~0x00000010);
+                data_ = com.google.protobuf.ByteString.EMPTY;
+                bitField0_ = (bitField0_ & ~0x00000020);
+                return this;
+            }
+
+            @java.lang.Override
+            public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+                return top.liumian.qt.common.proto.QuantumMessage.internal_static_top_liumian_qt_common_proto_Message_descriptor;
+            }
+
+            @java.lang.Override
+            public top.liumian.qt.common.proto.QuantumMessage.Message getDefaultInstanceForType() {
+                return top.liumian.qt.common.proto.QuantumMessage.Message.getDefaultInstance();
+            }
+
+            @java.lang.Override
+            public top.liumian.qt.common.proto.QuantumMessage.Message build() {
+                top.liumian.qt.common.proto.QuantumMessage.Message result = buildPartial();
+                if (!result.isInitialized()) {
+                    throw newUninitializedMessageException(result);
+                }
+                return result;
+            }
+
+            @java.lang.Override
+            public top.liumian.qt.common.proto.QuantumMessage.Message buildPartial() {
+                top.liumian.qt.common.proto.QuantumMessage.Message result = new top.liumian.qt.common.proto.QuantumMessage.Message(this);
+                int from_bitField0_ = bitField0_;
+                int to_bitField0_ = 0;
+                if (((from_bitField0_ & 0x00000001) != 0)) {
+                    to_bitField0_ |= 0x00000001;
+                }
+                result.networkId_ = networkId_;
+                if (((from_bitField0_ & 0x00000002) != 0)) {
+                    to_bitField0_ |= 0x00000002;
+                }
+                result.messageType_ = messageType_;
+                if (((from_bitField0_ & 0x00000004) != 0)) {
+                    to_bitField0_ |= 0x00000004;
+                }
+                result.channelId_ = channelId_;
+                if (((from_bitField0_ & 0x00000008) != 0)) {
+                    to_bitField0_ |= 0x00000008;
+                }
+                result.targetHost_ = targetHost_;
+                if (((from_bitField0_ & 0x00000010) != 0)) {
+                    result.targetPort_ = targetPort_;
+                    to_bitField0_ |= 0x00000010;
+                }
+                if (((from_bitField0_ & 0x00000020) != 0)) {
+                    to_bitField0_ |= 0x00000020;
+                }
+                result.data_ = data_;
+                result.bitField0_ = to_bitField0_;
+                onBuilt();
+                return result;
+            }
+
+            @java.lang.Override
+            public Builder clone() {
+                return super.clone();
+            }
+
+            @java.lang.Override
+            public Builder setField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    java.lang.Object value) {
+                return super.setField(field, value);
+            }
+
+            @java.lang.Override
+            public Builder clearField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field) {
+                return super.clearField(field);
+            }
+
+            @java.lang.Override
+            public Builder clearOneof(
+                    com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+                return super.clearOneof(oneof);
+            }
+
+            @java.lang.Override
+            public Builder setRepeatedField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    int index, java.lang.Object value) {
+                return super.setRepeatedField(field, index, value);
+            }
+
+            @java.lang.Override
+            public Builder addRepeatedField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    java.lang.Object value) {
+                return super.addRepeatedField(field, value);
+            }
+
+            @java.lang.Override
+            public Builder mergeFrom(com.google.protobuf.Message other) {
+                if (other instanceof top.liumian.qt.common.proto.QuantumMessage.Message) {
+                    return mergeFrom((top.liumian.qt.common.proto.QuantumMessage.Message) other);
+                } else {
+                    super.mergeFrom(other);
+                    return this;
+                }
+            }
+
+            public Builder mergeFrom(top.liumian.qt.common.proto.QuantumMessage.Message other) {
+                if (other == top.liumian.qt.common.proto.QuantumMessage.Message.getDefaultInstance()) return this;
+                if (other.hasNetworkId()) {
+                    bitField0_ |= 0x00000001;
+                    networkId_ = other.networkId_;
+                    onChanged();
+                }
+                if (other.hasMessageType()) {
+                    setMessageType(other.getMessageType());
+                }
+                if (other.hasChannelId()) {
+                    bitField0_ |= 0x00000004;
+                    channelId_ = other.channelId_;
+                    onChanged();
+                }
+                if (other.hasTargetHost()) {
+                    bitField0_ |= 0x00000008;
+                    targetHost_ = other.targetHost_;
+                    onChanged();
+                }
+                if (other.hasTargetPort()) {
+                    setTargetPort(other.getTargetPort());
+                }
+                if (other.hasData()) {
+                    setData(other.getData());
+                }
+                this.mergeUnknownFields(other.unknownFields);
+                onChanged();
+                return this;
+            }
+
+            @java.lang.Override
+            public final boolean isInitialized() {
+                if (!hasNetworkId()) {
+                    return false;
+                }
+                if (!hasMessageType()) {
+                    return false;
+                }
+                return true;
+            }
+
+            @java.lang.Override
+            public Builder mergeFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws java.io.IOException {
+                top.liumian.qt.common.proto.QuantumMessage.Message parsedMessage = null;
+                try {
+                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                    parsedMessage = (top.liumian.qt.common.proto.QuantumMessage.Message) e.getUnfinishedMessage();
+                    throw e.unwrapIOException();
+                } finally {
+                    if (parsedMessage != null) {
+                        mergeFrom(parsedMessage);
+                    }
+                }
+                return this;
+            }
+
+            /**
+             * <code>required string networkId = 9;</code>
+             *
+             * @return Whether the networkId field is set.
+             */
+            public boolean hasNetworkId() {
+                return ((bitField0_ & 0x00000001) != 0);
+            }
+
+            /**
+             * <code>required string networkId = 9;</code>
+             *
+             * @return The networkId.
+             */
+            public java.lang.String getNetworkId() {
+                java.lang.Object ref = networkId_;
+                if (!(ref instanceof java.lang.String)) {
+                    com.google.protobuf.ByteString bs =
+                            (com.google.protobuf.ByteString) ref;
+                    java.lang.String s = bs.toStringUtf8();
+                    if (bs.isValidUtf8()) {
+                        networkId_ = s;
+                    }
+                    return s;
+                } else {
+                    return (java.lang.String) ref;
+                }
+            }
+
+            /**
+             * <code>required string networkId = 9;</code>
+             *
+             * @param value The networkId to set.
+             * @return This builder for chaining.
+             */
+            public Builder setNetworkId(
+                    java.lang.String value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000001;
+                networkId_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>required string networkId = 9;</code>
+             *
+             * @return The bytes for networkId.
+             */
+            public com.google.protobuf.ByteString
+            getNetworkIdBytes() {
+                java.lang.Object ref = networkId_;
+                if (ref instanceof String) {
+                    com.google.protobuf.ByteString b =
+                            com.google.protobuf.ByteString.copyFromUtf8(
+                                    (java.lang.String) ref);
+                    networkId_ = b;
+                    return b;
+                } else {
+                    return (com.google.protobuf.ByteString) ref;
+                }
+            }
+
+            /**
+             * <code>required string networkId = 9;</code>
+             *
+             * @param value The bytes for networkId to set.
+             * @return This builder for chaining.
+             */
+            public Builder setNetworkIdBytes(
+                    com.google.protobuf.ByteString value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000001;
+                networkId_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>required string networkId = 9;</code>
+             *
+             * @return This builder for chaining.
+             */
+            public Builder clearNetworkId() {
+                bitField0_ = (bitField0_ & ~0x00000001);
+                networkId_ = getDefaultInstance().getNetworkId();
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+             *
+             * @return Whether the messageType field is set.
+             */
+            @java.lang.Override
+            public boolean hasMessageType() {
+                return ((bitField0_ & 0x00000002) != 0);
+            }
+
+            /**
+             * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+             *
+             * @return The messageType.
+             */
+            @java.lang.Override
+            public top.liumian.qt.common.proto.QuantumMessage.MessageType getMessageType() {
+                @SuppressWarnings("deprecation")
+                top.liumian.qt.common.proto.QuantumMessage.MessageType result = top.liumian.qt.common.proto.QuantumMessage.MessageType.valueOf(messageType_);
+                return result == null ? top.liumian.qt.common.proto.QuantumMessage.MessageType.REGISTER : result;
+            }
+
+            /**
+             * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+             *
+             * @param value The messageType to set.
+             * @return This builder for chaining.
+             */
+            public Builder setMessageType(top.liumian.qt.common.proto.QuantumMessage.MessageType value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000002;
+                messageType_ = value.getNumber();
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>required .top.liumian.qt.common.proto.MessageType messageType = 10;</code>
+             *
+             * @return This builder for chaining.
+             */
+            public Builder clearMessageType() {
+                bitField0_ = (bitField0_ & ~0x00000002);
+                messageType_ = 1;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional string channelId = 11;</code>
+             *
+             * @return Whether the channelId field is set.
+             */
+            public boolean hasChannelId() {
+                return ((bitField0_ & 0x00000004) != 0);
+            }
+
+            /**
+             * <code>optional string channelId = 11;</code>
+             *
+             * @return The channelId.
+             */
+            public java.lang.String getChannelId() {
+                java.lang.Object ref = channelId_;
+                if (!(ref instanceof java.lang.String)) {
+                    com.google.protobuf.ByteString bs =
+                            (com.google.protobuf.ByteString) ref;
+                    java.lang.String s = bs.toStringUtf8();
+                    if (bs.isValidUtf8()) {
+                        channelId_ = s;
+                    }
+                    return s;
+                } else {
+                    return (java.lang.String) ref;
+                }
+            }
+
+            /**
+             * <code>optional string channelId = 11;</code>
+             *
+             * @param value The channelId to set.
+             * @return This builder for chaining.
+             */
+            public Builder setChannelId(
+                    java.lang.String value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000004;
+                channelId_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional string channelId = 11;</code>
+             *
+             * @return The bytes for channelId.
+             */
+            public com.google.protobuf.ByteString
+            getChannelIdBytes() {
+                java.lang.Object ref = channelId_;
+                if (ref instanceof String) {
+                    com.google.protobuf.ByteString b =
+                            com.google.protobuf.ByteString.copyFromUtf8(
+                                    (java.lang.String) ref);
+                    channelId_ = b;
+                    return b;
+                } else {
+                    return (com.google.protobuf.ByteString) ref;
+                }
+            }
+
+            /**
+             * <code>optional string channelId = 11;</code>
+             *
+             * @param value The bytes for channelId to set.
+             * @return This builder for chaining.
+             */
+            public Builder setChannelIdBytes(
+                    com.google.protobuf.ByteString value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000004;
+                channelId_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional string channelId = 11;</code>
+             *
+             * @return This builder for chaining.
+             */
+            public Builder clearChannelId() {
+                bitField0_ = (bitField0_ & ~0x00000004);
+                channelId_ = getDefaultInstance().getChannelId();
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional string targetHost = 12;</code>
+             *
+             * @return Whether the targetHost field is set.
+             */
+            public boolean hasTargetHost() {
+                return ((bitField0_ & 0x00000008) != 0);
+            }
+
+            /**
+             * <code>optional string targetHost = 12;</code>
+             *
+             * @return The targetHost.
+             */
+            public java.lang.String getTargetHost() {
+                java.lang.Object ref = targetHost_;
+                if (!(ref instanceof java.lang.String)) {
+                    com.google.protobuf.ByteString bs =
+                            (com.google.protobuf.ByteString) ref;
+                    java.lang.String s = bs.toStringUtf8();
+                    if (bs.isValidUtf8()) {
+                        targetHost_ = s;
+                    }
+                    return s;
+                } else {
+                    return (java.lang.String) ref;
+                }
+            }
+
+            /**
+             * <code>optional string targetHost = 12;</code>
+             *
+             * @param value The targetHost to set.
+             * @return This builder for chaining.
+             */
+            public Builder setTargetHost(
+                    java.lang.String value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000008;
+                targetHost_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional string targetHost = 12;</code>
+             *
+             * @return The bytes for targetHost.
+             */
+            public com.google.protobuf.ByteString
+            getTargetHostBytes() {
+                java.lang.Object ref = targetHost_;
+                if (ref instanceof String) {
+                    com.google.protobuf.ByteString b =
+                            com.google.protobuf.ByteString.copyFromUtf8(
+                                    (java.lang.String) ref);
+                    targetHost_ = b;
+                    return b;
+                } else {
+                    return (com.google.protobuf.ByteString) ref;
+                }
+            }
+
+            /**
+             * <code>optional string targetHost = 12;</code>
+             *
+             * @param value The bytes for targetHost to set.
+             * @return This builder for chaining.
+             */
+            public Builder setTargetHostBytes(
+                    com.google.protobuf.ByteString value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000008;
+                targetHost_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional string targetHost = 12;</code>
+             *
+             * @return This builder for chaining.
+             */
+            public Builder clearTargetHost() {
+                bitField0_ = (bitField0_ & ~0x00000008);
+                targetHost_ = getDefaultInstance().getTargetHost();
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional int32 targetPort = 13;</code>
+             *
+             * @return Whether the targetPort field is set.
+             */
+            @java.lang.Override
+            public boolean hasTargetPort() {
+                return ((bitField0_ & 0x00000010) != 0);
+            }
+
+            /**
+             * <code>optional int32 targetPort = 13;</code>
+             *
+             * @return The targetPort.
+             */
+            @java.lang.Override
+            public int getTargetPort() {
+                return targetPort_;
+            }
+
+            /**
+             * <code>optional int32 targetPort = 13;</code>
+             *
+             * @param value The targetPort to set.
+             * @return This builder for chaining.
+             */
+            public Builder setTargetPort(int value) {
+                bitField0_ |= 0x00000010;
+                targetPort_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional int32 targetPort = 13;</code>
+             *
+             * @return This builder for chaining.
+             */
+            public Builder clearTargetPort() {
+                bitField0_ = (bitField0_ & ~0x00000010);
+                targetPort_ = 0;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional bytes data = 14;</code>
+             *
+             * @return Whether the data field is set.
+             */
+            @java.lang.Override
+            public boolean hasData() {
+                return ((bitField0_ & 0x00000020) != 0);
+            }
+
+            /**
+             * <code>optional bytes data = 14;</code>
+             *
+             * @return The data.
+             */
+            @java.lang.Override
+            public com.google.protobuf.ByteString getData() {
+                return data_;
+            }
+
+            /**
+             * <code>optional bytes data = 14;</code>
+             *
+             * @param value The data to set.
+             * @return This builder for chaining.
+             */
+            public Builder setData(com.google.protobuf.ByteString value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                bitField0_ |= 0x00000020;
+                data_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>optional bytes data = 14;</code>
+             *
+             * @return This builder for chaining.
+             */
+            public Builder clearData() {
+                bitField0_ = (bitField0_ & ~0x00000020);
+                data_ = getDefaultInstance().getData();
+                onChanged();
+                return this;
+            }
+
+            @java.lang.Override
+            public final Builder setUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return super.setUnknownFields(unknownFields);
+            }
+
+            @java.lang.Override
+            public final Builder mergeUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return super.mergeUnknownFields(unknownFields);
+            }
 
 
-      // @@protoc_insertion_point(builder_scope:top.liumian.qt.common.proto.Message)
+            // @@protoc_insertion_point(builder_scope:top.liumian.qt.common.proto.Message)
+        }
+
     }
 
-    // @@protoc_insertion_point(class_scope:top.liumian.qt.common.proto.Message)
-    private static final top.liumian.qt.common.proto.QuantumMessage.Message DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new top.liumian.qt.common.proto.QuantumMessage.Message();
-    }
-
-    public static top.liumian.qt.common.proto.QuantumMessage.Message getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<Message>
-        PARSER = new com.google.protobuf.AbstractParser<Message>() {
-      @java.lang.Override
-      public Message parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Message(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<Message> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Message> getParserForType() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public top.liumian.qt.common.proto.QuantumMessage.Message getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_top_liumian_qt_common_proto_Message_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable;
-
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
-    return descriptor;
-  }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
-  static {
-    java.lang.String[] descriptorData = {
-      "\n*common/src/main/proto/QuantumMessage.p" +
-      "roto\022\033top.liumian.qt.common.proto\"\244\001\n\007Me" +
-      "ssage\022\021\n\tnetworkId\030\t \002(\t\022=\n\013messageType\030" +
-      "\n \002(\0162(.top.liumian.qt.common.proto.Mess" +
-      "ageType\022\021\n\tchannelId\030\013 \001(\t\022\022\n\ntargetHost" +
-      "\030\014 \001(\t\022\022\n\ntargetPort\030\r \001(\005\022\014\n\004data\030\016 \001(\014" +
-      "*\235\001\n\013MessageType\022\014\n\010REGISTER\020\001\022\024\n\020REGIST" +
-      "ER_SUCCESS\020\002\022\023\n\017REGISTER_FAILED\020\003\022\r\n\tCON" +
-      "NECTED\020\004\022\026\n\022PROXY_DISCONNECTED\020\005\022\010\n\004DATA" +
-      "\020\006\022\r\n\tKEEPALIVE\020\007\022\025\n\021USER_DISCONNECTED\020\010" +
-      "B/\n\033top.liumian.qt.common.protoB\016Quantum" +
-      "MessageH\001"
-    };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        });
-    internal_static_top_liumian_qt_common_proto_Message_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_top_liumian_qt_common_proto_Message_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_top_liumian_qt_common_proto_Message_descriptor,
-        new java.lang.String[] { "NetworkId", "MessageType", "ChannelId", "TargetHost", "TargetPort", "Data", });
-  }
-
-  // @@protoc_insertion_point(outer_class_scope)
+    // @@protoc_insertion_point(outer_class_scope)
 }

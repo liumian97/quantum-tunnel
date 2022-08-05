@@ -5,21 +5,21 @@ import org.apache.commons.cli.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
-import top.liumian.qt.server.ProxyServer;
-import top.liumian.qt.server.UserServer;
 import top.liumian.qt.common.enumeration.RouteMode;
 import top.liumian.qt.common.util.BannerUtil;
+import top.liumian.qt.server.ProxyServer;
+import top.liumian.qt.server.UserServer;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import static top.liumian.qt.common.util.ExecutorUtil.SERVER_CLIENT_EXECUTOR;
+import static top.liumian.qt.common.util.ExecutorUtil.USER_SERVER_EXECUTOR;
 
+/**
+ * @author liumian 2022/06/01 11:14 下午
+ */
 @Slf4j
 @PropertySource("classpath:gitBuildInfo.properties")
 @SpringBootApplication
 public class QuantumTunnelServerApplication {
-
-
-    private static Executor executor = Executors.newFixedThreadPool(2);
 
 
     public static void main(String[] args) throws ParseException {
@@ -74,13 +74,13 @@ public class QuantumTunnelServerApplication {
                 log.error("target_server_port cannot be null");
                 return;
             }
-            executor.execute(() -> {
+            SERVER_CLIENT_EXECUTOR.execute(() -> {
                 //启动代理服务端
                 ProxyServer proxyServer = new ProxyServer(proxyServerPort);
                 proxyServer.start();
             });
 
-            executor.execute(() -> {
+            USER_SERVER_EXECUTOR.execute(() -> {
                 //启动用户服务端
                 UserServer nettyServer = new UserServer(userServerPort, routeMode, networkId, targetHost, targetPort);
                 nettyServer.start();

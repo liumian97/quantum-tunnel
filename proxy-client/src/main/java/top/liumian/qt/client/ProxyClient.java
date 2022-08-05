@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import top.liumian.qt.client.handler.ProxyClientHandler;
 import top.liumian.qt.common.proto.QuantumMessage;
 
-import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -25,12 +24,25 @@ import java.util.Set;
 @Slf4j
 public class ProxyClient {
 
-
+    /**
+     * 代理服务器地址
+     */
     private final String proxyServerHost;
-    private final String proxyServerPort;
-    private final String networkId;
-    private final Set<String> tupleWhiteSet;
 
+    /**
+     * 代理服务器端口
+     */
+    private final String proxyServerPort;
+
+    /**
+     * 所在网络id，需要手动配置
+     */
+    private final String networkId;
+
+    /**
+     * 被代理服务白名单
+     */
+    private final Set<String> tupleWhiteSet;
 
     private final NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -42,9 +54,12 @@ public class ProxyClient {
     }
 
     /**
-     * @throws InterruptedException
+     * 连接内网穿透服务器
+     *
+     * @return 与服务器通信的channel
+     * @throws InterruptedException exception
      */
-    public Channel connect() throws InterruptedException, IOException {
+    public Channel connect() throws InterruptedException {
 
         Bootstrap b = new Bootstrap();
         b.group(workerGroup);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>quantum-tunnel</artifactId>
@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>server</artifactId>
+    <artifactId>proxy-server</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-<!--            <version>4.1.69.Final</version>-->
+            <!--            <version>4.1.69.Final</version>-->
         </dependency>
 
         <dependency>
@@ -57,7 +57,7 @@
     </dependencies>
 
     <build>
-        <finalName>quantum-tunnel-server</finalName>
+        <finalName>proxy-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -74,7 +74,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-<!--                <version>2.1.5</version>-->
+                <!--                <version>2.1.5</version>-->
                 <executions>
                     <execution>
                         <goals>
@@ -90,7 +90,8 @@
                     <verbose>true</verbose>
                     <skipPoms>false</skipPoms>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>src/main/resources/gitBuildInfo.properties</generateGitPropertiesFilename>
+                    <generateGitPropertiesFilename>src/main/resources/gitBuildInfo.properties
+                    </generateGitPropertiesFilename>
                     <failOnNoGitDirectory>true</failOnNoGitDirectory>
                     <gitDescribe>
                         <skip>false</skip>
