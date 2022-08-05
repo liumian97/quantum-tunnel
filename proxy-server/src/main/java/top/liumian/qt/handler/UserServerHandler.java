@@ -35,6 +35,12 @@ public class UserServerHandler extends QuantumCommonHandler {
         this.targetPort = targetPort;
     }
 
+    /**
+     * 处理用户连接激活事件
+     *
+     * @param ctx 连接上下文
+     * @throws Exception 异常
+     */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
@@ -42,8 +48,22 @@ public class UserServerHandler extends QuantumCommonHandler {
         remoteAddress = ctx.channel().remoteAddress();
         log.info("打开用户通道，ip：{} ：{}", remoteAddress, userChannelId);
         ChannelMap.USER_CHANNEL_MAP.put(userChannelId, ctx.channel());
+
+        if (networkId != null && targetHost != null && targetPort != null) {
+            //建立连接时向内网穿透客户端发送一个connect事件，表示正在建立连接。某些协议如MySQL需要该事件
+            QuantumMessage.Message message = QuantumMessage.Message.newBuilder().setMessageType(QuantumMessage.MessageType.DATA)
+                    .setNetworkId(networkId).setTargetHost(targetHost).setTargetPort(Integer.parseInt(targetPort)).build();
+            writeToProxyChannel(message);
+        }
+
     }
 
+    /**
+     * 处理用户连接断开时间
+     *
+     * @param ctx 连接上下文
+     * @throws Exception 异常
+     */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
@@ -61,6 +81,7 @@ public class UserServerHandler extends QuantumCommonHandler {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         byte[] bytes = (byte[]) msg;
+        //当代理信息未设置时，尝试从http报文中获取代理配置信息
         if (networkId == null || targetHost == null || targetPort == null) {
             String s = new String(bytes);
             networkId = getHeaderValue(s, "network_id");
@@ -82,11 +103,9 @@ public class UserServerHandler extends QuantumCommonHandler {
             ctx.channel().close();
         }
 
-        QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
-                .setNetworkId(networkId).setMessageType(QuantumMessage.MessageType.DATA)
-                .setChannelId(userChannelId).setTargetHost(targetHost)
-                .setTargetPort(Integer.parseInt(targetPort))
-                .setData(ByteString.copyFrom(bytes)).build();
+        QuantumMessage.Message message = QuantumMessage.Message.newBuilder().setNetworkId(networkId)
+                .setMessageType(QuantumMessage.MessageType.DATA).setChannelId(userChannelId).setTargetHost(targetHost)
+                .setTargetPort(Integer.parseInt(targetPort)).setData(ByteString.copyFrom(bytes)).build();
 
 
         boolean success = writeToProxyChannel(message);
@@ -96,6 +115,12 @@ public class UserServerHandler extends QuantumCommonHandler {
         }
     }
 
+    /**
+     * 写入到内网穿透客户端
+     *
+     * @param message 用户数据
+     * @return 写入结果
+     */
     private boolean writeToProxyChannel(QuantumMessage.Message message) {
         Channel proxyChannel = ChannelMap.PROXY_CHANNEL_MAP.get(networkId);
         if (proxyChannel != null && proxyChannel.isWritable()) {
@@ -109,6 +134,13 @@ public class UserServerHandler extends QuantumCommonHandler {
         }
     }
 
+    /**
+     * 从http请求报文中获取指定header值
+     *
+     * @param requestStr http请求报文
+     * @param headerName header名称
+     * @return header值
+     */
     private String getHeaderValue(String requestStr, String headerName) {
         final String lineBreak = "\r\n";
         for (String s : requestStr.split(lineBreak)) {

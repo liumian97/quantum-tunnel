@@ -1,8 +1,6 @@
 package top.liumian.qt.client.handler;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -121,7 +119,6 @@ public class ProxyClientHandler extends QuantumCommonHandler {
                 disconnectUserChannel(ctx, quantumMessage.getChannelId());
                 return;
             }
-            ByteBuf byteBuf = Unpooled.copiedBuffer(quantumMessage.getData().toByteArray());
             CLIENT_BOOTSTRAP.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) {
@@ -132,15 +129,22 @@ public class ProxyClientHandler extends QuantumCommonHandler {
 
             try {
                 Channel channel = CLIENT_BOOTSTRAP.connect(quantumMessage.getTargetHost(), quantumMessage.getTargetPort()).sync().channel();
-                channel.writeAndFlush(byteBuf);
+                if (quantumMessage.getMessageType() == QuantumMessage.MessageType.DATA) {
+                    channel.writeAndFlush(quantumMessage.getData().toByteArray());
+                } else {
+                    log.info("连接已打开：{}:{}", quantumMessage.getTargetHost(), quantumMessage.getTargetPort());
+                }
             } catch (Exception e) {
                 log.error("请求" + targetTuple + "异常", e);
                 //通知服务端proxyChannel已经断开，让其断开userChannel
                 disconnectUserChannel(ctx, quantumMessage.getChannelId());
             }
         } else {
-            ByteBuf byteBuf = Unpooled.copiedBuffer(quantumMessage.getData().toByteArray());
-            proxyChannel.writeAndFlush(byteBuf);
+            if (quantumMessage.getMessageType() == QuantumMessage.MessageType.DATA) {
+                proxyChannel.writeAndFlush(quantumMessage.getData().toByteArray());
+            } else {
+                log.info("连接已打开：{}:{}", quantumMessage.getTargetHost(), quantumMessage.getTargetPort());
+            }
         }
     }
 

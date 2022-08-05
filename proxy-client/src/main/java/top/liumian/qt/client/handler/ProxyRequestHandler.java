@@ -58,6 +58,9 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
         log.error("请求异常", cause);
     }
 
+    /**
+     * 处理连接断开事件
+     */
     private void processDisconnected() {
         QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
                 .setNetworkId(networkId).setChannelId(userChannelId)
@@ -66,6 +69,11 @@ public class ProxyRequestHandler extends QuantumCommonHandler {
     }
 
 
+    /**
+     * 写入到内网穿透服务器中的用户连接通道
+     *
+     * @param data 目标服务器所返回的数据
+     */
     private void writeToUserChannel(byte[] data) {
         QuantumMessage.Message message = QuantumMessage.Message.newBuilder()
                 .setNetworkId(networkId).setChannelId(userChannelId)

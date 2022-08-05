@@ -54,6 +54,8 @@ public class ProxyClient {
     }
 
     /**
+     * 连接内网穿透服务器
+     *
      * @return 与服务器通信的channel
      * @throws InterruptedException exception
      */
